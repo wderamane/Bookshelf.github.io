@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Accueil – Ma bibliothèque numérique</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <title>Bookshelf – Accueil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
     :root {
-      --bg: #020617;
-      --bg-soft: #0f172a;
+      --bg: #0f172a;
+      --bg-alt: #020617;
       --accent: #f97316;
       --accent-soft: #fed7aa;
       --text: #f9fafb;
@@ -21,47 +21,77 @@
 
     body {
       margin: 0;
-      min-height: 100vh;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #000 100%);
       color: var(--text);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
     header {
-      padding: 1rem 1.5rem;
+      padding: 1.2rem 1.5rem;
+      background: linear-gradient(90deg, #020617, #111827);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .logo {
-      display: flex;
-      flex-direction: column;
-      gap: 0.1rem;
+      gap: 0.75rem;
     }
 
     .logo-title {
-      font-size: 1.2rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 1.4rem;
+      letter-spacing: 0.05em;
     }
 
     .logo-sub {
       font-size: 0.8rem;
+      text-transform: uppercase;
       color: var(--muted);
     }
 
-    .nav-link {
-      font-size: 0.85rem;
-      color: var(--muted);
-      text-decoration: none;
-      padding: 0.3rem 0.8rem;
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .badge {
       border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      background: rgba(15, 23, 42, 0.6);
+      padding: 0.25rem 0.7rem;
+      background: rgba(248, 250, 252, 0.05);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 0.75rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .nav-btn {
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      transition: background 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .nav-btn-primary {
+      border-color: transparent;
+      background: radial-gradient(circle at top left, #f97316, #b45309);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
     }
 
     main {
@@ -73,10 +103,10 @@
     }
 
     .hero {
-      max-width: 900px;
+      max-width: 780px;
       width: 100%;
       display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
       gap: 2rem;
       align-items: center;
     }
@@ -89,199 +119,210 @@
     }
 
     .hero-title {
-      font-size: clamp(2rem, 3vw, 2.4rem);
-      line-height: 1.1;
-      margin-bottom: 0.8rem;
+      font-size: 2.1rem;
+      margin-bottom: 0.6rem;
     }
 
-    .hero-highlight {
-      background: linear-gradient(90deg, #f97316, #fb923c, #facc15);
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-
-    .hero-text {
-      font-size: 0.98rem;
+    .hero-sub {
+      font-size: 0.95rem;
       color: var(--muted);
-      max-width: 32rem;
       margin-bottom: 1.4rem;
     }
 
-    .hero-buttons {
+    .hero-actions {
       display: flex;
+      gap: 0.75rem;
       flex-wrap: wrap;
-      gap: 0.7rem;
       justify-content: flex-start;
     }
 
     @media (max-width: 800px) {
-      .hero-buttons {
+      .hero-actions {
         justify-content: center;
       }
     }
 
-    .btn {
-      border-radius: 999px;
-      padding: 0.55rem 1.2rem;
-      font-size: 0.9rem;
-      border: 1px solid rgba(148, 163, 184, 0.8);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      text-decoration: none;
-      color: var(--text);
-      background: rgba(15, 23, 42, 0.9);
-      transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
-    }
-
-    .btn span.icon {
-      font-size: 1.1rem;
-    }
-
-    .btn-primary {
-      border-color: transparent;
-      background: radial-gradient(circle at top left, #f97316, #b45309);
-      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.9);
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 22px rgba(15, 23, 42, 0.95);
-    }
-
-    .hero-note {
-      margin-top: 0.7rem;
+    .pill {
       font-size: 0.8rem;
       color: var(--muted);
+      margin-top: 0.6rem;
     }
 
-    .hero-card {
-      border-radius: 24px;
-      padding: 1.4rem 1.2rem;
-      background: radial-gradient(circle at top left, rgba(248, 250, 252, 0.04), rgba(15, 23, 42, 0.96));
+    .card {
+      border-radius: 18px;
+      padding: 1.5rem 1.4rem;
+      background: radial-gradient(circle at top left, rgba(248, 250, 252, 0.06), rgba(15, 23, 42, 0.96));
       border: 1px solid rgba(148, 163, 184, 0.4);
       box-shadow:
         0 18px 40px rgba(15, 23, 42, 0.9),
         0 0 0 1px rgba(15, 23, 42, 0.9);
-      position: relative;
-      overflow: hidden;
     }
 
-    .hero-card-title {
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-      margin-bottom: 0.6rem;
-    }
-
-    .hero-card-main {
+    .card-title {
       font-size: 0.95rem;
-      margin-bottom: 0.8rem;
+      margin-bottom: 0.4rem;
     }
 
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
+    .card-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.9rem;
+    }
+
+    .card-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1rem;
       font-size: 0.8rem;
-      border-radius: 999px;
-      padding: 0.2rem 0.7rem;
-      background: rgba(34, 197, 94, 0.12);
-      color: #bbf7d0;
-      border: 1px solid rgba(34, 197, 94, 0.4);
-      margin-bottom: 0.8rem;
-    }
-
-    .hero-card-footer {
-      font-size: 0.78rem;
       color: var(--muted);
     }
 
-    .hero-card-decoration {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.8;
-      background: radial-gradient(circle at 10% 0%, rgba(248, 250, 252, 0.06) 0, transparent 55%),
-                  radial-gradient(circle at 110% 100%, rgba(249, 115, 22, 0.28) 0, transparent 60%);
-      mix-blend-mode: screen;
+    .card-list li {
+      margin-bottom: 0.35rem;
     }
 
     footer {
-      padding: 0.8rem 1.5rem 1.2rem;
-      text-align: center;
-      font-size: 0.8rem;
+      padding: 0.8rem 1.5rem 1rem;
+      font-size: 0.75rem;
       color: var(--muted);
+      text-align: center;
     }
   </style>
 </head>
 <body>
-
 <header>
-  <div class="logo">
+  <div>
     <div class="logo-title">Ma bibliothèque numérique</div>
-    <div class="logo-sub">PDF personnels • Void Project & co</div>
+    <div class="logo-sub">Livres PDF personnels</div>
   </div>
-  <a class="nav-link" href="bibliotheque.html">Accéder à la bibliothèque →</a>
+
+  <div class="header-actions">
+    <span id="userLabel" class="badge">Invité</span>
+
+    <button id="loginBtn" class="nav-btn">
+      Se connecter
+    </button>
+
+    <button id="logoutBtn" class="nav-btn" style="display:none;">
+      Se déconnecter
+    </button>
+
+    <a href="bibliotheque.html" class="nav-btn nav-btn-primary">
+      Ouvrir la bibliothèque →
+    </a>
+  </div>
 </header>
 
 <main>
   <section class="hero">
     <div>
-      <h1 class="hero-title">
-        Bienvenue dans <span class="hero-highlight">ma bibliothèque de livres PDF</span>
-      </h1>
-      <p class="hero-text">
-        Ici tu peux feuilleter mes projets, romans, et documents au format PDF.
-        Clique sur le bouton ci-dessous pour entrer dans la bibliothèque, choisir un livre
-        sur l’étagère et le lire dans le lecteur intégré.
+      <h1 class="hero-title">Retrouve tous tes livres PDF au même endroit.</h1>
+      <p class="hero-sub">
+        Void Project, romans, notes perso… tout est rangé sur une étagère virtuelle
+        avec un lecteur moderne intégré.
       </p>
-
-      <div class="hero-buttons">
-        <a href="bibliotheque.html" class="btn btn-primary">
-          <span class="icon">📚</span>
-          Entrer dans la bibliothèque
+      <div class="hero-actions">
+        <a href="bibliotheque.html" class="nav-btn nav-btn-primary">
+          Accéder à la bibliothèque
         </a>
-        <a href="pdf/Void_Project.pdf" class="btn" target="_blank">
-          <span class="icon">🌀</span>
-          Ouvrir directement Void Project
-        </a>
+        <button id="heroLoginBtn" class="nav-btn">
+          Se connecter
+        </button>
       </div>
-
-      <div class="hero-note">
-        Astuce : depuis la bibliothèque, tu pourras aussi ouvrir les PDF en plein écran
-        ou les télécharger.
-      </div>
+      <p class="pill">Connexion gérée par Auth0 · Session partagée sur toutes les pages.</p>
     </div>
 
-    <aside class="hero-card">
-      <div class="hero-card-decoration"></div>
-      <div class="hero-card-title">Aperçu</div>
-      <div class="hero-tag">
-        <span>✅</span> Lecteur PDF intégré
-      </div>
-      <div class="hero-card-main">
-        • Étagère de livres cliquables<br>
-        • Lecture dans le navigateur<br>
-        • Boutons “mode moderne” (pdf.js) & téléchargement<br>
-      </div>
-      <div class="hero-card-footer">
-        Clique sur <strong>“Entrer dans la bibliothèque”</strong> pour voir tous les livres disponibles.
-      </div>
+    <aside class="card">
+      <h2 class="card-title">Fonctionnalités</h2>
+      <p class="card-sub">Ce site est ton espace de lecture privé.</p>
+      <ul class="card-list">
+        <li>📚 Étagère visuelle de tes PDF</li>
+        <li>📖 Lecture intégrée dans le navigateur</li>
+        <li>🧭 Recherche par titre</li>
+        <li>🔐 Connexion sécurisée via Auth0</li>
+      </ul>
+      <a href="bibliotheque.html" class="nav-btn nav-btn-primary">
+        Voir mes livres
+      </a>
     </aside>
   </section>
 </main>
 
 <footer>
-  &copy; <span id="year"></span> Ma bibliothèque numérique – Tous droits réservés
+  © <span id="yearSpan"></span> – Bookshelf perso.
 </footer>
 
-<script>
-  // année dynamique
-  document.getElementById('year').textContent = new Date().getFullYear();
-</script>
+<!-- Auth0 SPA SDK -->
+<script src="https://cdn.auth0.com/js/auth0-spa-js/2.5/auth0-spa-js.production.js"></script>
 
+<script>
+  const AUTH0_DOMAIN       = "dev-cs1dp4naybhpswqf.us.auth0.com";
+  const AUTH0_CLIENT_ID    = "c0gjwDJ78cwVGoEndWm1fgj7S9Mj6vp2";
+  const AUTH0_REDIRECT_URI = "https://wderamane.github.io/bookshelf/";
+
+  let auth0Client = null;
+
+  async function initAuth() {
+    const loginBtn      = document.getElementById("loginBtn");
+    const heroLoginBtn  = document.getElementById("heroLoginBtn");
+    const logoutBtn     = document.getElementById("logoutBtn");
+    const userLabel     = document.getElementById("userLabel");
+
+    auth0Client = await auth0.createAuth0Client({
+      domain: AUTH0_DOMAIN,
+      clientId: AUTH0_CLIENT_ID,
+      authorizationParams: {
+        redirect_uri: AUTH0_REDIRECT_URI
+      }
+    });
+
+    const query = window.location.search;
+    if (query.includes("code=") && query.includes("state=")) {
+      await auth0Client.handleRedirectCallback();
+      window.history.replaceState({}, document.title, AUTH0_REDIRECT_URI);
+    }
+
+    const isAuthenticated = await auth0Client.isAuthenticated();
+
+    function renderAuthState() {
+      if (isAuthenticated) {
+        if (loginBtn)     loginBtn.style.display = "none";
+        if (heroLoginBtn) heroLoginBtn.style.display = "none";
+        if (logoutBtn)    logoutBtn.style.display = "inline-flex";
+        if (userLabel)    userLabel.textContent = "Connecté";
+      } else {
+        if (loginBtn)     loginBtn.style.display = "inline-flex";
+        if (heroLoginBtn) heroLoginBtn.style.display = "inline-flex";
+        if (logoutBtn)    logoutBtn.style.display = "none";
+        if (userLabel)    userLabel.textContent = "Invité";
+      }
+    }
+
+    renderAuthState();
+
+    function login() {
+      auth0Client.loginWithRedirect({
+        authorizationParams: { redirect_uri: AUTH0_REDIRECT_URI }
+      });
+    }
+
+    if (loginBtn)     loginBtn.onclick     = login;
+    if (heroLoginBtn) heroLoginBtn.onclick = login;
+
+    if (logoutBtn) {
+      logoutBtn.onclick = () => {
+        auth0Client.logout({
+          logoutParams: { returnTo: AUTH0_REDIRECT_URI }
+        });
+      };
+    }
+  }
+
+  window.addEventListener("load", () => {
+    const yearSpan = document.getElementById("yearSpan");
+    if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+    initAuth();
+  });
+</script>
 </body>
 </html>

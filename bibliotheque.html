@@ -62,7 +62,6 @@
     }
 
     .nav-back {
-      margin-left: 0.6rem;
       font-size: 0.8rem;
       color: var(--muted);
       text-decoration: none;
@@ -76,13 +75,33 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      flex-wrap: wrap;
     }
 
-    /* --- LAYOUT --- */
+    .nav-btn {
+      border-radius: 999px;
+      padding: 0.35rem 0.8rem;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text);
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      transition: background 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
+    }
+
+    /* LAYOUT */
     .layout {
       flex: 1;
       display: grid;
-      /* étagère réduite */
       grid-template-columns: minmax(180px, 220px) minmax(0, 1fr);
       min-height: 0;
     }
@@ -94,7 +113,7 @@
       }
     }
 
-    /* --- Bookshelf --- */
+    /* Bookshelf */
 
     .shelf-panel {
       border-right: 1px solid rgba(148, 163, 184, 0.35);
@@ -207,7 +226,7 @@
 
     .book {
       position: relative;
-      width: 28px;  /* un peu plus fin pour rentrer dans l’étagère réduite */
+      width: 28px;
       height: 120px;
       border-radius: 4px 4px 2px 2px;
       background: linear-gradient(180deg, #f97316, #b45309);
@@ -260,7 +279,7 @@
       overflow: hidden;
     }
 
-    /* --- Viewer panel --- */
+    /* Viewer panel */
 
     .viewer-panel {
       display: flex;
@@ -370,6 +389,39 @@
     .viewer-main.has-pdf .viewer-placeholder {
       display: none;
     }
+
+    /* Écran "connexion requise" */
+    .auth-screen {
+      flex: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .auth-card {
+      max-width: 380px;
+      width: 100%;
+      border-radius: 18px;
+      padding: 1.5rem 1.7rem;
+      background: radial-gradient(circle at top left, rgba(248, 250, 252, 0.04), rgba(15, 23, 42, 0.96));
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow:
+        0 18px 40px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 0.9);
+      text-align: center;
+    }
+
+    .auth-title {
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .auth-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -381,146 +433,244 @@
   </div>
   <div class="header-actions">
     <a href="index.html" class="nav-back">← Accueil</a>
+
+    <span id="userLabel" class="badge">Invité</span>
+
+    <button id="loginBtn" class="nav-btn">
+      Se connecter
+    </button>
+
+    <button id="logoutBtn" class="nav-btn" style="display:none;">
+      Se déconnecter
+    </button>
+
     <span class="badge">Bookshelf + lecteur</span>
   </div>
 </header>
 
-<main class="layout">
-  <!-- PANEL GAUCHE : Bookshelf -->
-  <section class="shelf-panel">
-    <div class="shelf-header">
-      <div>
-        <div class="shelf-title">Étagère</div>
-        <div class="shelf-count" id="bookCount">0 livres</div>
-      </div>
-    </div>
+<!-- écran "connexion requise" -->
+<div id="mustLogin" class="auth-screen">
+  <div class="auth-card">
+    <div class="auth-title">Connexion requise</div>
+    <div class="auth-sub">Connecte-toi pour accéder à tes livres.</div>
+    <button id="loginBtnOverlay" class="btn btn-primary">
+      <span class="icon">🔐</span>
+      Se connecter
+    </button>
+  </div>
+</div>
 
-    <div class="search-box">
-      <span class="search-icon">🔍</span>
-      <input
-        id="searchInput"
-        class="search-input"
-        type="text"
-        placeholder="Rechercher un titre..."
-      />
-    </div>
-
-    <div class="shelf" id="shelf">
-      <div class="shelf-row">
-        <div class="books" id="booksRow">
-          <div class="book" 
-               data-file="pdf/Void_Project.pdf" 
-               data-title="Void_Project" 
-               data-author="Deramane Waren">
-            <div class="book-title">Void Project</div>
-          </div>
-
-          <div class="book" data-file="pdf/livre4.pdf" data-title="Mon roman" data-author="Moi">
-            <div class="book-title">Mon roman</div>
-          </div>
-          <!-- Ajoute d'autres livres ici -->
+<!-- appli bibliothèque -->
+<div id="app" style="display:none;">
+  <main class="layout">
+    <!-- PANEL GAUCHE : Bookshelf -->
+    <section class="shelf-panel">
+      <div class="shelf-header">
+        <div>
+          <div class="shelf-title">Étagère</div>
+          <div class="shelf-count" id="bookCount">0 livres</div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- PANEL DROIT : Visualiseur -->
-  <section class="viewer-panel">
-    <div class="viewer-header">
-      <div class="viewer-info">
-        <div class="viewer-title" id="currentTitle">Aucun livre sélectionné</div>
-        <div class="viewer-meta" id="currentMeta">Clique sur un livre sur l’étagère pour l’ouvrir.</div>
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input
+          id="searchInput"
+          class="search-input"
+          type="text"
+          placeholder="Rechercher un titre..."
+        />
       </div>
-      <div class="viewer-actions">
-        <a id="openNewTab" class="btn" href="#" target="_blank" style="display:none;">
-          <span class="icon">🗔</span>
-          Ouvrir en mode moderne
-        </a>
-        <a id="downloadLink" class="btn btn-primary" href="#" download style="display:none;">
-          <span class="icon">⬇</span>
-          Télécharger le PDF
-        </a>
-      </div>
-    </div>
 
-    <div class="viewer-main" id="viewerMain">
-      <div class="viewer-placeholder">
-        <div class="icon">📚</div>
-        <div>Bienvenue dans ta bibliothèque numérique.</div>
-        <div>Sélectionne un livre sur l’étagère à gauche pour l’afficher ici.</div>
+      <div class="shelf" id="shelf">
+        <div class="shelf-row">
+          <div class="books" id="booksRow">
+            <div class="book" 
+                 data-file="pdf/Void_Project.pdf" 
+                 data-title="Void_Project" 
+                 data-author="Deramane Waren">
+              <div class="book-title">Void Project</div>
+            </div>
+
+            <div class="book" data-file="pdf/livre4.pdf" data-title="Mon roman" data-author="Moi">
+              <div class="book-title">Mon roman</div>
+            </div>
+            <!-- Ajoute d'autres livres ici -->
+          </div>
+        </div>
       </div>
-      <iframe id="pdfViewer"></iframe>
-    </div>
-  </section>
-</main>
+    </section>
+
+    <!-- PANEL DROIT : Visualiseur -->
+    <section class="viewer-panel">
+      <div class="viewer-header">
+        <div class="viewer-info">
+          <div class="viewer-title" id="currentTitle">Aucun livre sélectionné</div>
+          <div class="viewer-meta" id="currentMeta">Clique sur un livre sur l’étagère pour l’ouvrir.</div>
+        </div>
+        <div class="viewer-actions">
+          <a id="openNewTab" class="btn" href="#" target="_blank" style="display:none;">
+            <span class="icon">🗔</span>
+            Ouvrir en mode moderne
+          </a>
+          <a id="downloadLink" class="btn btn-primary" href="#" download style="display:none;">
+            <span class="icon">⬇</span>
+            Télécharger le PDF
+          </a>
+        </div>
+      </div>
+
+      <div class="viewer-main" id="viewerMain">
+        <div class="viewer-placeholder">
+          <div class="icon">📚</div>
+          <div>Bienvenue dans ta bibliothèque numérique.</div>
+          <div>Sélectionne un livre sur l’étagère à gauche pour l’afficher ici.</div>
+        </div>
+        <iframe id="pdfViewer"></iframe>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Auth0 SDK -->
+<script src="https://cdn.auth0.com/js/auth0-spa-js/2.5/auth0-spa-js.production.js"></script>
 
 <script>
-  const PDFJS_VIEWER_BASE = "https://mozilla.github.io/pdf.js/web/viewer.html?file=";
+  const AUTH0_DOMAIN       = "dev-cs1dp4naybhpswqf.us.auth0.com";
+  const AUTH0_CLIENT_ID    = "c0gjwDJ78cwVGoEndWm1fgj7S9Mj6vp2";
+  const AUTH0_REDIRECT_URI = "https://wderamane.github.io/bookshelf/";
 
-  const books = Array.from(document.querySelectorAll('.book'));
-  const viewer = document.getElementById('pdfViewer');
-  const viewerMain = document.getElementById('viewerMain');
-  const currentTitle = document.getElementById('currentTitle');
-  const currentMeta = document.getElementById('currentMeta');
-  const openNewTab = document.getElementById('openNewTab');
-  const downloadLink = document.getElementById('downloadLink');
-  const bookCount = document.getElementById('bookCount');
-  const searchInput = document.getElementById('searchInput');
+  let auth0Client = null;
 
-  // Affiche le nombre de livres
-  bookCount.textContent = books.length + (books.length > 1 ? ' livres' : ' livre');
+  async function initAuth() {
+    const loginBtn        = document.getElementById("loginBtn");
+    const logoutBtn       = document.getElementById("logoutBtn");
+    const userLabel       = document.getElementById("userLabel");
+    const mustLogin       = document.getElementById("mustLogin");
+    const app             = document.getElementById("app");
+    const loginBtnOverlay = document.getElementById("loginBtnOverlay");
 
-  function openBook(bookEl) {
-    const file = bookEl.getAttribute('data-file');
-    const title = bookEl.getAttribute('data-title') || 'Livre PDF';
-    const author = bookEl.getAttribute('data-author') || '';
-
-    const absoluteUrl = new URL(file, window.location.href).toString();
-    const pdfjsUrl = PDFJS_VIEWER_BASE + encodeURIComponent(absoluteUrl);
-
-    books.forEach(b => b.classList.remove('active'));
-    bookEl.classList.add('active');
-
-    // lecteur intégré du navigateur
-    viewer.src = file;
-    viewerMain.classList.add('has-pdf');
-
-    currentTitle.textContent = title;
-    currentMeta.textContent = author ? `Auteur : ${author}` : 'Document PDF';
-
-    // bouton mode moderne (pdf.js) dans un nouvel onglet
-    openNewTab.style.display = 'inline-flex';
-    openNewTab.href = pdfjsUrl;
-
-    // bouton téléchargement
-    downloadLink.style.display = 'inline-flex';
-    downloadLink.href = absoluteUrl;
-    downloadLink.setAttribute('download', title.replace(/\s+/g, '_') + '.pdf');
-  }
-
-  books.forEach(book => {
-    book.addEventListener('click', () => openBook(book));
-  });
-
-  // Recherche simple par titre
-  searchInput.addEventListener('input', () => {
-    const q = searchInput.value.toLowerCase().trim();
-    let visibleCount = 0;
-
-    books.forEach(book => {
-      const title = (book.getAttribute('data-title') || '').toLowerCase();
-      if (!q || title.includes(q)) {
-        book.style.display = '';
-        visibleCount++;
-      } else {
-        book.style.display = 'none';
+    auth0Client = await auth0.createAuth0Client({
+      domain: AUTH0_DOMAIN,
+      clientId: AUTH0_CLIENT_ID,
+      authorizationParams: {
+        redirect_uri: AUTH0_REDIRECT_URI
       }
     });
 
-    bookCount.textContent =
-      visibleCount + (visibleCount > 1 ? ' livres trouvés' : ' livre trouvé');
+    const query = window.location.search;
+    if (query.includes("code=") && query.includes("state=")) {
+      await auth0Client.handleRedirectCallback();
+      window.history.replaceState({}, document.title, AUTH0_REDIRECT_URI);
+    }
+
+    const isAuthenticated = await auth0Client.isAuthenticated();
+
+    function renderAuthState() {
+      if (isAuthenticated) {
+        if (loginBtn)  loginBtn.style.display  = "inline-flex";
+        if (logoutBtn) logoutBtn.style.display = "inline-flex";
+        if (userLabel) userLabel.textContent   = "Connecté";
+        if (mustLogin) mustLogin.style.display = "none";
+        if (app)       app.style.display       = "block";
+      } else {
+        if (loginBtn)  loginBtn.style.display  = "inline-flex";
+        if (logoutBtn) logoutBtn.style.display = "none";
+        if (userLabel) userLabel.textContent   = "Invité";
+        if (mustLogin) mustLogin.style.display = "flex";
+        if (app)       app.style.display       = "none";
+      }
+    }
+
+    renderAuthState();
+
+    function login() {
+      auth0Client.loginWithRedirect({
+        authorizationParams: { redirect_uri: AUTH0_REDIRECT_URI }
+      });
+    }
+
+    if (loginBtn)        loginBtn.onclick        = login;
+    if (loginBtnOverlay) loginBtnOverlay.onclick = login;
+
+    if (logoutBtn) {
+      logoutBtn.onclick = () => {
+        auth0Client.logout({
+          logoutParams: { returnTo: AUTH0_REDIRECT_URI }
+        });
+      };
+    }
+  }
+
+  // ----- logique bibliothèque (PDF) -----
+  const PDFJS_VIEWER_BASE = "https://mozilla.github.io/pdf.js/web/viewer.html?file=";
+
+  window.addEventListener("load", () => {
+    initAuth(); // auth
+
+    const books = Array.from(document.querySelectorAll('.book'));
+    const viewer = document.getElementById('pdfViewer');
+    const viewerMain = document.getElementById('viewerMain');
+    const currentTitle = document.getElementById('currentTitle');
+    const currentMeta = document.getElementById('currentMeta');
+    const openNewTab = document.getElementById('openNewTab');
+    const downloadLink = document.getElementById('downloadLink');
+    const bookCount = document.getElementById('bookCount');
+    const searchInput = document.getElementById('searchInput');
+
+    if (!bookCount) return; // sécurité
+
+    bookCount.textContent = books.length + (books.length > 1 ? ' livres' : ' livre');
+
+    function openBook(bookEl) {
+      const file = bookEl.getAttribute('data-file');
+      const title = bookEl.getAttribute('data-title') || 'Livre PDF';
+      const author = bookEl.getAttribute('data-author') || '';
+
+      const absoluteUrl = new URL(file, window.location.href).toString();
+      const pdfjsUrl = PDFJS_VIEWER_BASE + encodeURIComponent(absoluteUrl);
+
+      books.forEach(b => b.classList.remove('active'));
+      bookEl.classList.add('active');
+
+      viewer.src = file;
+      viewerMain.classList.add('has-pdf');
+
+      currentTitle.textContent = title;
+      currentMeta.textContent = author ? `Auteur : ${author}` : 'Document PDF';
+
+      openNewTab.style.display = 'inline-flex';
+      openNewTab.href = pdfjsUrl;
+
+      downloadLink.style.display = 'inline-flex';
+      downloadLink.href = absoluteUrl;
+      downloadLink.setAttribute('download', title.replace(/\s+/g, '_') + '.pdf');
+    }
+
+    books.forEach(book => {
+      book.addEventListener('click', () => openBook(book));
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener('input', () => {
+        const q = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        books.forEach(book => {
+          const title = (book.getAttribute('data-title') || '').toLowerCase();
+          if (!q || title.includes(q)) {
+            book.style.display = '';
+            visibleCount++;
+          } else {
+            book.style.display = 'none';
+          }
+        });
+
+        bookCount.textContent =
+          visibleCount + (visibleCount > 1 ? ' livres trouvés' : ' livre trouvé');
+      });
+    }
   });
 </script>
-
 </body>
 </html>
