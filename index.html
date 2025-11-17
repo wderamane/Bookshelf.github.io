@@ -360,7 +360,7 @@
     <h1>Ma bibliothèque numérique</h1>
     <span>Livres PDF</span>
   </div>
-  <div class="badge">Bookshelf interactif</div>
+  <div class="badge">Bookshelf + lecteur</div>
 </header>
 
 <main class="layout">
@@ -389,9 +389,9 @@
         <div class="books" id="booksRow">
           <!-- Exemple de livres (à adapter à tes PDFs) -->
           <div class="book" 
-          data-file="pdf/Void_Project.pdf" 
-          data-title="Void_Project" 
-          data-author="Deramane Waren">
+               data-file="pdf/Void_Project.pdf" 
+               data-title="Void_Project" 
+               data-author="Deramane Waren">
             <div class="book-title">Void Project</div>
           </div>
 
@@ -414,7 +414,7 @@
       <div class="viewer-actions">
         <a id="openNewTab" class="btn" href="#" target="_blank" style="display:none;">
           <span class="icon">🗔</span>
-          Ouvrir dans un nouvel onglet
+          Ouvrir en mode moderne
         </a>
         <a id="downloadLink" class="btn btn-primary" href="#" download style="display:none;">
           <span class="icon">⬇</span>
@@ -435,6 +435,9 @@
 </main>
 
 <script>
+  // pdf.js pour le mode "moderne" dans un nouvel onglet
+  const PDFJS_VIEWER_BASE = "https://mozilla.github.io/pdf.js/web/viewer.html?file=";
+
   const books = Array.from(document.querySelectorAll('.book'));
   const viewer = document.getElementById('pdfViewer');
   const viewerMain = document.getElementById('viewerMain');
@@ -448,29 +451,34 @@
   // Affiche le nombre de livres
   bookCount.textContent = books.length + (books.length > 1 ? ' livres' : ' livre');
 
-  // Fonction pour ouvrir un PDF
+  // Fonction pour ouvrir un PDF (lecteur intégré dans la page)
   function openBook(bookEl) {
     const file = bookEl.getAttribute('data-file');
     const title = bookEl.getAttribute('data-title') || 'Livre PDF';
     const author = bookEl.getAttribute('data-author') || '';
 
+    // URL absolue vers ton PDF (pour liens externes)
+    const absoluteUrl = new URL(file, window.location.href).toString();
+    const pdfjsUrl = PDFJS_VIEWER_BASE + encodeURIComponent(absoluteUrl);
+
     // Active / désactive l’état visuel du livre sélectionné
     books.forEach(b => b.classList.remove('active'));
     bookEl.classList.add('active');
 
-    // Mettre à jour le viewer
-    viewer.src = file; // utilise le visualiseur intégré du navigateur
+    // 👉 Ici : on utilise le lecteur PDF intégré du navigateur
+    viewer.src = file;
     viewerMain.classList.add('has-pdf');
 
     currentTitle.textContent = title;
     currentMeta.textContent = author ? `Auteur : ${author}` : 'Document PDF';
 
-    // Mettre à jour les actions
+    // Bouton "Ouvrir en mode moderne" (pdf.js) dans un nouvel onglet
     openNewTab.style.display = 'inline-flex';
-    openNewTab.href = file;
+    openNewTab.href = pdfjsUrl;
 
+    // Bouton "Télécharger"
     downloadLink.style.display = 'inline-flex';
-    downloadLink.href = file;
+    downloadLink.href = absoluteUrl;
     downloadLink.setAttribute('download', title.replace(/\s+/g, '_') + '.pdf');
   }
 
