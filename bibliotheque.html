@@ -5,7 +5,6 @@
   <title>Bibliothèque – Livres PDF</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Styles -->
   <style>
     :root {
       --bg: #0f172a;
@@ -27,7 +26,7 @@
       flex-direction: column;
     }
 
-    /* Header */
+    /* HEADER */
 
     header {
       padding: 1.2rem 1.5rem;
@@ -94,7 +93,7 @@
       box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
     }
 
-    /* Layout principal */
+    /* LAYOUT */
 
     .layout {
       flex: 1;
@@ -110,7 +109,7 @@
       }
     }
 
-    /* Shelf */
+    /* SHELF PANEL */
 
     .shelf-panel {
       border-right: 1px solid rgba(148, 163, 184, 0.35);
@@ -147,9 +146,7 @@
       color: var(--muted);
     }
 
-    .search-box {
-      position: relative;
-    }
+    .search-box { position: relative; }
 
     .search-input {
       width: 100%;
@@ -162,9 +159,7 @@
       outline: none;
     }
 
-    .search-input::placeholder {
-      color: #64748b;
-    }
+    .search-input::placeholder { color: #64748b; }
 
     .search-icon {
       position: absolute;
@@ -190,7 +185,6 @@
       background: #4b5563;
       border-radius: 999px;
     }
-    .shelf::-webkit-scrollbar-track { background: transparent; }
 
     .shelf-row {
       position: relative;
@@ -264,7 +258,7 @@
       overflow: hidden;
     }
 
-    /* Viewer */
+    /* VIEWER */
 
     .viewer-panel {
       display: flex;
@@ -281,12 +275,7 @@
       gap: 0.75rem;
     }
 
-    .viewer-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.15rem;
-    }
-
+    .viewer-info { display: flex; flex-direction: column; gap: 0.15rem; }
     .viewer-title { font-size: 0.95rem; font-weight: 600; }
     .viewer-meta { font-size: 0.8rem; color: var(--muted); }
 
@@ -359,7 +348,7 @@
     .viewer-main.has-pdf iframe#pdfViewer { display: block; }
     .viewer-main.has-pdf .viewer-placeholder { display: none; }
 
-    /* Auth screen */
+    /* AUTH SCREEN */
 
     .auth-screen {
       flex: 1;
@@ -382,16 +371,8 @@
       text-align: center;
     }
 
-    .auth-title {
-      font-size: 1rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .auth-sub {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 1rem;
-    }
+    .auth-title { font-size: 1rem; margin-bottom: 0.4rem; }
+    .auth-sub   { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; }
   </style>
 
   <!-- Auth0 SDK -->
@@ -431,7 +412,7 @@
 <!-- Application bibliothèque -->
 <div id="app" style="display:none;">
   <main class="layout">
-    <!-- PANEL GAUCHE : Bookshelf -->
+    <!-- ÉTAGÈRE -->
     <section class="shelf-panel">
       <div class="shelf-header">
         <div>
@@ -472,7 +453,7 @@
       </div>
     </section>
 
-    <!-- PANEL DROIT : Visualiseur -->
+    <!-- VIEWER -->
     <section class="viewer-panel">
       <div class="viewer-header">
         <div class="viewer-info">
@@ -504,13 +485,14 @@
 </div>
 
 <script>
+  // ------------ CONFIG AUTH0 ------------
   const AUTH0_DOMAIN       = "dev-cs1dp4naybhpswqf.us.auth0.com";
   const AUTH0_CLIENT_ID    = "c0gjwDJ78cwVGoEndWm1fgj7S9Mj6vp2";
-  const AUTH0_REDIRECT_URI = "https://wderamane.github.io/bookshelf"; // correspond à tes Callback/Logout
+  const AUTH0_REDIRECT_URI = "https://wderamane.github.io/bookshelf"; // PAS de .html
 
   let auth0Client = null;
 
-  async function initAuth() {
+  async function initAuthBiblio() {
     const loginBtn        = document.getElementById("loginBtn");
     const logoutBtn       = document.getElementById("logoutBtn");
     const userLabel       = document.getElementById("userLabel");
@@ -526,13 +508,21 @@
       }
     });
 
-    const isAuthenticated = await auth0Client.isAuthenticated();
+    // ICI : pas de handleRedirectCallback,
+    // car tous les retours vont vers /bookshelf (la page d'accueil)
 
-    function renderAuthState() {
-      if (isAuthenticated) {
+    async function render() {
+      const isAuth = await auth0Client.isAuthenticated();
+
+      if (isAuth) {
         if (loginBtn)  loginBtn.style.display  = "none";
         if (logoutBtn) logoutBtn.style.display = "inline-flex";
-        if (userLabel) userLabel.textContent   = "Connecté";
+
+        if (userLabel) {
+          const user = await auth0Client.getUser();
+          userLabel.textContent = user && user.name ? user.name : "Connecté";
+        }
+
         if (mustLogin) mustLogin.style.display = "none";
         if (app)       app.style.display       = "block";
       } else {
@@ -544,27 +534,28 @@
       }
     }
 
-    renderAuthState();
-
     function login() {
       auth0Client.loginWithRedirect({
         authorizationParams: { redirect_uri: AUTH0_REDIRECT_URI }
       });
     }
 
-    if (loginBtn)        loginBtn.onclick        = login;
-    if (loginBtnOverlay) loginBtnOverlay.onclick = login;
+    if (loginBtn)        loginBtn.addEventListener("click", login);
+    if (loginBtnOverlay) loginBtnOverlay.addEventListener("click", login);
 
     if (logoutBtn) {
-      logoutBtn.onclick = () => {
+      logoutBtn.addEventListener("click", () => {
         auth0Client.logout({
           logoutParams: { returnTo: AUTH0_REDIRECT_URI }
         });
-      };
+      });
     }
+
+    render();
   }
 
-  // ----------------- LOGIQUE BIBLIOTHÈQUE -----------------
+  // ------------ LOGIQUE BIBLIOTHÈQUE ------------
+
   const PDFJS_VIEWER_BASE = "https://mozilla.github.io/pdf.js/web/viewer.html?file=";
 
   function initBookshelf() {
@@ -632,8 +623,8 @@
     }
   }
 
-  window.addEventListener('load', () => {
-    initAuth().catch(console.error);
+  window.addEventListener("load", () => {
+    initAuthBiblio().catch(console.error);
     initBookshelf();
   });
 </script>

@@ -2,114 +2,136 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bookshelf – Accueil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
     body {
       margin: 0;
       font-family: system-ui, sans-serif;
-      background: radial-gradient(circle at top, #0f172a, #020617);
+      background: #0f172a;
       color: #fff;
-      min-height: 100vh;
+      text-align: center;
+      padding: 40px 20px;
     }
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.2rem 2rem;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #9ca3af;
+      margin-bottom: 2rem;
     }
 
     .btn {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 24px;
+      border-radius: 999px;
       background: #f97316;
       color: white;
-      padding: 0.55rem 1rem;
+      text-decoration: none;
       border: none;
-      border-radius: 999px;
       cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      transition: 0.2s;
     }
 
-    .btn-outline {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.3);
-      border-radius: 999px;
-      padding: 0.5rem 1rem;
-      color: white;
-      cursor: pointer;
+    .btn:hover {
+      transform: translateY(-2px);
     }
 
-    .hero {
-      padding: 5rem 3rem;
-      max-width: 830px;
+    .btn-secondary {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
-    h1 { font-size: 2.8rem; margin-bottom: 0.5rem; }
+    #userBox {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #fbbf24;
+    }
   </style>
 
+  <!-- Auth0 -->
   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.5/auth0-spa-js.production.js"></script>
 </head>
+
 <body>
+  <h1>Bienvenue dans ta Bibliothèque 📚</h1>
+  <p>Connecte-toi pour accéder à tes livres.</p>
 
-<header>
-  <div style="font-size:1.4rem;">📚 Ma bibliothèque numérique</div>
+  <button id="loginBtn" class="btn">Se connecter</button>
+  <button id="logoutBtn" class="btn btn-secondary" style="display:none;">Se déconnecter</button>
 
-  <div>
-    <span id="userLabel">Invité</span>
-    <button id="loginBtn" class="btn-outline">Se connecter</button>
-    <button id="logoutBtn" class="btn" style="display:none;">Se déconnecter</button>
-    <a href="bibliotheque.html" class="btn">Ouvrir la bibliothèque →</a>
-  </div>
-</header>
+  <br /><br />
+  <a href="bibliotheque.html" class="btn btn-secondary">Accéder à la Bibliothèque →</a>
 
-<section class="hero">
-  <h1>Retrouve tous tes livres PDF au même endroit</h1>
-  <p>Void Project, romans, documents, tout est rangé et accessible de manière sécurisée.</p>
+  <div id="userBox"></div>
 
-  <button class="btn" onclick="window.location='bibliotheque.html'">
-    Accéder à la bibliothèque
-  </button>
-</section>
+  <script>
+    // ---- CONFIG ----
+    const AUTH0_DOMAIN       = "dev-cs1dp4naybhpswqf.us.auth0.com";
+    const AUTH0_CLIENT_ID    = "c0gjwDJ78cwVGoEndWm1fgj7S9Mj6vp2";
+    const AUTH0_REDIRECT_URI = "https://wderamane.github.io/bookshelf";
 
-<script>
-const auth0Client = await auth0.createAuth0Client({
-  domain: "dev-cs1dp4naybhpswqf.us.auth0.com",
-  clientId: "c0gjwDJ78cwVGoEndWm1fgj7S9Mj6vp2",
-  authorizationParams: {
-    redirect_uri: "https://wderamane.github.io/bookshelf"
-  }
-});
+    let auth0Client = null;
 
-const loginBtn = document.getElementById("loginBtn");
-const logoutBtn = document.getElementById("logoutBtn");
-const userLabel = document.getElementById("userLabel");
+    async function initAuthIndex() {
+      const loginBtn  = document.getElementById("loginBtn");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const userBox   = document.getElementById("userBox");
 
-async function refreshUI() {
-  const isAuth = await auth0Client.isAuthenticated();
+      // Initialisation du SDK
+      auth0Client = await auth0.createAuth0Client({
+        domain: AUTH0_DOMAIN,
+        clientId: AUTH0_CLIENT_ID,
+        authorizationParams: {
+          redirect_uri: AUTH0_REDIRECT_URI
+        }
+      });
 
-  if (isAuth) {
-    loginBtn.style.display = "none";
-    logoutBtn.style.display = "inline-block";
-    const user = await auth0Client.getUser();
-    userLabel.textContent = user.name || "Utilisateur";
-  } else {
-    loginBtn.style.display = "inline-block";
-    logoutBtn.style.display = "none";
-    userLabel.textContent = "Invité";
-  }
-}
+      // Auth0 renvoie ici après login
+      if (window.location.search.includes("code=")) {
+        await auth0Client.handleRedirectCallback();
+        window.history.replaceState({}, document.title, AUTH0_REDIRECT_URI);
+      }
 
-loginBtn.onclick = () => auth0Client.loginWithRedirect();
-logoutBtn.onclick = () => auth0Client.logout({ logoutParams: { returnTo: "https://wderamane.github.io/bookshelf" } });
+      const isAuth = await auth0Client.isAuthenticated();
 
-if (window.location.search.includes("code=")) {
-  await auth0Client.handleRedirectCallback();
-  window.history.replaceState({}, document.title, "/bookshelf");
-}
+      if (isAuth) {
+        const user = await auth0Client.getUser();
 
-refreshUI();
-</script>
+        loginBtn.style.display  = "none";
+        logoutBtn.style.display = "inline-block";
 
+        userBox.textContent = "Connecté en tant que : " + user.email;
+      }
+
+      // Bouton login
+      loginBtn.addEventListener("click", () => {
+        auth0Client.loginWithRedirect({
+          authorizationParams: {
+            redirect_uri: AUTH0_REDIRECT_URI
+          }
+        });
+      });
+
+      // Bouton logout
+      logoutBtn.addEventListener("click", () => {
+        auth0Client.logout({
+          logoutParams: { returnTo: AUTH0_REDIRECT_URI }
+        });
+      });
+    }
+
+    window.onload = () => {
+      initAuthIndex().catch(console.error);
+    };
+  </script>
 </body>
 </html>
