@@ -5,19 +5,17 @@
   <title>Bibliothèque – Livres PDF</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- Styles -->
   <style>
     :root {
       --bg: #0f172a;
       --bg-alt: #020617;
       --accent: #f97316;
-      --accent-soft: #fed7aa;
       --text: #f9fafb;
       --muted: #9ca3af;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -28,6 +26,8 @@
       display: flex;
       flex-direction: column;
     }
+
+    /* Header */
 
     header {
       padding: 1.2rem 1.5rem;
@@ -51,6 +51,13 @@
       color: var(--muted);
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
     .badge {
       border-radius: 999px;
       padding: 0.25rem 0.7rem;
@@ -71,14 +78,7 @@
       background: rgba(15, 23, 42, 0.7);
     }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .nav-btn {
+    .btn-small {
       border-radius: 999px;
       padding: 0.35rem 0.8rem;
       border: 1px solid rgba(148, 163, 184, 0.7);
@@ -86,19 +86,16 @@
       color: var(--text);
       font-size: 0.8rem;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      text-decoration: none;
-      transition: background 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
     }
 
-    .nav-btn:hover {
-      transform: translateY(-1px);
+    .btn-small.primary {
+      border-color: transparent;
+      background: radial-gradient(circle at top left, #f97316, #b45309);
       box-shadow: 0 8px 18px rgba(15, 23, 42, 0.9);
     }
 
-    /* LAYOUT */
+    /* Layout principal */
+
     .layout {
       flex: 1;
       display: grid;
@@ -113,7 +110,7 @@
       }
     }
 
-    /* Bookshelf */
+    /* Shelf */
 
     .shelf-panel {
       border-right: 1px solid rgba(148, 163, 184, 0.35);
@@ -188,16 +185,12 @@
       scrollbar-color: #4b5563 transparent;
     }
 
-    .shelf::-webkit-scrollbar {
-      width: 8px;
-    }
+    .shelf::-webkit-scrollbar { width: 8px; }
     .shelf::-webkit-scrollbar-thumb {
       background: #4b5563;
       border-radius: 999px;
     }
-    .shelf::-webkit-scrollbar-track {
-      background: transparent;
-    }
+    .shelf::-webkit-scrollbar-track { background: transparent; }
 
     .shelf-row {
       position: relative;
@@ -234,24 +227,16 @@
         0 4px 10px rgba(15, 23, 42, 0.9),
         inset 0 0 0 1px rgba(248, 250, 252, 0.08);
       cursor: pointer;
-      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 0.3rem;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
     }
 
-    .book:nth-child(3n + 1) {
-      background: linear-gradient(180deg, #22c55e, #15803d);
-    }
-
-    .book:nth-child(3n + 2) {
-      background: linear-gradient(180deg, #3b82f6, #1d4ed8);
-    }
-
-    .book:nth-child(4n + 2) {
-      background: linear-gradient(180deg, #a855f7, #7e22ce);
-    }
+    .book:nth-child(3n + 1) { background: linear-gradient(180deg, #22c55e, #15803d); }
+    .book:nth-child(3n + 2) { background: linear-gradient(180deg, #3b82f6, #1d4ed8); }
+    .book:nth-child(4n + 2) { background: linear-gradient(180deg, #a855f7, #7e22ce); }
 
     .book:hover {
       transform: translateY(-4px) translateX(-1px) rotate(-1deg);
@@ -279,7 +264,7 @@
       overflow: hidden;
     }
 
-    /* Viewer panel */
+    /* Viewer */
 
     .viewer-panel {
       display: flex;
@@ -302,15 +287,8 @@
       gap: 0.15rem;
     }
 
-    .viewer-title {
-      font-size: 0.95rem;
-      font-weight: 600;
-    }
-
-    .viewer-meta {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
+    .viewer-title { font-size: 0.95rem; font-weight: 600; }
+    .viewer-meta { font-size: 0.8rem; color: var(--muted); }
 
     .viewer-actions {
       display: flex;
@@ -334,9 +312,7 @@
       transition: background 0.1s ease, transform 0.1s ease, box-shadow 0.1s ease;
     }
 
-    .btn span.icon {
-      font-size: 0.9rem;
-    }
+    .btn span.icon { font-size: 0.9rem; }
 
     .btn-primary {
       border-color: transparent;
@@ -370,9 +346,7 @@
       pointer-events: none;
     }
 
-    .viewer-placeholder .icon {
-      font-size: 2.4rem;
-    }
+    .viewer-placeholder .icon { font-size: 2.4rem; }
 
     iframe#pdfViewer {
       width: 100%;
@@ -382,15 +356,11 @@
       background: #111827;
     }
 
-    .viewer-main.has-pdf iframe#pdfViewer {
-      display: block;
-    }
+    .viewer-main.has-pdf iframe#pdfViewer { display: block; }
+    .viewer-main.has-pdf .viewer-placeholder { display: none; }
 
-    .viewer-main.has-pdf .viewer-placeholder {
-      display: none;
-    }
+    /* Auth screen */
 
-    /* Écran "connexion requise" */
     .auth-screen {
       flex: 1;
       display: none;
@@ -423,6 +393,9 @@
       margin-bottom: 1rem;
     }
   </style>
+
+  <!-- Auth0 SDK -->
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.5/auth0-spa-js.production.js"></script>
 </head>
 <body>
 
@@ -436,19 +409,14 @@
 
     <span id="userLabel" class="badge">Invité</span>
 
-    <button id="loginBtn" class="nav-btn">
-      Se connecter
-    </button>
-
-    <button id="logoutBtn" class="nav-btn" style="display:none;">
-      Se déconnecter
-    </button>
+    <button id="loginBtn" class="btn-small">Se connecter</button>
+    <button id="logoutBtn" class="btn-small" style="display:none;">Se déconnecter</button>
 
     <span class="badge">Bookshelf + lecteur</span>
   </div>
 </header>
 
-<!-- écran "connexion requise" -->
+<!-- Écran connexion requise -->
 <div id="mustLogin" class="auth-screen">
   <div class="auth-card">
     <div class="auth-title">Connexion requise</div>
@@ -460,7 +428,7 @@
   </div>
 </div>
 
-<!-- appli bibliothèque -->
+<!-- Application bibliothèque -->
 <div id="app" style="display:none;">
   <main class="layout">
     <!-- PANEL GAUCHE : Bookshelf -->
@@ -485,14 +453,17 @@
       <div class="shelf" id="shelf">
         <div class="shelf-row">
           <div class="books" id="booksRow">
-            <div class="book" 
-                 data-file="pdf/Void_Project.pdf" 
-                 data-title="Void_Project" 
+            <div class="book"
+                 data-file="pdf/Void_Project.pdf"
+                 data-title="Void_Project"
                  data-author="Deramane Waren">
               <div class="book-title">Void Project</div>
             </div>
 
-            <div class="book" data-file="pdf/livre4.pdf" data-title="Mon roman" data-author="Moi">
+            <div class="book"
+                 data-file="pdf/livre4.pdf"
+                 data-title="Mon roman"
+                 data-author="Moi">
               <div class="book-title">Mon roman</div>
             </div>
             <!-- Ajoute d'autres livres ici -->
@@ -532,13 +503,10 @@
   </main>
 </div>
 
-<!-- Auth0 SDK -->
-<script src="https://cdn.auth0.com/js/auth0-spa-js/2.5/auth0-spa-js.production.js"></script>
-
 <script>
   const AUTH0_DOMAIN       = "dev-cs1dp4naybhpswqf.us.auth0.com";
   const AUTH0_CLIENT_ID    = "c0gjwDJ78cwVGoEndWm1fgj7S9Mj6vp2";
-  const AUTH0_REDIRECT_URI = "https://wderamane.github.io/bookshelf/";
+  const AUTH0_REDIRECT_URI = "https://wderamane.github.io/bookshelf"; // correspond à tes Callback/Logout
 
   let auth0Client = null;
 
@@ -558,17 +526,11 @@
       }
     });
 
-    const query = window.location.search;
-    if (query.includes("code=") && query.includes("state=")) {
-      await auth0Client.handleRedirectCallback();
-      window.history.replaceState({}, document.title, AUTH0_REDIRECT_URI);
-    }
-
     const isAuthenticated = await auth0Client.isAuthenticated();
 
     function renderAuthState() {
       if (isAuthenticated) {
-        if (loginBtn)  loginBtn.style.display  = "inline-flex";
+        if (loginBtn)  loginBtn.style.display  = "none";
         if (logoutBtn) logoutBtn.style.display = "inline-flex";
         if (userLabel) userLabel.textContent   = "Connecté";
         if (mustLogin) mustLogin.style.display = "none";
@@ -602,33 +564,31 @@
     }
   }
 
-  // ----- logique bibliothèque (PDF) -----
+  // ----------------- LOGIQUE BIBLIOTHÈQUE -----------------
   const PDFJS_VIEWER_BASE = "https://mozilla.github.io/pdf.js/web/viewer.html?file=";
 
-  window.addEventListener("load", () => {
-    initAuth(); // auth
-
-    const books = Array.from(document.querySelectorAll('.book'));
-    const viewer = document.getElementById('pdfViewer');
-    const viewerMain = document.getElementById('viewerMain');
-    const currentTitle = document.getElementById('currentTitle');
+  function initBookshelf() {
+    const books       = Array.from(document.querySelectorAll('.book'));
+    const viewer      = document.getElementById('pdfViewer');
+    const viewerMain  = document.getElementById('viewerMain');
+    const currentTitle= document.getElementById('currentTitle');
     const currentMeta = document.getElementById('currentMeta');
-    const openNewTab = document.getElementById('openNewTab');
-    const downloadLink = document.getElementById('downloadLink');
-    const bookCount = document.getElementById('bookCount');
+    const openNewTab  = document.getElementById('openNewTab');
+    const downloadLink= document.getElementById('downloadLink');
+    const bookCount   = document.getElementById('bookCount');
     const searchInput = document.getElementById('searchInput');
 
-    if (!bookCount) return; // sécurité
+    if (!bookCount) return;
 
     bookCount.textContent = books.length + (books.length > 1 ? ' livres' : ' livre');
 
     function openBook(bookEl) {
-      const file = bookEl.getAttribute('data-file');
-      const title = bookEl.getAttribute('data-title') || 'Livre PDF';
+      const file   = bookEl.getAttribute('data-file');
+      const title  = bookEl.getAttribute('data-title')  || 'Livre PDF';
       const author = bookEl.getAttribute('data-author') || '';
 
       const absoluteUrl = new URL(file, window.location.href).toString();
-      const pdfjsUrl = PDFJS_VIEWER_BASE + encodeURIComponent(absoluteUrl);
+      const pdfjsUrl    = PDFJS_VIEWER_BASE + encodeURIComponent(absoluteUrl);
 
       books.forEach(b => b.classList.remove('active'));
       bookEl.classList.add('active');
@@ -637,13 +597,13 @@
       viewerMain.classList.add('has-pdf');
 
       currentTitle.textContent = title;
-      currentMeta.textContent = author ? `Auteur : ${author}` : 'Document PDF';
+      currentMeta.textContent  = author ? `Auteur : ${author}` : 'Document PDF';
 
       openNewTab.style.display = 'inline-flex';
-      openNewTab.href = pdfjsUrl;
+      openNewTab.href          = pdfjsUrl;
 
       downloadLink.style.display = 'inline-flex';
-      downloadLink.href = absoluteUrl;
+      downloadLink.href          = absoluteUrl;
       downloadLink.setAttribute('download', title.replace(/\s+/g, '_') + '.pdf');
     }
 
@@ -670,7 +630,13 @@
           visibleCount + (visibleCount > 1 ? ' livres trouvés' : ' livre trouvé');
       });
     }
+  }
+
+  window.addEventListener('load', () => {
+    initAuth().catch(console.error);
+    initBookshelf();
   });
 </script>
+
 </body>
 </html>
