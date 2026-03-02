@@ -42,45 +42,40 @@
     .subtitle {
       font-size: 0.8rem;
       color: var(--muted);
-      margin-bottom: 12px;
+      margin-bottom: 20px;
     }
-
-    .search {
-      display: block;
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid #334155;
-      background: transparent;
-      color: var(--text);
-      margin-bottom: 12px;
-      outline: none;
-    }
-
-    .book-list { display: flex; flex-direction: column; gap: 12px; }
 
     .book-card {
       background: #0f172a;
       border: 1px solid #334155;
       border-radius: 10px;
-      padding: 8px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
+      padding: 10px;
+      margin-bottom: 15px;
       cursor: pointer;
-      transition: transform .15s, box-shadow .15s;
+      transition: 0.15s;
     }
 
-    .book-card:hover { transform: translateY(-4px); box-shadow: 0 8px 22px rgba(0,0,0,0.35); }
+    .book-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+    }
 
     .book-cover {
-      width: 56px; height: 84px; border-radius: 6px; object-fit: cover; flex-shrink:0;
-      background: linear-gradient(180deg,#0b1220,#172033);
+      width: 80px;
+      height: 120px;
+      border-radius: 8px;
+      object-fit: cover;
     }
 
-    .book-meta { display:flex; flex-direction:column; }
-    .book-name { font-size: 0.95rem; }
-    .book-author { font-size: 0.78rem; color: var(--muted); }
+    .book-name {
+      font-size: 1rem;
+      margin-top: 8px;
+    }
+
+    .book-author {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
 
     /* --- VIEWER PDF --- */
     .viewer {
@@ -130,15 +125,6 @@
       cursor: pointer;
       font-size: 0.9rem;
     }
-
-    @media (max-width: 700px) {
-      body { flex-direction: column; }
-      .sidebar { width: 100%; height: 160px; display: flex; gap: 12px; overflow-x: auto; overflow-y: hidden; padding: 12px; }
-      .book-list { flex-direction: row; align-items: flex-start; }
-      .book-card { min-width: 160px; flex-direction: column; align-items:flex-start; }
-      .viewer { height: calc(100vh - 160px); }
-      iframe { min-height: 0; }
-    }
   </style>
 </head>
 
@@ -146,200 +132,52 @@
 
   <!-- ÉTAGÈRE GAUCHE -->
   <aside class="sidebar">
-    <div style="display:flex;flex-direction:column;gap:6px;">
-      <div class="title">Ma bibliothèque</div>
-      <div class="subtitle"><span id="bookCount">0</span> livre(s)</div>
-      <input id="searchInput" class="search" placeholder="Rechercher un titre ou un auteur…" />
-    </div>
+    <div class="title">Ma bibliothèque</div>
+    <div class="subtitle">1 livre</div>
 
-    <div class="book-list" id="bookList"></div>
+    <!-- CARTE DU LIVRE -->
+    <div class="book-card" onclick="openBook('pdf/Void_Project.pdf', 'Void Project – Tome I')">
+      <img src="img/VoidProject.png" class="book-cover">
+      <div class="book-name">Void Project – Tome I</div>
+      <div class="book-author">Deramane Waren</div>
+    </div>
   </aside>
 
   <!-- VIEWER PDF -->
   <main class="viewer">
     <div class="viewer-header">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button class="btn" id="prevBtn">‹</button>
-        <button class="btn" id="nextBtn">›</button>
-        <input id="pageNum" class="btn" type="number" min="1" value="1" style="width:64px;padding:6px;" />
-        <span>/ <span id="pageCount">0</span></span>
-        <div style="width:12px"></div>
-        <div class="viewer-title" id="viewerTitle">Aucun livre ouvert</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <button class="btn" id="zoomOut">-</button>
-        <span id="zoomVal">100%</span>
-        <button class="btn" id="zoomIn">+</button>
-        <button class="btn" id="rotateBtn">⤾</button>
-        <button class="btn" id="downloadBtn" style="display:none;">Télécharger</button>
-      </div>
+      <div class="viewer-title" id="viewerTitle">Aucun livre ouvert</div>
+      <button class="btn" id="downloadBtn" style="display:none;">Télécharger</button>
     </div>
 
-    <div id="pdfViewer" style="flex:1;display:flex;align-items:center;justify-content:center;position:relative;">
-      <canvas id="pdfCanvas" style="display:none;max-width:100%;height:auto;box-shadow:0 8px 30px rgba(0,0,0,0.6);"></canvas>
-      <div class="placeholder" id="placeholder">
-        Sélectionne un livre à gauche 📚
-      </div>
+    <iframe id="pdfFrame"></iframe>
+
+    <div class="placeholder" id="placeholder">
+      Sélectionne un livre à gauche 📚
     </div>
   </main>
 
-  <!-- PDF.js from CDN -->
-  <script src="https://unpkg.com/pdfjs-dist@3.13.216/build/pdf.min.js"></script>
   <script>
-    const books = [
-      { title: 'Void Project – Tome I', author: 'Deramane Waren', cover: 'img/VoidProject.png', path: 'pdf/Void_Project.pdf' }
-      // Ajoute d'autres livres ici sous forme d'objets
-    ];
+    function openBook(path, title) {
+      const iframe = document.getElementById("pdfFrame");
+      const placeholder = document.getElementById("placeholder");
+      const viewerTitle = document.getElementById("viewerTitle");
+      const downloadBtn = document.getElementById("downloadBtn");
 
-    const placeholderCover = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="160"><rect width="100%" height="100%" fill="%230b1220"/><text x="50%" y="50%" fill="%2394a3b8" font-size="14" text-anchor="middle" dy=".3em">Couverture</text></svg>';
-
-    function renderBooks(list) {
-      const container = document.getElementById('bookList');
-      container.innerHTML = '';
-      list.forEach(b => {
-        const card = document.createElement('div');
-        card.className = 'book-card';
-        card.tabIndex = 0;
-
-        const img = document.createElement('img');
-        img.className = 'book-cover';
-        img.src = b.cover || placeholderCover;
-        img.onerror = () => img.src = placeholderCover;
-
-        const meta = document.createElement('div');
-        meta.className = 'book-meta';
-        const name = document.createElement('div'); name.className = 'book-name'; name.textContent = b.title;
-        const auth = document.createElement('div'); auth.className = 'book-author'; auth.textContent = b.author || '';
-        meta.appendChild(name); meta.appendChild(auth);
-
-        card.appendChild(img);
-        card.appendChild(meta);
-
-        card.addEventListener('click', () => openBook(b.path, b.title));
-        card.addEventListener('keydown', (e) => { if (e.key === 'Enter') openBook(b.path, b.title); });
-
-        container.appendChild(card);
-      });
-      document.getElementById('bookCount').textContent = list.length;
-    }
-
-    // note: PDF opening is handled below by the PDF.js implementation (openPdf)
-
-    function init() {
-      renderBooks(books);
-
-      const input = document.getElementById('searchInput');
-      input.addEventListener('input', (e) => {
-        const q = e.target.value.trim().toLowerCase();
-        const filtered = books.filter(b => (b.title + ' ' + (b.author||'')).toLowerCase().includes(q));
-        renderBooks(filtered);
-      });
-
-      try {
-        const last = JSON.parse(localStorage.getItem('bookshelf:lastOpened') || 'null');
-        if (last && last.path) openBook(last.path, last.title);
-      } catch (e) {}
-    }
-
-    // --- PDF.js viewer implementation ---
-    const pdfjsLib = window['pdfjs-dist/build/pdf'];
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.13.216/build/pdf.worker.min.js';
-
-    let pdfDoc = null;
-    let currentPage = 1;
-    let pageRendering = false;
-    let pageNumPending = null;
-    let scale = 1.0;
-    let rotation = 0;
-    const canvas = document.getElementById('pdfCanvas');
-    const ctx = canvas.getContext('2d');
-
-    function renderPage(num) {
-      pageRendering = true;
-      pdfDoc.getPage(num).then(function(page) {
-        const viewport = page.getViewport({ scale: scale, rotation: rotation });
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        canvas.style.display = 'block';
-        const renderContext = { canvasContext: ctx, viewport: viewport };
-        const renderTask = page.render(renderContext);
-        renderTask.promise.then(function() {
-          pageRendering = false;
-          document.getElementById('pageNum').value = currentPage;
-          document.getElementById('pageCount').textContent = pdfDoc.numPages;
-          document.getElementById('zoomVal').textContent = Math.round(scale * 100) + '%';
-          if (pageNumPending !== null) { renderPage(pageNumPending); pageNumPending = null; }
-        });
-      });
-    }
-
-    function queueRenderPage(num) {
-      if (pageRendering) { pageNumPending = num; } else { renderPage(num); }
-    }
-
-    function onPrevPage() { if (currentPage <= 1) return; currentPage--; queueRenderPage(currentPage); saveLastPage(); }
-    function onNextPage() { if (currentPage >= pdfDoc.numPages) return; currentPage++; queueRenderPage(currentPage); saveLastPage(); }
-
-    function openPdf(path, title, openPage) {
-      const placeholder = document.getElementById('placeholder');
-      const viewerTitle = document.getElementById('viewerTitle');
-      const downloadBtn = document.getElementById('downloadBtn');
+      iframe.src = path;
+      iframe.style.display = "block";
+      placeholder.style.display = "none";
 
       viewerTitle.textContent = title;
-      placeholder.style.display = 'none';
-      canvas.style.display = 'block';
 
-      // load document
-      pdfjsLib.getDocument(path).promise.then(function(pdfDoc_) {
-        pdfDoc = pdfDoc_;
-        document.getElementById('pageCount').textContent = pdfDoc.numPages;
-        currentPage = openPage || 1;
-        queueRenderPage(currentPage);
-        downloadBtn.style.display = 'inline-block';
-        downloadBtn.onclick = () => { const a = document.createElement('a'); a.href = path; a.download = title.replace(/\s+/g,'_') + '.pdf'; a.click(); };
-        try { localStorage.setItem('bookshelf:lastOpened', JSON.stringify({ path, title, page: currentPage })); } catch (e) {}
-      }).catch(err => {
-        console.error('Erreur PDF:', err);
-        alert('Impossible de charger le PDF. Servez le dossier via un serveur HTTP.');
-      });
-    }
-
-    function saveLastPage() { try { const last = JSON.parse(localStorage.getItem('bookshelf:lastOpened')||'null'); if (last) { last.page = currentPage; localStorage.setItem('bookshelf:lastOpened', JSON.stringify(last)); } } catch(e){} }
-
-    // toolbar handlers
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('prevBtn').addEventListener('click', onPrevPage);
-      document.getElementById('nextBtn').addEventListener('click', onNextPage);
-      document.getElementById('zoomIn').addEventListener('click', () => { scale = Math.min(4, scale * 1.15); queueRenderPage(currentPage); });
-      document.getElementById('zoomOut').addEventListener('click', () => { scale = Math.max(0.25, scale / 1.15); queueRenderPage(currentPage); });
-      document.getElementById('rotateBtn').addEventListener('click', () => { rotation = (rotation + 90) % 360; queueRenderPage(currentPage); });
-
-      const pageInput = document.getElementById('pageNum');
-      pageInput.addEventListener('change', (e) => { let v = parseInt(e.target.value,10); if (!isNaN(v) && pdfDoc) { v = Math.max(1, Math.min(pdfDoc.numPages, v)); currentPage = v; queueRenderPage(currentPage); saveLastPage(); } });
-
-      // expose openBook to existing list rendering
-      window.openBook = function(path, title) {
-        openPdf(path, title);
+      downloadBtn.style.display = "inline-block";
+      downloadBtn.onclick = () => {
+        const a = document.createElement("a");
+        a.href = path;
+        a.download = title.replace(/\s+/g, "_") + ".pdf";
+        a.click();
       };
-
-      // restore last opened with page
-      try {
-        const last = JSON.parse(localStorage.getItem('bookshelf:lastOpened') || 'null');
-        if (last && last.path) openPdf(last.path, last.title, last.page || 1);
-      } catch(e){}
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (!pdfDoc) return;
-      if (e.key === 'ArrowRight') onNextPage();
-      if (e.key === 'ArrowLeft') onPrevPage();
-      if (e.key === '+' || e.key === '=') { scale = Math.min(4, scale * 1.15); queueRenderPage(currentPage); }
-      if (e.key === '-') { scale = Math.max(0.25, scale / 1.15); queueRenderPage(currentPage); }
-    });
-
-    // kick init for book list
-    init();
-    
+    }
   </script>
 
 </body>
