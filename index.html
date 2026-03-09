@@ -27,7 +27,6 @@
       font-family: 'EB Garamond', Georgia, serif;
       background: var(--smoke);
       color: var(--text);
-      cursor: none;
     }
 
     /* BACKGROUND */
@@ -118,7 +117,6 @@
       padding: 3rem 2rem 4rem;
     }
 
-    /* Fade-up animation */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -181,7 +179,6 @@
       opacity: 0; animation: fadeUp .9s .6s forwards;
     }
 
-    /* CTA */
     .cta-wrap {
       opacity: 0; animation: fadeUp .9s .8s forwards;
       display: flex; flex-direction: column; align-items: center; gap: .9rem;
@@ -228,7 +225,6 @@
     }
     .cta-sec:hover { color: var(--gold-lt); border-color: var(--gold-lt); }
 
-    /* BOTTOM MARK */
     .bottom-mark {
       display: flex; align-items: center; gap: 1rem;
       margin-top: 3.5rem;
@@ -241,7 +237,6 @@
       color: var(--muted); text-transform: uppercase;
     }
 
-    /* FOOTER */
     footer {
       text-align: center; padding: 1.2rem;
       font-family: 'Cinzel', serif;
@@ -251,27 +246,20 @@
       position: relative; z-index: 2;
     }
 
-    /* MOBILE */
     @media (max-width: 600px) {
       header { padding: 1.2rem 1.4rem; }
       nav { gap: 1.2rem; }
       .rune-line { width: 36px; }
-      body { cursor: auto; }
-      #cur, #cur-trail { display: none; }
     }
   </style>
 </head>
 <body>
-
-  <div id="cur"></div>
-  <div id="cur-trail"></div>
 
   <div class="bg"></div>
   <div class="rune-grid"></div>
   <div class="vignette"></div>
   <div class="embers" id="embers"></div>
 
-  <!-- Corner ornaments -->
   <div class="corner tl"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#c9a84c" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#c9a84c" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#c9a84c" opacity=".8"/></svg></div>
   <div class="corner tr"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#c9a84c" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#c9a84c" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#c9a84c" opacity=".8"/></svg></div>
   <div class="corner bl"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#c9a84c" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#c9a84c" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#c9a84c" opacity=".8"/></svg></div>
@@ -321,8 +309,6 @@
   </div>
 
   <script>
-
-    // Embers
     const container = document.getElementById('embers');
     function spawnEmber() {
       const el = document.createElement('div');
