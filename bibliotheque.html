@@ -12,37 +12,85 @@
       --accent: #f97316;
       --text: #f1f5f9;
       --muted: #94a3b8;
+      --sidebar-w: 160px;
+      --header-h: 52px;
+      --bottom-bar-h: 90px;
     }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0;
       font-family: system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
+      height: 100dvh;
+      overflow: hidden;
       display: flex;
-      height: 100vh;
+      flex-direction: column;
+    }
+
+    /* ========== HEADER (mobile + desktop) ========== */
+    .viewer-header {
+      height: var(--header-h);
+      padding: 0 16px;
+      background: #0f172a;
+      border-bottom: 1px solid #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .viewer-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 60vw;
+    }
+
+    .btn {
+      padding: 6px 14px;
+      background: var(--accent);
+      color: white;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+
+    /* ========== LAYOUT PRINCIPAL ========== */
+    .layout {
+      flex: 1;
+      display: flex;
       overflow: hidden;
     }
 
-    /* --- ÉTAGÈRE GAUCHE --- */
+    /* ========== SIDEBAR (desktop) ========== */
     .sidebar {
-      width: 120px;
+      width: var(--sidebar-w);
       background: var(--bg2);
       border-right: 1px solid #334155;
-      padding: 16px;
+      padding: 16px 12px;
       overflow-y: auto;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
     }
 
-    .title {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: 10px;
+    .sidebar-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 4px;
     }
 
-    .subtitle {
-      font-size: 0.8rem;
+    .sidebar-subtitle {
+      font-size: 0.75rem;
       color: var(--muted);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .book-card {
@@ -50,53 +98,49 @@
       border: 1px solid #334155;
       border-radius: 10px;
       padding: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 14px;
       cursor: pointer;
-      transition: 0.15s;
+      transition: transform 0.15s, box-shadow 0.15s;
     }
 
     .book-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+      transform: scale(1.03);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+    }
+
+    .book-card.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
     }
 
     .book-cover {
-      width: 80px;
-      height: 120px;
-      border-radius: 8px;
+      width: 100%;
+      aspect-ratio: 2/3;
+      border-radius: 6px;
       object-fit: cover;
+      display: block;
     }
 
     .book-name {
-      font-size: 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
       margin-top: 8px;
+      line-height: 1.3;
     }
 
     .book-author {
-      font-size: 0.8rem;
+      font-size: 0.72rem;
       color: var(--muted);
+      margin-top: 2px;
     }
 
-    /* --- VIEWER PDF --- */
+    /* ========== VIEWER PDF ========== */
     .viewer {
       flex: 1;
-      background: #000;
       display: flex;
       flex-direction: column;
-    }
-
-    .viewer-header {
-      padding: 10px 20px;
-      background: #0f172a;
-      border-bottom: 1px solid #334155;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .viewer-title {
-      font-size: 1rem;
-      font-weight: 600;
+      background: #000;
+      overflow: hidden;
     }
 
     iframe {
@@ -110,60 +154,160 @@
     .placeholder {
       flex: 1;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       color: var(--muted);
       font-size: 1rem;
+      gap: 12px;
+      text-align: center;
+      padding: 20px;
     }
 
-    .btn {
-      padding: 6px 12px;
-      background: var(--accent);
-      color: white;
-      border-radius: 999px;
-      border: none;
+    .placeholder span {
+      font-size: 2.5rem;
+    }
+
+    /* ========== BOTTOM BAR (mobile uniquement) ========== */
+    .bottom-bar {
+      display: none;
+      height: var(--bottom-bar-h);
+      background: var(--bg2);
+      border-top: 1px solid #334155;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-shrink: 0;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+    }
+
+    .bottom-bar::-webkit-scrollbar { display: none; }
+
+    .bottom-book {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
       cursor: pointer;
-      font-size: 0.9rem;
+      flex-shrink: 0;
+      padding: 8px 4px;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    .bottom-book.active {
+      border-color: var(--accent);
+    }
+
+    .bottom-cover {
+      width: 44px;
+      height: 62px;
+      border-radius: 5px;
+      object-fit: cover;
+    }
+
+    .bottom-name {
+      font-size: 0.65rem;
+      color: var(--text);
+      text-align: center;
+      max-width: 60px;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .bottom-bar { display: flex; }
+
+      .layout {
+        flex-direction: column;
+      }
+
+      .viewer-title {
+        max-width: 55vw;
+        font-size: 0.88rem;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ÉTAGÈRE GAUCHE -->
-  <aside class="sidebar">
-    <div class="title">Ma bibliothèque</div>
-    <div class="subtitle">1 livre</div>
+  <!-- HEADER GLOBAL -->
+  <header class="viewer-header">
+    <div class="viewer-title" id="viewerTitle">Aucun livre ouvert</div>
+    <button class="btn" id="downloadBtn" style="display:none;">Télécharger</button>
+  </header>
 
-    <!-- CARTE DU LIVRE -->
-    <div class="book-card" onclick="openBook('pdf/Void_Project.pdf', 'Void Project – Tome I')">
-      <img src="img/VoidProject.png" class="book-cover">
-      <div class="book-name">Void Project – Tome I</div>
-      <div class="book-author">Deramane Waren</div>
+  <!-- LAYOUT PRINCIPAL -->
+  <div class="layout">
+
+    <!-- SIDEBAR DESKTOP -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-title">Ma bibliothèque</div>
+      <div class="sidebar-subtitle">1 livre</div>
+
+      <div class="book-card" id="card-0" onclick="openBook('pdf/Void_Project.pdf', 'Void Project – Tome I', 0)">
+        <img src="img/VoidProject.png" class="book-cover" alt="Void Project">
+        <div class="book-name">Void Project – Tome I</div>
+        <div class="book-author">Deramane Waren</div>
+      </div>
+    </aside>
+
+    <!-- VIEWER PDF -->
+    <main class="viewer">
+      <iframe id="pdfFrame"></iframe>
+      <div class="placeholder" id="placeholder">
+        <span>📚</span>
+        Sélectionne un livre pour commencer
+      </div>
+    </main>
+
+  </div>
+
+  <!-- BARRE DU BAS MOBILE -->
+  <nav class="bottom-bar" id="bottomBar">
+
+    <div class="bottom-book" id="mob-0" onclick="openBook('pdf/Void_Project.pdf', 'Void Project – Tome I', 0)">
+      <img src="img/VoidProject.png" class="bottom-cover" alt="Void Project">
+      <div class="bottom-name">Void Project</div>
     </div>
-  </aside>
 
-  <!-- VIEWER PDF -->
-  <main class="viewer">
-    <div class="viewer-header">
-      <div class="viewer-title" id="viewerTitle">Aucun livre ouvert</div>
-      <button class="btn" id="downloadBtn" style="display:none;">Télécharger</button>
-    </div>
-
-    <iframe id="pdfFrame"></iframe>
-
-    <div class="placeholder" id="placeholder">
-      Sélectionne un livre à gauche 📚
-    </div>
-  </main>
+  </nav>
 
   <script>
-    function openBook(path, title) {
+    let currentIndex = null;
+
+    function openBook(path, title, index) {
       const iframe = document.getElementById("pdfFrame");
       const placeholder = document.getElementById("placeholder");
       const viewerTitle = document.getElementById("viewerTitle");
       const downloadBtn = document.getElementById("downloadBtn");
 
+      // Retrait de l'état actif précédent
+      if (currentIndex !== null) {
+        const prevCard = document.getElementById("card-" + currentIndex);
+        const prevMob = document.getElementById("mob-" + currentIndex);
+        if (prevCard) prevCard.classList.remove("active");
+        if (prevMob) prevMob.classList.remove("active");
+      }
+
+      currentIndex = index;
+
+      // Activer les cartes correspondantes
+      const card = document.getElementById("card-" + index);
+      const mob = document.getElementById("mob-" + index);
+      if (card) card.classList.add("active");
+      if (mob) mob.classList.add("active");
+
+      // Charger le PDF
       iframe.src = path;
       iframe.style.display = "block";
       placeholder.style.display = "none";
