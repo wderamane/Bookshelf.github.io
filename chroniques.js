@@ -61,21 +61,23 @@ const chars = [
     infos:[{l:'Âge',v:'28 ans'},{l:'Origine',v:'Korrath'},{l:'Statut',v:'Vivant'},{l:'Affinité',v:'Void'}]
   },
   {
-    emoji:'🌑',
+    emoji:'🌑', element:'💧',
     bg:'linear-gradient(160deg,#120540 0%,#0a021e 40%,#060118 100%)',
     glow:'rgba(224,64,251,0.5)', cardGlow:'rgba(224,64,251,0.22)',
-    name:'Ji Yosen', role:'Prince (Tome 1) et Empereur (Tome 3)', faction:'Imépriale', factionClass:'faction-order',
-    classe:'Reaper', race:'Néthéral Impérial', alignement:'Loyal Bon',
-    status:'Vivant', statusClass:'status-alive',
+    name:'Ji Yosen', role:'Prince (Tome 1)', faction:'Ordre', factionClass:'faction-order',
+    classe:'Clerc / Érudit', race:'Néthéral Impérial', alignement:'Loyal Bon',
+    status:'Vivante', statusClass:'status-alive',
     quote:'"Chaque mot interdit est une arme que j\'ai choisi de porter."',
-    desc:'Empereur de Nétheria et meilleur ami de Waren, Ji Yosen est le seul empereur de Nétheria restant, ses soeurs étant l\'ainée une princesse et la benjamine une princesse également, elles ne participent qu\'aux grands conseils et aux plans de guerre. Son titre est à la fois son plus grand atout et son plus lourd fardeau.',
+    desc:'Gardienne des archives de l\'Ordre de l\'Aube, Lyra est la seule à avoir lu les textes interdits sur le Void. Sa mémoire parfaite est à la fois son plus grand atout et son plus lourd fardeau.',
+    hp:{current:62, max:72},
+    abilities:[{n:'FOR',s:8,m:'-1'},{n:'DEX',s:12,m:'+1'},{n:'CON',s:13,m:'+1'},{n:'INT',s:20,m:'+5'},{n:'SAG',s:18,m:'+4'},{n:'CHA',s:15,m:'+2'}],
     bars:[{l:'Savoir',v:98,c:BAR_SOFT},{l:'Magie Sacrée',v:85,c:BAR_LILAC},{l:'Diplomatie',v:75,c:BAR_VIOLET},{l:'Combat',v:28,c:BAR_DEEP}],
     powers:[
       {i:'📖',n:'Mémoire Absolue',d:'Avantage sur tous les jets d\'Histoire.'},
       {i:'✨',n:'Lumière Sacrée',d:'2d8 dégâts radieux. Désavantage aux créatures du Void.'},
       {i:'🔒',n:'Sceau de l\'Ordre',d:'Lie un secret. Nul ne peut le révéler sous contrainte.'}
     ],
-    infos:[{l:'Âge',v:'29 ans'},{l:'Origine',v:'Néthéral Impérial'},{l:'Statut',v:'Vivant'},{l:'Affinité',v:'Néther'}]
+    infos:[{l:'Âge',v:'31 ans'},{l:'Origine',v:'Mirhal'},{l:'Statut',v:'Vivante'},{l:'Affinité',v:'Lumière'}]
   },
   {
     emoji:'🔮', element:'🌫',
@@ -166,9 +168,11 @@ chars.forEach((c, i) => {
     <div class="char-card" onclick="openModal(${i})" style="--card-glow:${c.cardGlow}">
       <div class="card-icon-wrap">
         <div class="card-icon" style="background:${c.bg};--card-glow:${c.cardGlow};">${c.emoji}</div>
+        <div class="card-element">${c.element}</div>
       </div>
       <div class="card-body">
         <div class="card-name">${c.name}</div>
+        <div class="card-role">${c.role}</div>
         <div class="card-faction ${c.factionClass}">${c.faction}</div>
       </div>
     </div>`;
@@ -177,7 +181,7 @@ chars.forEach((c, i) => {
       <div class="list-avatar" style="background:${c.bg};">${c.emoji}</div>
       <div>
         <div class="list-name">${c.name}</div>
-        <div class="list-role">${c.faction}</div>
+        <div class="list-role">${c.role} · ${c.faction}</div>
       </div>
       <div class="list-status ${c.statusClass}">${c.status}</div>
     </div>`;
@@ -203,6 +207,7 @@ function buildRight(c, section) {
           <span class="g-badge">${c.classe}</span>
           <span class="g-badge">${c.race}</span>
           <span class="g-badge">${c.alignement}</span>
+          <span class="g-badge">Niv. ${c.niveau}</span>
         </div>
         <div class="g-section-title">Points de vie</div>
         <div class="g-hp">
@@ -293,6 +298,7 @@ function openModal(i) {
   document.getElementById('gNavIcon').style.cssText = `background:${c.bg};`;
   document.getElementById('gNavIcon').textContent = c.emoji;
   document.getElementById('gNavName').textContent = c.name;
+  document.getElementById('gNavSub').textContent = c.role;
 
   document.getElementById('gBg').style.background = c.bg;
   document.getElementById('gGlow').style.background = c.glow;
@@ -300,6 +306,7 @@ function openModal(i) {
   document.getElementById('gArt').innerHTML = `
     <div class="g-art-emoji">${c.emoji}</div>
     <div class="g-art-name">${c.name}</div>
+    <div class="g-art-role">${c.role}</div>
     <div class="g-art-badge ${c.factionClass}">${c.faction} · ${c.element}</div>`;
 
   document.getElementById('gQuote').textContent = c.quote;
