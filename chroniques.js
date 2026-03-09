@@ -61,7 +61,7 @@ const chars = [
     infos:[{l:'Âge',v:'28 ans'},{l:'Origine',v:'Korrath'},{l:'Statut',v:'Vivant'},{l:'Affinité',v:'Void'}]
   },
   {
-    emoji:'🌑', element:'💧',
+    emoji:'🌑',
     bg:'linear-gradient(160deg,#120540 0%,#0a021e 40%,#060118 100%)',
     glow:'rgba(224,64,251,0.5)', cardGlow:'rgba(224,64,251,0.22)',
     name:'Ji Yosen', role:'Prince (Tome 1) et Empereur (Tome 3)', faction:'Imépriale', factionClass:'faction-order',
