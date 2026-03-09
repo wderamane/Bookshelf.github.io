@@ -225,7 +225,8 @@
       transition: border-color 0.15s;
     }
 
-    .bottom-book.active { border-color: var(--accent); }
+    .bottom-book { text-decoration: none; }
+    .bottom-book:active { border-color: var(--accent); }
 
     .bottom-cover { width: 44px; height: 62px; border-radius: 5px; object-fit: cover; }
 
@@ -295,10 +296,10 @@
 
   <!-- BOTTOM BAR MOBILE -->
   <nav class="bottom-bar">
-    <div class="bottom-book" id="mob-0" onclick="openBook('pdf/Void_Project.pdf', 'Void Project – Tome I', 0)">
+    <a class="bottom-book" href="pdf/Void_Project.pdf" target="_blank" rel="noopener">
       <img src="img/VoidProject.png" class="bottom-cover" alt="Void Project">
       <div class="bottom-name">Void Project</div>
-    </div>
+    </a>
   </nav>
 
   <!-- PDF.js via CDN -->
