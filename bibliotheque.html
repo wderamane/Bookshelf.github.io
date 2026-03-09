@@ -2,327 +2,136 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Les Archives — Scriptorium</title>
+  <title>Les Archives — Bookshelf</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cinzel+Decorative:wght@400&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
-
   <style>
     :root {
-      --blood:   #8b1a1a;
-      --gold:    #c9a84c;
-      --gold-lt: #e8c97a;
-      --ash:     #1a1510;
-      --smoke:   #0d0b08;
-      --bg2:     #110e0b;
-      --bg3:     #1a1410;
-      --text:    #e8dcc8;
-      --muted:   #8a7a6a;
-      --border:  rgba(201,168,76,0.15);
+      --void:     #7c3aed;
+      --mauve:    #a855f7;
+      --lilac:    #c084fc;
+      --pink:     #e040fb;
+      --soft:     #d8b4fe;
+      --smoke:    #08060e;
+      --ash:      #0d0a1a;
+      --panel:    #0b0815;
+      --text:     #f0e6ff;
+      --muted:    #8b6aaf;
+      --border:   rgba(168,85,247,0.18);
       --header-h: 56px;
-      --sidebar-w: 180px;
+      --sidebar-w:180px;
       --bottom-h: 94px;
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body { font-family: 'EB Garamond', Georgia, serif; background: var(--smoke); color: var(--text); display: flex; flex-direction: column; }
 
-    html, body {
-      height: 100%; overflow: hidden;
-    }
-
-    body {
-      font-family: 'EB Garamond', Georgia, serif;
-      background: var(--smoke);
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ======== BACKGROUND ======== */
     .bg {
       position: fixed; inset: 0; z-index: -2;
       background:
-        radial-gradient(ellipse 70% 50% at 50% 110%, rgba(139,26,26,0.3) 0%, transparent 65%),
-        linear-gradient(180deg, #0a0806 0%, #0d0b08 60%, #120e0a 100%);
+        radial-gradient(ellipse 70% 50% at 50% 110%, rgba(124,58,237,0.4) 0%, transparent 65%),
+        linear-gradient(180deg, #06040c 0%, #08060e 60%, #0e0a1a 100%);
     }
     .rune-grid {
       position: fixed; inset: 0; z-index: -1; opacity: .1;
       background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(201,168,76,0.08) 80px),
-        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(201,168,76,0.08) 80px);
+        repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(168,85,247,0.1) 80px),
+        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(168,85,247,0.1) 80px);
     }
-    .vignette {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 45%, rgba(0,0,0,0.7) 100%);
-    }
+    .vignette { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 45%, rgba(0,0,0,0.7) 100%); }
 
-    /* ======== EMBERS ======== */
     .embers { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
     .ember { position: absolute; border-radius: 50%; animation: rise linear infinite; opacity: 0; }
     @keyframes rise {
       0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-      8%   { opacity: .8; }
-      85%  { opacity: .3; }
+      8%   { opacity: .8; }  85% { opacity: .3; }
       100% { transform: translateY(-110vh) translateX(var(--dx)) scale(0); opacity: 0; }
     }
 
-    /* ======== HEADER ======== */
+    /* HEADER */
     .header {
-      height: var(--header-h);
-      background: rgba(10,8,6,0.92);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center;
-      padding: 0 20px; gap: 14px;
-      flex-shrink: 0;
-      position: relative; z-index: 10;
-      backdrop-filter: blur(8px);
+      height: var(--header-h); background: rgba(8,6,14,0.92); border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 20px; gap: 14px;
+      flex-shrink: 0; position: relative; z-index: 10; backdrop-filter: blur(8px);
     }
-
-    .header-back {
-      font-family: 'Cinzel', serif;
-      font-size: .68rem; letter-spacing: .12em;
-      color: var(--muted); text-decoration: none;
-      text-transform: uppercase;
-      transition: color .2s;
-      white-space: nowrap;
-    }
-    .header-back:hover { color: var(--gold-lt); }
-
-    .header-sep {
-      width: 1px; height: 20px;
-      background: var(--border);
-      flex-shrink: 0;
-    }
-
-    .header-title {
-      font-family: 'Cinzel', serif;
-      font-size: .85rem; letter-spacing: .1em;
-      color: var(--text);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      flex: 1;
-    }
-
-    .header-title span {
-      color: var(--gold);
-      text-shadow: 0 0 14px rgba(201,168,76,0.5);
-    }
-
+    .header-back { font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .12em; color: var(--muted); text-decoration: none; text-transform: uppercase; transition: color .2s; white-space: nowrap; }
+    .header-back:hover { color: var(--soft); }
+    .header-sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
+    .header-title { font-family: 'Cinzel', serif; font-size: .85rem; letter-spacing: .1em; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+    .header-title span { color: var(--lilac); text-shadow: 0 0 14px rgba(224,64,251,0.45); }
     .dl-btn {
-      font-family: 'Cinzel', serif;
-      font-size: .68rem; letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: 6px 16px;
-      background: linear-gradient(135deg, var(--gold-lt), var(--gold), #a07830);
-      color: var(--ash);
-      border: none; border-radius: 2px;
-      text-decoration: none;
-      cursor: pointer;
-      white-space: nowrap;
-      box-shadow: 0 0 16px rgba(201,168,76,0.3);
-      transition: box-shadow .2s, transform .2s;
-      flex-shrink: 0;
+      font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase;
+      padding: 6px 16px; background: linear-gradient(135deg, var(--pink), var(--lilac), var(--void));
+      color: #0a0514; border: none; border-radius: 2px; text-decoration: none; cursor: pointer;
+      white-space: nowrap; box-shadow: 0 0 16px rgba(224,64,251,0.3); transition: box-shadow .2s, transform .2s; flex-shrink: 0;
     }
-    .dl-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 0 28px rgba(201,168,76,0.55);
-    }
+    .dl-btn:hover { transform: translateY(-1px); box-shadow: 0 0 28px rgba(224,64,251,0.55); }
 
-    /* ======== LAYOUT ======== */
-    .layout {
-      flex: 1; display: flex; overflow: hidden;
-      position: relative; z-index: 2;
-    }
+    .layout { flex: 1; display: flex; overflow: hidden; position: relative; z-index: 2; }
 
-    /* ======== SIDEBAR ======== */
+    /* SIDEBAR */
     .sidebar {
-      width: var(--sidebar-w);
-      background: rgba(10,8,6,0.85);
-      border-right: 1px solid var(--border);
-      padding: 18px 12px;
-      overflow-y: auto;
-      flex-shrink: 0;
-      backdrop-filter: blur(6px);
+      width: var(--sidebar-w); background: rgba(8,6,14,0.85); border-right: 1px solid var(--border);
+      padding: 18px 12px; overflow-y: auto; flex-shrink: 0; backdrop-filter: blur(6px);
     }
-
     .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-track { background: transparent; }
-    .sidebar::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); border-radius: 2px; }
-
-    .sidebar-heading {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: .68rem; letter-spacing: .14em;
-      color: var(--gold); margin-bottom: 4px;
-      text-shadow: 0 0 12px rgba(201,168,76,0.4);
-    }
-
-    .sidebar-sub {
-      font-size: .72rem; color: var(--muted);
-      letter-spacing: .06em; margin-bottom: 18px;
-      font-style: italic;
-    }
-
-    /* Gold rule */
-    .sidebar-rule {
-      height: 1px; margin-bottom: 16px;
-      background: linear-gradient(to right, var(--gold), transparent);
-      opacity: .4;
-    }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(168,85,247,0.2); border-radius: 2px; }
+    .sidebar-heading { font-family: 'Cinzel Decorative', serif; font-size: .68rem; letter-spacing: .14em; color: var(--lilac); margin-bottom: 4px; text-shadow: 0 0 12px rgba(224,64,251,0.4); }
+    .sidebar-sub { font-size: .72rem; color: var(--muted); letter-spacing: .06em; margin-bottom: 18px; font-style: italic; }
+    .sidebar-rule { height: 1px; margin-bottom: 16px; background: linear-gradient(to right, var(--pink), transparent); opacity: .35; }
 
     .book-card {
-      background: rgba(26,20,16,0.7);
-      border: 1px solid rgba(201,168,76,0.12);
-      border-radius: 6px;
-      padding: 10px;
-      margin-bottom: 12px;
-      cursor: pointer;
-      transition: transform .15s, border-color .2s, box-shadow .2s;
-      position: relative;
-      overflow: hidden;
+      background: rgba(13,10,26,0.75); border: 1px solid rgba(168,85,247,0.12);
+      border-radius: 6px; padding: 10px; margin-bottom: 12px; cursor: pointer;
+      transition: transform .15s, border-color .2s, box-shadow .2s; position: relative; overflow: hidden;
     }
-
-    .book-card::before {
-      content: "";
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(201,168,76,0.04), transparent);
-      opacity: 0; transition: opacity .2s;
-    }
-
-    .book-card:hover {
-      transform: scale(1.02);
-      border-color: rgba(201,168,76,0.35);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 12px rgba(201,168,76,0.1);
-    }
+    .book-card::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(224,64,251,0.05), transparent); opacity: 0; transition: opacity .2s; }
+    .book-card:hover { transform: scale(1.02); border-color: rgba(168,85,247,0.4); box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 14px rgba(168,85,247,0.12); }
     .book-card:hover::before { opacity: 1; }
+    .book-card.active { border-color: var(--lilac); box-shadow: 0 0 22px rgba(224,64,251,0.3), 0 0 0 1px rgba(168,85,247,0.25); }
 
-    .book-card.active {
-      border-color: var(--gold);
-      box-shadow: 0 0 20px rgba(201,168,76,0.25), 0 0 0 1px rgba(201,168,76,0.3);
-    }
+    .book-cover { width: 100%; aspect-ratio: 2/3; border-radius: 4px; object-fit: cover; display: block; filter: sepia(0.1) brightness(0.9); transition: filter .2s; }
+    .book-card:hover .book-cover, .book-card.active .book-cover { filter: sepia(0) brightness(1); }
+    .book-name { font-family: 'Cinzel', serif; font-size: .72rem; letter-spacing: .06em; margin-top: 8px; line-height: 1.35; color: var(--text); }
+    .book-author { font-size: .68rem; color: var(--muted); margin-top: 3px; font-style: italic; }
 
-    .book-cover {
-      width: 100%; aspect-ratio: 2/3;
-      border-radius: 4px; object-fit: cover; display: block;
-      filter: sepia(0.1) brightness(0.9);
-      transition: filter .2s;
-    }
-    .book-card:hover .book-cover,
-    .book-card.active .book-cover { filter: sepia(0) brightness(1); }
+    /* VIEWER */
+    .viewer { flex: 1; display: flex; flex-direction: column; overflow: hidden; background: transparent; }
+    .placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; padding: 30px; }
+    .placeholder-glyph { font-family: 'Cinzel Decorative', serif; font-size: 3rem; color: var(--lilac); opacity: .22; line-height: 1; text-shadow: 0 0 30px rgba(224,64,251,0.3); }
+    .placeholder-title { font-family: 'Cinzel', serif; font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+    .placeholder-sub { font-size: .95rem; color: rgba(139,106,175,0.5); font-style: italic; max-width: 280px; line-height: 1.6; }
+    .placeholder-rule { display: flex; align-items: center; gap: 10px; }
+    .ph-line { height: 1px; width: 50px; background: linear-gradient(to right, transparent, rgba(168,85,247,0.3)); }
+    .ph-line.r { background: linear-gradient(to left, transparent, rgba(168,85,247,0.3)); }
+    .ph-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(224,64,251,0.4); }
 
-    .book-name {
-      font-family: 'Cinzel', serif;
-      font-size: .72rem; letter-spacing: .06em;
-      margin-top: 8px; line-height: 1.35;
-      color: var(--text);
-    }
-    .book-author {
-      font-size: .68rem; color: var(--muted);
-      margin-top: 3px; font-style: italic;
-    }
+    #pdfFrame { flex: 1; width: 100%; border: none; display: none; background: #fff; }
 
-    /* ======== VIEWER ======== */
-    .viewer {
-      flex: 1; display: flex; flex-direction: column;
-      overflow: hidden; background: transparent;
-    }
-
-    .placeholder {
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 16px; text-align: center; padding: 30px;
-    }
-
-    .placeholder-glyph {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 3rem; color: var(--gold);
-      opacity: .25; line-height: 1;
-      text-shadow: 0 0 30px rgba(201,168,76,0.3);
-    }
-
-    .placeholder-title {
-      font-family: 'Cinzel', serif;
-      font-size: .8rem; letter-spacing: .2em;
-      text-transform: uppercase; color: var(--muted);
-    }
-
-    .placeholder-sub {
-      font-size: .95rem; color: rgba(138,122,106,0.5);
-      font-style: italic; max-width: 280px; line-height: 1.6;
-    }
-
-    /* Gold rule decoration */
-    .placeholder-rule {
-      display: flex; align-items: center; gap: 10px;
-    }
-    .ph-line {
-      height: 1px; width: 50px;
-      background: linear-gradient(to right, transparent, rgba(201,168,76,0.3));
-    }
-    .ph-line.r { background: linear-gradient(to left, transparent, rgba(201,168,76,0.3)); }
-    .ph-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(201,168,76,0.3); }
-
-    #pdfFrame {
-      flex: 1; width: 100%; border: none;
-      display: none; background: #fff;
-    }
-
-    /* ======== BOTTOM BAR MOBILE ======== */
+    /* BOTTOM BAR */
     .bottom-bar {
-      display: none;
-      height: var(--bottom-h);
-      background: rgba(10,8,6,0.95);
-      border-top: 1px solid var(--border);
-      overflow-x: auto; overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      flex-shrink: 0;
-      align-items: center;
-      gap: 12px; padding: 0 16px;
-      position: relative; z-index: 10;
-      backdrop-filter: blur(8px);
+      display: none; height: var(--bottom-h); background: rgba(8,6,14,0.95);
+      border-top: 1px solid var(--border); overflow-x: auto; overflow-y: hidden;
+      -webkit-overflow-scrolling: touch; scrollbar-width: none; flex-shrink: 0;
+      align-items: center; gap: 12px; padding: 0 16px; position: relative; z-index: 10; backdrop-filter: blur(8px);
     }
     .bottom-bar::-webkit-scrollbar { display: none; }
+    .bottom-book { display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0; padding: 6px 8px; border-radius: 6px; border: 1px solid transparent; text-decoration: none; transition: border-color .15s; }
+    .bottom-book:active { border-color: var(--lilac); }
+    .bottom-cover { width: 40px; height: 56px; border-radius: 3px; object-fit: cover; filter: sepia(0.15); }
+    .bottom-name { font-family: 'Cinzel', serif; font-size: .58rem; letter-spacing: .06em; color: var(--muted); text-align: center; max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    .bottom-book {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 5px;
-      flex-shrink: 0; padding: 6px 8px;
-      border-radius: 6px;
-      border: 1px solid transparent;
-      text-decoration: none;
-      transition: border-color .15s;
-    }
-    .bottom-book:active { border-color: var(--gold); }
-
-    .bottom-cover {
-      width: 40px; height: 56px;
-      border-radius: 3px; object-fit: cover;
-      filter: sepia(0.15);
-    }
-
-    .bottom-name {
-      font-family: 'Cinzel', serif;
-      font-size: .58rem; letter-spacing: .06em;
-      color: var(--muted); text-align: center;
-      max-width: 60px; overflow: hidden;
-      text-overflow: ellipsis; white-space: nowrap;
-    }
-
-    /* ======== RESPONSIVE ======== */
-    @media (max-width: 640px) {
-      .sidebar { display: none; }
-      .bottom-bar { display: flex; }
-    }
+    @media (max-width: 640px) { .sidebar { display: none; } .bottom-bar { display: flex; } }
   </style>
 </head>
 <body>
-
   <div class="bg"></div>
   <div class="rune-grid"></div>
   <div class="vignette"></div>
   <div class="embers" id="embers"></div>
 
-  <!-- HEADER -->
   <header class="header">
     <a href="index.html" class="header-back">← Accueil</a>
     <div class="header-sep"></div>
@@ -331,38 +140,27 @@
   </header>
 
   <div class="layout">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar">
       <div class="sidebar-heading">⚔ Archives</div>
       <div class="sidebar-sub">1 tome disponible</div>
       <div class="sidebar-rule"></div>
-
-      <div class="book-card" id="card-0" onclick="openBook('pdf/Void_Project.pdf', 'Void Project – Tome I', 0)">
+      <div class="book-card" id="card-0" onclick="openBook('pdf/Void_Project.pdf','Void Project – Tome I',0)">
         <img src="img/VoidProject.png" class="book-cover" alt="Void Project">
         <div class="book-name">Void Project – Tome I</div>
         <div class="book-author">Deramane Waren</div>
       </div>
     </aside>
-
-    <!-- VIEWER -->
     <main class="viewer">
       <div class="placeholder" id="placeholder">
         <div class="placeholder-glyph">⚔</div>
-        <div class="placeholder-rule">
-          <div class="ph-line"></div>
-          <div class="ph-dot"></div>
-          <div class="ph-line r"></div>
-        </div>
+        <div class="placeholder-rule"><div class="ph-line"></div><div class="ph-dot"></div><div class="ph-line r"></div></div>
         <div class="placeholder-title">Ouvre un tome</div>
         <p class="placeholder-sub">Sélectionne un livre dans les archives pour commencer la lecture.</p>
       </div>
       <iframe id="pdfFrame"></iframe>
     </main>
-
   </div>
 
-  <!-- BOTTOM BAR MOBILE -->
   <nav class="bottom-bar">
     <a class="bottom-book" href="pdf/Void_Project.pdf" target="_blank" rel="noopener">
       <img src="img/VoidProject.png" class="bottom-cover" alt="Void Project">
@@ -371,54 +169,29 @@
   </nav>
 
   <script>
-    // Embers
     const container = document.getElementById('embers');
     function spawnEmber() {
-      const el = document.createElement('div');
-      el.className = 'ember';
-      const size  = Math.random() * 3 + 1.2;
-      const x     = Math.random() * 100;
-      const dx    = (Math.random() - .5) * 70;
-      const dur   = Math.random() * 7 + 5;
-      const delay = Math.random() * 5;
-      const gold  = Math.random() > .5;
-      el.style.cssText = `
-        width:${size}px;height:${size}px;
-        left:${x}%;bottom:-10px;--dx:${dx}px;
-        background:radial-gradient(circle,${gold?'rgba(201,168,76,0.85)':'rgba(192,57,43,0.85)'},transparent 70%);
-        animation-duration:${dur}s;animation-delay:${delay}s;
-        box-shadow:0 0 ${size*2}px ${gold?'rgba(201,168,76,0.5)':'rgba(192,57,43,0.5)'};
-      `;
-      container.appendChild(el);
-      setTimeout(() => el.remove(), (dur + delay) * 1000);
+      const el = document.createElement('div'); el.className = 'ember';
+      const size=Math.random()*3+1.2, x=Math.random()*100, dx=(Math.random()-.5)*70, dur=Math.random()*7+5, delay=Math.random()*5, pink=Math.random()>.5;
+      el.style.cssText=`width:${size}px;height:${size}px;left:${x}%;bottom:-10px;--dx:${dx}px;background:radial-gradient(circle,${pink?'rgba(224,64,251,0.85)':'rgba(168,85,247,0.85)'},transparent 70%);animation-duration:${dur}s;animation-delay:${delay}s;box-shadow:0 0 ${size*2}px ${pink?'rgba(224,64,251,0.5)':'rgba(168,85,247,0.5)'};`;
+      container.appendChild(el); setTimeout(()=>el.remove(),(dur+delay)*1000);
     }
-    for (let i = 0; i < 14; i++) spawnEmber();
-    setInterval(spawnEmber, 650);
+    for(let i=0;i<14;i++) spawnEmber(); setInterval(spawnEmber,650);
 
-    // Open book
-    let currentIndex = null;
-    function openBook(path, title, index) {
-      if (currentIndex !== null)
-        document.getElementById("card-" + currentIndex)?.classList.remove("active");
-      currentIndex = index;
-      document.getElementById("card-" + index)?.classList.add("active");
-
-      document.getElementById("viewerTitle").innerHTML = `<span>${title}</span>`;
-
-      const dlBtn = document.getElementById("downloadBtn");
-      dlBtn.style.display = "inline-block";
-      dlBtn.href = path;
-      dlBtn.download = title.replace(/\s+/g, "_") + ".pdf";
-
-      const absoluteUrl = new URL(path, window.location.href).href;
-      const googleUrl = "https://docs.google.com/viewer?url=" + encodeURIComponent(absoluteUrl) + "&embedded=true";
-
-      const frame = document.getElementById("pdfFrame");
-      frame.src = googleUrl;
-      frame.style.display = "block";
-      document.getElementById("placeholder").style.display = "none";
+    let currentIndex=null;
+    function openBook(path,title,index) {
+      if(currentIndex!==null) document.getElementById("card-"+currentIndex)?.classList.remove("active");
+      currentIndex=index;
+      document.getElementById("card-"+index)?.classList.add("active");
+      document.getElementById("viewerTitle").innerHTML=`<span>${title}</span>`;
+      const dlBtn=document.getElementById("downloadBtn");
+      dlBtn.style.display="inline-block"; dlBtn.href=path; dlBtn.download=title.replace(/\s+/g,"_")+".pdf";
+      const absoluteUrl=new URL(path,window.location.href).href;
+      const googleUrl="https://docs.google.com/viewer?url="+encodeURIComponent(absoluteUrl)+"&embedded=true";
+      const frame=document.getElementById("pdfFrame");
+      frame.src=googleUrl; frame.style.display="block";
+      document.getElementById("placeholder").style.display="none";
     }
   </script>
-
 </body>
 </html>

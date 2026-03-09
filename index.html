@@ -7,55 +7,43 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-
   <style>
     :root {
-      --blood:   #8b1a1a;
-      --ember:   #c0392b;
-      --gold:    #c9a84c;
-      --gold-lt: #e8c97a;
-      --ash:     #1a1510;
-      --smoke:   #0d0b08;
-      --text:    #e8dcc8;
-      --muted:   #8a7a6a;
+      --void:   #7c3aed;
+      --mauve:  #a855f7;
+      --lilac:  #c084fc;
+      --pink:   #e040fb;
+      --soft:   #d8b4fe;
+      --smoke:  #08060e;
+      --ash:    #0d0a1a;
+      --text:   #f0e6ff;
+      --muted:  #8b6aaf;
+      --border: rgba(168,85,247,0.18);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body { height: 100%; overflow-x: hidden; }
+    body { font-family: 'EB Garamond', Georgia, serif; background: var(--smoke); color: var(--text); }
 
-    body {
-      font-family: 'EB Garamond', Georgia, serif;
-      background: var(--smoke);
-      color: var(--text);
-    }
-
-    /* BACKGROUND */
     .bg {
       position: fixed; inset: 0; z-index: -2;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 110%, rgba(139,26,26,0.4) 0%, transparent 65%),
-        radial-gradient(ellipse 60% 40% at 80% 20%, rgba(201,168,76,0.07) 0%, transparent 60%),
-        linear-gradient(180deg, #0a0806 0%, #0d0b08 40%, #120e0a 100%);
+        radial-gradient(ellipse 80% 55% at 50% 105%, rgba(124,58,237,0.45) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 35% at 20% 10%, rgba(224,64,251,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 35% at 80% 10%, rgba(168,85,247,0.07) 0%, transparent 55%),
+        linear-gradient(180deg, #06040c 0%, #08060e 40%, #0e0a1a 100%);
     }
-
     .rune-grid {
-      position: fixed; inset: 0; z-index: -1; opacity: .15;
+      position: fixed; inset: 0; z-index: -1; opacity: .12;
       background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(201,168,76,0.08) 80px),
-        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(201,168,76,0.08) 80px);
+        repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(168,85,247,0.1) 80px),
+        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(168,85,247,0.1) 80px);
     }
-
     .vignette {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.8) 100%);
+      background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.82) 100%);
     }
-
-    /* EMBERS */
     .embers { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
-    .ember {
-      position: absolute; border-radius: 50%;
-      animation: rise linear infinite; opacity: 0;
-    }
+    .ember { position: absolute; border-radius: 50%; animation: rise linear infinite; opacity: 0; }
     @keyframes rise {
       0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
       8%   { opacity: 1; }
@@ -63,207 +51,82 @@
       100% { transform: translateY(-110vh) translateX(var(--dx)) scale(0); opacity: 0; }
     }
 
-    /* CORNER ORNAMENTS */
-    .corner {
-      position: fixed; width: 55px; height: 55px;
-      pointer-events: none; z-index: 3; opacity: .3;
-    }
+    .corner { position: fixed; width: 55px; height: 55px; pointer-events: none; z-index: 3; opacity: .28; }
     .corner svg { width: 100%; height: 100%; }
     .corner.tl { top: 14px; left: 14px; }
     .corner.tr { top: 14px; right: 14px; transform: scaleX(-1); }
     .corner.bl { bottom: 14px; left: 14px; transform: scaleY(-1); }
     .corner.br { bottom: 14px; right: 14px; transform: scale(-1); }
 
-    /* PAGE */
-    .page {
-      position: relative; z-index: 2;
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-    }
+    .page { position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
 
-    /* HEADER */
-    header {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1.6rem 2.5rem;
-      border-bottom: 1px solid rgba(201,168,76,0.1);
-    }
-
-    .logo {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: .88rem;
-      letter-spacing: .12em;
-      color: var(--gold);
-      text-shadow: 0 0 20px rgba(201,168,76,0.5);
-    }
-
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1.6rem 2.5rem; border-bottom: 1px solid var(--border); }
+    .logo { font-family: 'Cinzel Decorative', serif; font-size: .88rem; letter-spacing: .12em; color: var(--lilac); text-shadow: 0 0 22px rgba(224,64,251,0.5); }
     nav { display: flex; gap: 2rem; }
-    nav a {
-      font-family: 'Cinzel', serif;
-      font-size: .7rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color .2s;
-    }
-    nav a:hover { color: var(--gold-lt); }
+    nav a { font-family: 'Cinzel', serif; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+    nav a:hover { color: var(--soft); }
 
-    /* HERO */
-    main {
-      flex: 1;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      text-align: center;
-      padding: 3rem 2rem 4rem;
-    }
+    main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 3rem 2rem 4rem; }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 
-    .rune-bar {
-      display: flex; align-items: center; gap: 1rem;
-      margin-bottom: 1.6rem;
-      opacity: 0; animation: fadeUp .9s .2s forwards;
-    }
-    .rune-line {
-      height: 1px; width: 80px;
-      background: linear-gradient(to right, transparent, var(--gold));
-    }
-    .rune-line.r { background: linear-gradient(to left, transparent, var(--gold)); }
-    .rune-glyph {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: .7rem; color: var(--gold); letter-spacing: .2em;
-    }
+    .rune-bar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.6rem; opacity: 0; animation: fadeUp .9s .2s forwards; }
+    .rune-line { height: 1px; width: 80px; background: linear-gradient(to right, transparent, var(--lilac)); }
+    .rune-line.r { background: linear-gradient(to left, transparent, var(--lilac)); }
+    .rune-glyph { font-family: 'Cinzel Decorative', serif; font-size: .7rem; color: var(--lilac); letter-spacing: .2em; text-shadow: 0 0 14px rgba(224,64,251,0.4); }
 
-    .title-block {
-      margin-bottom: 1.4rem;
-      opacity: 0; animation: fadeUp .9s .4s forwards;
-    }
-
-    .eyebrow {
-      font-family: 'Cinzel', serif;
-      font-size: .68rem; letter-spacing: .22em;
-      text-transform: uppercase; color: var(--blood);
-      margin-bottom: .8rem;
-    }
+    .title-block { margin-bottom: 1.4rem; opacity: 0; animation: fadeUp .9s .4s forwards; }
+    .eyebrow { font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--mauve); margin-bottom: .8rem; }
 
     h1 {
       font-family: 'Cinzel Decorative', serif;
-      font-size: clamp(2.6rem, 8vw, 6rem);
-      font-weight: 700;
-      line-height: 1.0;
-      color: var(--text);
-      text-shadow:
-        0 0 60px rgba(139,26,26,0.7),
-        0 0 120px rgba(139,26,26,0.3),
-        0 2px 4px rgba(0,0,0,0.9);
+      font-size: clamp(2.6rem, 8vw, 6rem); font-weight: 700; line-height: 1.0; color: var(--text);
+      text-shadow: 0 0 60px rgba(168,85,247,0.7), 0 0 120px rgba(224,64,251,0.3), 0 2px 4px rgba(0,0,0,0.9);
     }
-
     h1::after {
-      content: "";
-      display: block;
-      height: 2px; width: 55%;
-      margin: .7rem auto 0;
-      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      content: ""; display: block; height: 2px; width: 55%; margin: .7rem auto 0;
+      background: linear-gradient(to right, transparent, var(--pink), var(--lilac), transparent);
     }
 
-    .subtitle {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      color: var(--muted);
-      line-height: 1.8;
-      max-width: 440px;
-      margin: 0 auto 2.6rem;
-      font-style: italic;
-      opacity: 0; animation: fadeUp .9s .6s forwards;
-    }
+    .subtitle { font-size: clamp(1rem, 2vw, 1.2rem); color: var(--muted); line-height: 1.8; max-width: 440px; margin: 0 auto 2.6rem; font-style: italic; opacity: 0; animation: fadeUp .9s .6s forwards; }
 
-    .cta-wrap {
-      opacity: 0; animation: fadeUp .9s .8s forwards;
-      display: flex; flex-direction: column; align-items: center; gap: .9rem;
-    }
+    .cta-wrap { opacity: 0; animation: fadeUp .9s .8s forwards; display: flex; flex-direction: column; align-items: center; gap: .9rem; }
 
     .cta {
       display: inline-flex; align-items: center; gap: .8rem;
       padding: 1rem 2.4rem;
-      font-family: 'Cinzel', serif;
-      font-size: .85rem; letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--ash);
-      background: linear-gradient(135deg, var(--gold-lt) 0%, var(--gold) 50%, #a07830 100%);
-      border: none; border-radius: 2px;
-      text-decoration: none;
-      position: relative; overflow: hidden;
+      font-family: 'Cinzel', serif; font-size: .85rem; letter-spacing: .14em; text-transform: uppercase;
+      color: #0a0514;
+      background: linear-gradient(135deg, var(--pink) 0%, var(--lilac) 45%, var(--void) 100%);
+      border: none; border-radius: 2px; text-decoration: none; position: relative; overflow: hidden;
       transition: transform .2s, box-shadow .2s;
-      box-shadow:
-        0 0 30px rgba(201,168,76,0.4),
-        0 4px 20px rgba(0,0,0,0.6),
-        inset 0 1px 0 rgba(255,255,255,0.2);
+      box-shadow: 0 0 32px rgba(224,64,251,0.4), 0 4px 20px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.2);
     }
-
-    .cta::before {
-      content: ""; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-      opacity: 0; transition: opacity .2s;
-    }
-
-    .cta:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 0 55px rgba(201,168,76,0.7), 0 8px 30px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.2);
-    }
+    .cta::before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent); opacity: 0; transition: opacity .2s; }
+    .cta:hover { transform: translateY(-3px); box-shadow: 0 0 60px rgba(224,64,251,0.65), 0 8px 30px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.2); }
     .cta:hover::before { opacity: 1; }
 
-    .cta-sec {
-      font-family: 'Cinzel', serif;
-      font-size: .68rem; letter-spacing: .14em;
-      text-transform: uppercase; color: var(--muted);
-      text-decoration: none;
-      border-bottom: 1px solid rgba(138,122,106,0.3);
-      padding-bottom: 2px;
-      transition: color .2s, border-color .2s;
-    }
-    .cta-sec:hover { color: var(--gold-lt); border-color: var(--gold-lt); }
+    .cta-sec { font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-decoration: none; border-bottom: 1px solid rgba(168,85,247,0.25); padding-bottom: 2px; transition: color .2s, border-color .2s; }
+    .cta-sec:hover { color: var(--soft); border-color: var(--soft); }
 
-    .bottom-mark {
-      display: flex; align-items: center; gap: 1rem;
-      margin-top: 3.5rem;
-      opacity: 0; animation: fadeUp .9s 1s forwards;
-    }
-    .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); opacity: .5; }
-    .mark-text {
-      font-family: 'Cinzel', serif;
-      font-size: .6rem; letter-spacing: .22em;
-      color: var(--muted); text-transform: uppercase;
-    }
+    .bottom-mark { display: flex; align-items: center; gap: 1rem; margin-top: 3.5rem; opacity: 0; animation: fadeUp .9s 1s forwards; }
+    .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--lilac); opacity: .5; }
+    .mark-text { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .22em; color: var(--muted); text-transform: uppercase; }
 
-    footer {
-      text-align: center; padding: 1.2rem;
-      font-family: 'Cinzel', serif;
-      font-size: .6rem; letter-spacing: .14em;
-      color: rgba(138,122,106,0.25);
-      border-top: 1px solid rgba(201,168,76,0.06);
-      position: relative; z-index: 2;
-    }
+    footer { text-align: center; padding: 1.2rem; font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .14em; color: rgba(139,106,175,0.25); border-top: 1px solid rgba(168,85,247,0.07); position: relative; z-index: 2; }
 
-    @media (max-width: 600px) {
-      header { padding: 1.2rem 1.4rem; }
-      nav { gap: 1.2rem; }
-      .rune-line { width: 36px; }
-    }
+    @media (max-width: 600px) { header { padding: 1.2rem 1.4rem; } nav { gap: 1.2rem; } .rune-line { width: 36px; } }
   </style>
 </head>
 <body>
-
   <div class="bg"></div>
   <div class="rune-grid"></div>
   <div class="vignette"></div>
   <div class="embers" id="embers"></div>
-
-  <div class="corner tl"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#c9a84c" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#c9a84c" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#c9a84c" opacity=".8"/></svg></div>
-  <div class="corner tr"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#c9a84c" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#c9a84c" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#c9a84c" opacity=".8"/></svg></div>
-  <div class="corner bl"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#c9a84c" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#c9a84c" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#c9a84c" opacity=".8"/></svg></div>
-  <div class="corner br"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#c9a84c" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#c9a84c" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#c9a84c" opacity=".8"/></svg></div>
+  <div class="corner tl"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#a855f7" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#e040fb" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#e040fb" opacity=".8"/></svg></div>
+  <div class="corner tr"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#a855f7" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#e040fb" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#e040fb" opacity=".8"/></svg></div>
+  <div class="corner bl"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#a855f7" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#e040fb" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#e040fb" opacity=".8"/></svg></div>
+  <div class="corner br"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#a855f7" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#e040fb" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#e040fb" opacity=".8"/></svg></div>
 
   <div class="page">
     <header>
@@ -273,66 +136,39 @@
         <a href="chroniques.html">Chroniques</a>
       </nav>
     </header>
-
     <main>
       <div class="rune-bar">
         <div class="rune-line"></div>
         <span class="rune-glyph">✦ Les Archives ✦</span>
         <div class="rune-line r"></div>
       </div>
-
       <div class="title-block">
         <div class="eyebrow"></div>
         <h1>Scriptorium</h1>
       </div>
-
-      <p class="subtitle">
-        Là où les récits dorment entre deux mondes.<br>
-        Ouvre les archives et laisse-toi dévorer par l'histoire.
-      </p>
-
+      <p class="subtitle">Là où les récits dorment entre deux mondes.<br>Ouvre les archives et laisse-toi dévorer par l'histoire.</p>
       <div class="cta-wrap">
-        <a href="bibliotheque.html" class="cta">
-          <span>📜</span> Entrer dans les Archives
-        </a>
+        <a href="bibliotheque.html" class="cta"><span>📜</span> Entrer dans les Archives</a>
         <a href="chroniques.html" class="cta-sec">Explorer les chroniques →</a>
       </div>
-
       <div class="bottom-mark">
         <div class="dot"></div>
         <span class="mark-text">Deramane Waren · 2025</span>
         <div class="dot"></div>
       </div>
     </main>
-
     <footer>Scriptorium — Forged in darkness · All rights reserved</footer>
   </div>
 
   <script>
     const container = document.getElementById('embers');
     function spawnEmber() {
-      const el = document.createElement('div');
-      el.className = 'ember';
-      const size  = Math.random() * 4 + 1.5;
-      const x     = Math.random() * 100;
-      const dx    = (Math.random() - .5) * 80;
-      const dur   = Math.random() * 6 + 5;
-      const delay = Math.random() * 4;
-      const gold  = Math.random() > .5;
-      el.style.cssText = `
-        width:${size}px;height:${size}px;
-        left:${x}%;bottom:-10px;
-        --dx:${dx}px;
-        background:radial-gradient(circle,${gold?'rgba(201,168,76,0.9)':'rgba(192,57,43,0.9)'},transparent 70%);
-        animation-duration:${dur}s;animation-delay:${delay}s;
-        box-shadow:0 0 ${size*2}px ${gold?'rgba(201,168,76,0.6)':'rgba(192,57,43,0.6)'};
-      `;
-      container.appendChild(el);
-      setTimeout(() => el.remove(), (dur + delay) * 1000);
+      const el = document.createElement('div'); el.className = 'ember';
+      const size=Math.random()*4+1.5, x=Math.random()*100, dx=(Math.random()-.5)*80, dur=Math.random()*6+5, delay=Math.random()*4, pink=Math.random()>.5;
+      el.style.cssText=`width:${size}px;height:${size}px;left:${x}%;bottom:-10px;--dx:${dx}px;background:radial-gradient(circle,${pink?'rgba(224,64,251,0.9)':'rgba(168,85,247,0.9)'},transparent 70%);animation-duration:${dur}s;animation-delay:${delay}s;box-shadow:0 0 ${size*2}px ${pink?'rgba(224,64,251,0.6)':'rgba(168,85,247,0.6)'};`;
+      container.appendChild(el); setTimeout(()=>el.remove(),(dur+delay)*1000);
     }
-
-    for (let i = 0; i < 20; i++) spawnEmber();
-    setInterval(spawnEmber, 550);
+    for(let i=0;i<20;i++) spawnEmber(); setInterval(spawnEmber,550);
   </script>
 </body>
 </html>
