@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-
   <style>
     :root {
       --blood:   #8b1a1a;
@@ -18,385 +17,341 @@
       --text:    #e8dcc8;
       --muted:   #8a7a6a;
       --border:  rgba(201,168,76,0.15);
+      --card-bg: rgba(20,15,10,0.9);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body {
-      font-family: 'EB Garamond', Georgia, serif;
-      background: var(--smoke);
-      color: var(--text);
-      overflow-x: hidden;
-    }
+    body { font-family: 'EB Garamond', Georgia, serif; background: var(--smoke); color: var(--text); overflow-x: hidden; }
 
-    /* ======== BACKGROUND ======== */
-    .bg {
-      position: fixed; inset: 0; z-index: -2;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% 110%, rgba(139,26,26,0.35) 0%, transparent 65%),
-        radial-gradient(ellipse 60% 40% at 80% 20%, rgba(201,168,76,0.06) 0%, transparent 60%),
-        linear-gradient(180deg, #0a0806 0%, #0d0b08 40%, #120e0a 100%);
-    }
-    .rune-grid {
-      position: fixed; inset: 0; z-index: -1; opacity: .1;
-      background-image:
-        repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(201,168,76,0.08) 80px),
-        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(201,168,76,0.08) 80px);
-    }
-    .vignette {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 45%, rgba(0,0,0,0.75) 100%);
-    }
-
-    /* ======== EMBERS ======== */
+    /* BG */
+    .bg { position: fixed; inset: 0; z-index: -2; background: radial-gradient(ellipse 80% 60% at 50% 110%, rgba(139,26,26,0.35) 0%, transparent 65%), radial-gradient(ellipse 60% 40% at 80% 20%, rgba(201,168,76,0.06) 0%, transparent 60%), linear-gradient(180deg, #0a0806 0%, #0d0b08 40%, #120e0a 100%); }
+    .rune-grid { position: fixed; inset: 0; z-index: -1; opacity: .1; background-image: repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(201,168,76,0.08) 80px), repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(201,168,76,0.08) 80px); }
+    .vignette { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 45%, rgba(0,0,0,0.75) 100%); }
     .embers { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
     .ember { position: absolute; border-radius: 50%; animation: rise linear infinite; opacity: 0; }
-    @keyframes rise {
-      0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-      8%   { opacity: .8; }
-      85%  { opacity: .3; }
-      100% { transform: translateY(-110vh) translateX(var(--dx)) scale(0); opacity: 0; }
-    }
+    @keyframes rise { 0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; } 8% { opacity: .8; } 85% { opacity: .3; } 100% { transform: translateY(-110vh) translateX(var(--dx)) scale(0); opacity: 0; } }
 
-    /* ======== CORNER ORNAMENTS ======== */
+    /* CORNER */
     .corner { position: fixed; width: 50px; height: 50px; pointer-events: none; z-index: 3; opacity: .25; }
     .corner svg { width: 100%; height: 100%; }
     .corner.tl { top: 14px; left: 14px; }
     .corner.tr { top: 14px; right: 14px; transform: scaleX(-1); }
 
-    /* ======== HEADER ======== */
-    header {
-      position: sticky; top: 0; z-index: 100;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 1.2rem 2.5rem;
-      background: rgba(10,8,6,0.92);
-      border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(10px);
-    }
-    .logo {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: .88rem; letter-spacing: .12em;
-      color: var(--gold);
-      text-shadow: 0 0 20px rgba(201,168,76,0.5);
-      text-decoration: none;
-    }
-    nav { display: flex; gap: 2rem; align-items: center; }
-    nav a {
-      font-family: 'Cinzel', serif; font-size: .7rem;
-      letter-spacing: .14em; text-transform: uppercase;
-      color: var(--muted); text-decoration: none; transition: color .2s;
-    }
+    /* HEADER */
+    header { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2.5rem; background: rgba(10,8,6,0.92); border-bottom: 1px solid var(--border); backdrop-filter: blur(10px); }
+    .logo { font-family: 'Cinzel Decorative', serif; font-size: .88rem; letter-spacing: .12em; color: var(--gold); text-shadow: 0 0 20px rgba(201,168,76,0.5); text-decoration: none; }
+    nav { display: flex; gap: 2rem; }
+    nav a { font-family: 'Cinzel', serif; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
     nav a:hover, nav a.active { color: var(--gold-lt); }
 
-    /* ======== PAGE WRAPPER ======== */
     .page { position: relative; z-index: 2; }
 
-    /* ======== HERO SECTION ======== */
-    .hero {
-      text-align: center;
-      padding: 4rem 2rem 3rem;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    /* HERO */
+    .hero { text-align: center; padding: 4rem 2rem 3rem; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     .fade-up { opacity: 0; animation: fadeUp .8s forwards; }
+    .section-eyebrow { font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--blood); margin-bottom: .8rem; }
+    .page-title { font-family: 'Cinzel Decorative', serif; font-size: clamp(2rem, 5vw, 3.8rem); color: var(--text); text-shadow: 0 0 50px rgba(139,26,26,0.6), 0 2px 4px rgba(0,0,0,0.9); line-height: 1.1; }
+    .page-title::after { content: ""; display: block; height: 2px; width: 40%; margin: .6rem auto 0; background: linear-gradient(to right, transparent, var(--gold), transparent); }
+    .hero-sub { font-size: 1.1rem; font-style: italic; color: var(--muted); margin-top: 1rem; max-width: 480px; margin-inline: auto; line-height: 1.7; }
 
-    .section-eyebrow {
-      font-family: 'Cinzel', serif; font-size: .68rem;
-      letter-spacing: .22em; text-transform: uppercase;
-      color: var(--blood); margin-bottom: .8rem;
-    }
-    .page-title {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: clamp(2rem, 5vw, 3.8rem);
-      color: var(--text);
-      text-shadow: 0 0 50px rgba(139,26,26,0.6), 0 2px 4px rgba(0,0,0,0.9);
-      line-height: 1.1;
-    }
-    .page-title::after {
-      content: ""; display: block; height: 2px; width: 40%;
-      margin: .6rem auto 0;
-      background: linear-gradient(to right, transparent, var(--gold), transparent);
-    }
-    .hero-sub {
-      font-size: 1.1rem; font-style: italic;
-      color: var(--muted); margin-top: 1rem;
-      max-width: 480px; margin-inline: auto;
-      line-height: 1.7;
-    }
-
-    /* ======== TABS ======== */
-    .tabs {
-      display: flex; justify-content: center; gap: 0;
-      margin: 2rem auto;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      width: fit-content;
-      overflow: hidden;
-    }
-    .tab {
-      font-family: 'Cinzel', serif; font-size: .72rem;
-      letter-spacing: .12em; text-transform: uppercase;
-      padding: .7rem 1.6rem;
-      background: transparent; border: none;
-      color: var(--muted); cursor: pointer;
-      transition: background .2s, color .2s;
-      border-right: 1px solid var(--border);
-      position: relative;
-    }
+    /* TABS */
+    .tabs { display: flex; justify-content: center; margin: 2rem auto; border: 1px solid var(--border); border-radius: 4px; width: fit-content; overflow: hidden; }
+    .tab { font-family: 'Cinzel', serif; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; padding: .7rem 1.6rem; background: transparent; border: none; color: var(--muted); cursor: pointer; transition: background .2s, color .2s; border-right: 1px solid var(--border); position: relative; }
     .tab:last-child { border-right: none; }
     .tab:hover { background: rgba(201,168,76,0.06); color: var(--text); }
-    .tab.active {
-      background: rgba(201,168,76,0.12);
-      color: var(--gold-lt);
-    }
-    .tab.active::after {
-      content: ""; position: absolute; bottom: 0; left: 0; right: 0;
-      height: 2px; background: var(--gold);
-    }
+    .tab.active { background: rgba(201,168,76,0.12); color: var(--gold-lt); }
+    .tab.active::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--gold); }
 
-    /* ======== MAIN CONTENT ======== */
     .content { padding: 0 2rem 5rem; max-width: 1200px; margin: 0 auto; }
-
-    /* ======== PANEL ======== */
     .panel { display: none; }
     .panel.active { display: block; }
+    .section-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+    .section-head-line { flex: 1; height: 1px; background: linear-gradient(to right, var(--border), transparent); }
+    .section-head-title { font-family: 'Cinzel', serif; font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
 
-    /* ======== SECTION TITLE ======== */
-    .section-head {
-      display: flex; align-items: center; gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    .section-head-line {
-      flex: 1; height: 1px;
-      background: linear-gradient(to right, var(--border), transparent);
-    }
-    .section-head-title {
-      font-family: 'Cinzel', serif; font-size: .75rem;
-      letter-spacing: .2em; text-transform: uppercase;
-      color: var(--gold); white-space: nowrap;
-    }
-
-    /* ======== CHARACTER GRID ======== */
-    .char-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1.4rem;
-      margin-bottom: 3rem;
-    }
-
-    .char-card {
-      background: rgba(26,20,16,0.75);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform .2s, border-color .2s, box-shadow .2s;
-      position: relative;
-    }
-    .char-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(201,168,76,0.4);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,76,0.08);
-    }
-    .char-card.active-card {
-      border-color: var(--gold);
-      box-shadow: 0 0 24px rgba(201,168,76,0.2);
-    }
-
-    /* Placeholder portrait */
-    .char-portrait {
-      width: 100%; aspect-ratio: 3/4;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 3rem;
-      position: relative; overflow: hidden;
-    }
-    .char-portrait::after {
-      content: ""; position: absolute; inset: 0;
-      background: linear-gradient(to bottom, transparent 50%, rgba(10,8,6,0.9) 100%);
-    }
-
+    /* CHARACTER GRID */
+    .char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 1.4rem; margin-bottom: 3rem; }
+    .char-card { background: rgba(26,20,16,0.75); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; cursor: pointer; transition: transform .2s, border-color .2s, box-shadow .2s; }
+    .char-card:hover { transform: translateY(-5px); border-color: rgba(201,168,76,0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(201,168,76,0.08); }
+    .char-card.active-card { border-color: var(--gold); box-shadow: 0 0 28px rgba(201,168,76,0.25); }
+    .char-portrait { width: 100%; aspect-ratio: 3/4; display: flex; align-items: center; justify-content: center; font-size: 3rem; position: relative; overflow: hidden; }
+    .char-portrait::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 50%, rgba(10,8,6,0.9) 100%); }
     .char-info { padding: 12px 14px 14px; }
-    .char-name {
-      font-family: 'Cinzel', serif; font-size: .88rem;
-      letter-spacing: .08em; color: var(--text);
-      margin-bottom: 3px;
-    }
-    .char-role {
-      font-size: .78rem; font-style: italic; color: var(--muted);
-    }
-    .char-faction {
-      display: inline-block; margin-top: 8px;
-      font-family: 'Cinzel', serif; font-size: .6rem;
-      letter-spacing: .1em; text-transform: uppercase;
-      padding: 2px 8px; border-radius: 2px;
-      border: 1px solid;
-    }
-
-    /* Faction colors */
+    .char-name { font-family: 'Cinzel', serif; font-size: .88rem; letter-spacing: .08em; color: var(--text); margin-bottom: 3px; }
+    .char-role { font-size: .78rem; font-style: italic; color: var(--muted); }
+    .char-faction { display: inline-block; margin-top: 8px; font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; padding: 2px 8px; border-radius: 2px; border: 1px solid; }
     .faction-void     { color: #a78bfa; border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.08); }
     .faction-order    { color: var(--gold-lt); border-color: rgba(232,201,122,0.3); background: rgba(232,201,122,0.08); }
     .faction-shadow   { color: #f87171; border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.08); }
     .faction-neutral  { color: var(--muted); border-color: rgba(138,122,106,0.3); background: rgba(138,122,106,0.08); }
 
-    /* ======== CHARACTER DETAIL ======== */
-    .char-detail {
-      background: rgba(20,15,10,0.85);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 2rem;
+    /* =============================================
+       MODAL — FICHE D&D
+    ============================================= */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.88);
       backdrop-filter: blur(6px);
-      display: none;
-      margin-bottom: 2rem;
-      animation: fadeUp .4s forwards;
-    }
-    .char-detail.open { display: grid; grid-template-columns: 180px 1fr; gap: 2rem; }
-
-    .detail-portrait {
-      width: 100%; aspect-ratio: 3/4;
-      border-radius: 4px; display: flex;
-      align-items: center; justify-content: center;
-      font-size: 4rem; border: 1px solid var(--border);
-    }
-
-    .detail-name {
-      font-family: 'Cinzel Decorative', serif;
-      font-size: 1.6rem; color: var(--text);
-      text-shadow: 0 0 30px rgba(201,168,76,0.3);
-      margin-bottom: .3rem;
-    }
-    .detail-role { font-style: italic; color: var(--muted); margin-bottom: 1rem; }
-    .detail-divider {
-      height: 1px; margin: 1rem 0;
-      background: linear-gradient(to right, var(--gold), transparent);
-      opacity: .3;
-    }
-    .detail-desc { font-size: 1.05rem; line-height: 1.75; color: var(--text); margin-bottom: 1.2rem; }
-
-    .stats-row { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
-    .stat-box {
-      background: rgba(201,168,76,0.06);
-      border: 1px solid rgba(201,168,76,0.15);
-      border-radius: 4px;
-      padding: .5rem .9rem;
-    }
-    .stat-label {
-      font-family: 'Cinzel', serif; font-size: .58rem;
-      letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
-    }
-    .stat-value { font-size: 1rem; color: var(--gold-lt); margin-top: 2px; }
-
-    .close-btn {
-      font-family: 'Cinzel', serif; font-size: .68rem;
-      letter-spacing: .1em; text-transform: uppercase;
-      color: var(--muted); background: none; border: none;
-      cursor: pointer; margin-top: 1rem; padding: 0;
-      transition: color .2s;
-    }
-    .close-btn:hover { color: var(--gold-lt); }
-
-    /* ======== CHARACTER LIST (panel 2) ======== */
-    .char-list { display: flex; flex-direction: column; gap: .8rem; }
-    .char-list-item {
-      display: flex; align-items: center; gap: 1.4rem;
-      background: rgba(26,20,16,0.7);
-      border: 1px solid var(--border);
-      border-radius: 6px; padding: 1rem 1.4rem;
-      transition: border-color .2s, background .2s;
-    }
-    .char-list-item:hover {
-      border-color: rgba(201,168,76,0.3);
-      background: rgba(26,20,16,0.9);
-    }
-    .list-avatar {
-      width: 52px; height: 52px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem; flex-shrink: 0;
-      border: 1px solid var(--border);
+      padding: 1.5rem;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s;
     }
-    .list-name {
-      font-family: 'Cinzel', serif; font-size: .9rem;
-      letter-spacing: .08em; color: var(--text); flex: 1;
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal-sheet {
+      width: 100%; max-width: 860px;
+      max-height: 90vh; overflow-y: auto;
+      background: #13100c;
+      border: 1px solid rgba(201,168,76,0.35);
+      border-radius: 4px;
+      box-shadow: 0 0 80px rgba(139,26,26,0.4), 0 0 40px rgba(201,168,76,0.15), 0 20px 60px rgba(0,0,0,0.8);
+      transform: scale(.94) translateY(20px);
+      transition: transform .35s cubic-bezier(.16,1,.3,1), opacity .35s;
+      opacity: 0;
+      position: relative;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(201,168,76,0.2) transparent;
     }
-    .list-role { font-size: .82rem; font-style: italic; color: var(--muted); }
-    .list-status {
-      font-family: 'Cinzel', serif; font-size: .6rem;
+    .modal-sheet::-webkit-scrollbar { width: 4px; }
+    .modal-sheet::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); border-radius: 2px; }
+
+    .modal-overlay.open .modal-sheet { transform: scale(1) translateY(0); opacity: 1; }
+
+    /* Gold top border */
+    .modal-sheet::before {
+      content: ""; display: block; height: 3px;
+      background: linear-gradient(to right, transparent, var(--gold), var(--blood), var(--gold), transparent);
+    }
+
+    /* Parchment noise overlay */
+    .modal-sheet::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: 4px;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      opacity: .4;
+    }
+
+    .modal-close {
+      position: absolute; top: 14px; right: 16px; z-index: 10;
+      background: none; border: none; color: var(--muted);
+      font-family: 'Cinzel', serif; font-size: .7rem;
+      letter-spacing: .1em; cursor: pointer;
+      transition: color .2s; padding: 4px 8px;
+    }
+    .modal-close:hover { color: var(--gold-lt); }
+
+    /* ---- SHEET HEADER ---- */
+    .sheet-header {
+      display: grid; grid-template-columns: 140px 1fr;
+      gap: 1.6rem; padding: 1.6rem 1.8rem 0;
+      align-items: start;
+    }
+
+    .sheet-portrait {
+      width: 140px; height: 185px; border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4.5rem; border: 1px solid rgba(201,168,76,0.2);
+      position: relative; overflow: hidden; flex-shrink: 0;
+    }
+    .sheet-portrait-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 80%, var(--portrait-glow, rgba(201,168,76,0.2)), transparent 70%);
+    }
+
+    .sheet-title-block { padding-top: .3rem; }
+
+    .sheet-name {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      color: var(--text);
+      text-shadow: 0 0 30px rgba(201,168,76,0.25);
+      line-height: 1.1; margin-bottom: .3rem;
+    }
+    .sheet-role {
+      font-size: 1rem; font-style: italic; color: var(--muted);
+      margin-bottom: .8rem;
+    }
+
+    /* DnD identity row */
+    .sheet-identity {
+      display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem;
+    }
+    .id-badge {
+      font-family: 'Cinzel', serif; font-size: .62rem;
       letter-spacing: .1em; text-transform: uppercase;
-      padding: 3px 10px; border-radius: 2px; border: 1px solid;
+      padding: 3px 10px; border-radius: 2px;
+      border: 1px solid rgba(201,168,76,0.2);
+      background: rgba(201,168,76,0.06); color: var(--gold-lt);
     }
+
+    /* Quote */
+    .sheet-quote {
+      font-size: 1rem; font-style: italic;
+      color: rgba(232,201,122,0.55);
+      border-left: 2px solid rgba(201,168,76,0.3);
+      padding-left: .8rem; margin-bottom: .5rem;
+      line-height: 1.5;
+    }
+
+    /* ---- DIVIDER ---- */
+    .sheet-divider {
+      height: 1px; margin: 1.2rem 1.8rem;
+      background: linear-gradient(to right, transparent, rgba(201,168,76,0.35), rgba(139,26,26,0.4), rgba(201,168,76,0.35), transparent);
+    }
+
+    /* Ornament center divider */
+    .sheet-divider-ornament {
+      display: flex; align-items: center; gap: .8rem;
+      margin: 0 1.8rem 1.2rem;
+    }
+    .deco-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(201,168,76,0.2)); }
+    .deco-line.r { background: linear-gradient(to left, transparent, rgba(201,168,76,0.2)); }
+    .deco-glyph { font-family: 'Cinzel Decorative', serif; font-size: .62rem; color: rgba(201,168,76,0.4); letter-spacing: .2em; }
+
+    /* ---- BODY GRID ---- */
+    .sheet-body { padding: 0 1.8rem 1.8rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.6rem; }
+
+    /* ---- SECTION LABEL ---- */
+    .sheet-section-label {
+      font-family: 'Cinzel', serif; font-size: .65rem;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--blood); margin-bottom: .8rem;
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .sheet-section-label::after { content: ""; flex: 1; height: 1px; background: rgba(139,26,26,0.3); }
+
+    /* ---- DnD ABILITY SCORES ---- */
+    .ability-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem;
+      margin-bottom: .4rem;
+    }
+    .ability-box {
+      background: rgba(10,8,6,0.6);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 3px;
+      padding: .5rem .4rem;
+      text-align: center;
+      position: relative;
+    }
+    .ability-name {
+      font-family: 'Cinzel', serif; font-size: .55rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .3rem;
+    }
+    .ability-score {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: 1.6rem; line-height: 1;
+      color: var(--gold-lt);
+    }
+    .ability-mod {
+      font-family: 'Cinzel', serif; font-size: .65rem;
+      color: var(--muted); margin-top: .2rem;
+    }
+
+    /* ---- STAT BARS ---- */
+    .stat-bars { display: flex; flex-direction: column; gap: .7rem; }
+    .stat-bar-row { }
+    .stat-bar-label {
+      display: flex; justify-content: space-between;
+      font-family: 'Cinzel', serif; font-size: .62rem;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: .3rem;
+    }
+    .stat-bar-val { color: var(--gold-lt); }
+    .stat-bar-track {
+      height: 6px; background: rgba(255,255,255,0.05);
+      border-radius: 3px; overflow: hidden;
+      border: 1px solid rgba(201,168,76,0.1);
+    }
+    .stat-bar-fill {
+      height: 100%; border-radius: 3px;
+      width: 0; transition: width 1s cubic-bezier(.16,1,.3,1);
+      position: relative;
+    }
+    .stat-bar-fill::after {
+      content: ""; position: absolute; right: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 2px;
+    }
+
+    /* ---- DESC ---- */
+    .sheet-desc {
+      grid-column: 1 / -1;
+      font-size: 1.05rem; line-height: 1.75;
+      color: rgba(232,220,200,0.85);
+    }
+
+    /* ---- POWERS ---- */
+    .powers-list { display: flex; flex-direction: column; gap: .5rem; }
+    .power-item {
+      display: flex; gap: .8rem; align-items: flex-start;
+      background: rgba(10,8,6,0.5);
+      border: 1px solid rgba(201,168,76,0.1);
+      border-radius: 3px; padding: .6rem .8rem;
+    }
+    .power-icon { font-size: 1rem; flex-shrink: 0; margin-top: .1rem; }
+    .power-name {
+      font-family: 'Cinzel', serif; font-size: .72rem;
+      letter-spacing: .06em; color: var(--gold-lt);
+      margin-bottom: .2rem;
+    }
+    .power-desc { font-size: .88rem; color: var(--muted); line-height: 1.5; }
+
+    /* ---- INFO BOXES ---- */
+    .info-boxes { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+    .info-box {
+      background: rgba(10,8,6,0.5); border: 1px solid rgba(201,168,76,0.1);
+      border-radius: 3px; padding: .5rem .7rem;
+    }
+    .info-box-label { font-family: 'Cinzel', serif; font-size: .55rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+    .info-box-value { font-size: .9rem; color: var(--text); }
+
+    /* ---- HP BAR ---- */
+    .hp-section { grid-column: 1 / -1; }
+    .hp-bar-track { height: 10px; background: rgba(139,26,26,0.15); border-radius: 999px; overflow: hidden; border: 1px solid rgba(139,26,26,0.3); margin-top: .4rem; }
+    .hp-bar-fill { height: 100%; background: linear-gradient(to right, #7f1d1d, #dc2626); border-radius: 999px; transition: width 1.2s cubic-bezier(.16,1,.3,1); width: 0; }
+    .hp-label { display: flex; justify-content: space-between; font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: .4rem; }
+    .hp-value { color: #f87171; }
+
+    /* ---- REGISTER & TIMELINE (unchanged) ---- */
+    .char-list { display: flex; flex-direction: column; gap: .8rem; }
+    .char-list-item { display: flex; align-items: center; gap: 1.4rem; background: rgba(26,20,16,0.7); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.4rem; transition: border-color .2s, background .2s; }
+    .char-list-item:hover { border-color: rgba(201,168,76,0.3); background: rgba(26,20,16,0.9); }
+    .list-avatar { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0; border: 1px solid var(--border); }
+    .list-name { font-family: 'Cinzel', serif; font-size: .9rem; letter-spacing: .08em; color: var(--text); flex: 1; }
+    .list-role { font-size: .82rem; font-style: italic; color: var(--muted); }
+    .list-status { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 2px; border: 1px solid; }
     .status-alive  { color: #86efac; border-color: rgba(134,239,172,0.3); background: rgba(134,239,172,0.06); }
     .status-unknown { color: var(--muted); border-color: rgba(138,122,106,0.3); background: rgba(138,122,106,0.06); }
     .status-dead   { color: #f87171; border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.06); }
 
-    /* ======== TIMELINE (panel 3) ======== */
     .timeline { position: relative; padding-left: 2rem; }
-    .timeline::before {
-      content: ""; position: absolute;
-      left: 0; top: 0; bottom: 0; width: 1px;
-      background: linear-gradient(to bottom, transparent, var(--gold), rgba(201,168,76,0.2), transparent);
-    }
-
-    .tl-entry {
-      position: relative; margin-bottom: 2.4rem;
-      padding-left: 1.8rem;
-      animation: fadeUp .5s forwards; opacity: 0;
-    }
-    .tl-entry:nth-child(1) { animation-delay: .1s; }
-    .tl-entry:nth-child(2) { animation-delay: .2s; }
-    .tl-entry:nth-child(3) { animation-delay: .3s; }
-    .tl-entry:nth-child(4) { animation-delay: .4s; }
-    .tl-entry:nth-child(5) { animation-delay: .5s; }
-    .tl-entry:nth-child(6) { animation-delay: .6s; }
-
-    .tl-dot {
-      position: absolute; left: -2.4rem; top: .35rem;
-      width: 10px; height: 10px; border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 0 10px rgba(201,168,76,0.6);
-      border: 2px solid var(--smoke);
-    }
-    .tl-date {
-      font-family: 'Cinzel', serif; font-size: .65rem;
-      letter-spacing: .18em; text-transform: uppercase;
-      color: var(--blood); margin-bottom: .4rem;
-    }
-    .tl-title {
-      font-family: 'Cinzel', serif; font-size: 1rem;
-      letter-spacing: .06em; color: var(--gold-lt);
-      margin-bottom: .5rem;
-    }
+    .timeline::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, transparent, var(--gold), rgba(201,168,76,0.2), transparent); }
+    .tl-entry { position: relative; margin-bottom: 2.4rem; padding-left: 1.8rem; animation: fadeUp .5s forwards; opacity: 0; }
+    .tl-entry:nth-child(1) { animation-delay: .1s; } .tl-entry:nth-child(2) { animation-delay: .2s; } .tl-entry:nth-child(3) { animation-delay: .3s; } .tl-entry:nth-child(4) { animation-delay: .4s; } .tl-entry:nth-child(5) { animation-delay: .5s; } .tl-entry:nth-child(6) { animation-delay: .6s; }
+    .tl-dot { position: absolute; left: -2.4rem; top: .35rem; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px rgba(201,168,76,0.6); border: 2px solid var(--smoke); }
+    .tl-date { font-family: 'Cinzel', serif; font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--blood); margin-bottom: .4rem; }
+    .tl-title { font-family: 'Cinzel', serif; font-size: 1rem; letter-spacing: .06em; color: var(--gold-lt); margin-bottom: .5rem; }
     .tl-body { font-size: 1rem; color: var(--muted); line-height: 1.7; }
-    .tl-chars {
-      display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .7rem;
-    }
-    .tl-char-tag {
-      font-family: 'Cinzel', serif; font-size: .6rem;
-      letter-spacing: .08em; padding: 2px 8px;
-      border-radius: 2px; background: rgba(201,168,76,0.08);
-      border: 1px solid rgba(201,168,76,0.2); color: var(--gold-lt);
-    }
+    .tl-chars { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .7rem; }
+    .tl-char-tag { font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .08em; padding: 2px 8px; border-radius: 2px; background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); color: var(--gold-lt); }
 
-    /* ======== FOOTER ======== */
-    footer {
-      text-align: center; padding: 1.5rem;
-      font-family: 'Cinzel', serif; font-size: .6rem;
-      letter-spacing: .14em; color: rgba(138,122,106,0.25);
-      border-top: 1px solid rgba(201,168,76,0.06);
-      position: relative; z-index: 2;
-    }
+    footer { text-align: center; padding: 1.5rem; font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .14em; color: rgba(138,122,106,0.25); border-top: 1px solid rgba(201,168,76,0.06); position: relative; z-index: 2; }
 
-    /* ======== RESPONSIVE ======== */
-    @media (max-width: 700px) {
-      header { padding: 1rem 1.2rem; }
-      nav { gap: 1rem; }
-      .char-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
-      .char-detail.open { grid-template-columns: 1fr; }
-      .detail-portrait { max-width: 160px; margin: 0 auto; }
+    @media (max-width: 680px) {
+      header { padding: 1rem 1.2rem; } nav { gap: 1rem; }
+      .char-grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 1rem; }
+      .sheet-header { grid-template-columns: 1fr; }
+      .sheet-portrait { width: 110px; height: 145px; margin: 0 auto; }
+      .sheet-body { grid-template-columns: 1fr; }
+      .hp-section, .sheet-desc { grid-column: 1; }
       .tabs { width: 100%; }
-      .tab { padding: .6rem .9rem; font-size: .65rem; flex: 1; text-align: center; }
+      .tab { padding: .6rem .8rem; font-size: .62rem; flex: 1; text-align: center; }
       .content { padding: 0 1rem 4rem; }
+      .modal-sheet { max-height: 95vh; }
     }
   </style>
 </head>
@@ -406,9 +361,16 @@
   <div class="rune-grid"></div>
   <div class="vignette"></div>
   <div class="embers" id="embers"></div>
-
   <div class="corner tl"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#c9a84c" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#c9a84c" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#c9a84c" opacity=".8"/></svg></div>
   <div class="corner tr"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#c9a84c" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#c9a84c" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#c9a84c" opacity=".8"/></svg></div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+    <div class="modal-sheet" id="modalSheet">
+      <button class="modal-close" onclick="closeModal()">✕ Fermer</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
 
   <div class="page">
     <header>
@@ -419,17 +381,12 @@
       </nav>
     </header>
 
-    <!-- HERO -->
     <div class="hero">
       <div class="section-eyebrow fade-up" style="animation-delay:.1s">— Registre des âmes —</div>
       <h1 class="page-title fade-up" style="animation-delay:.25s">Chroniques</h1>
-      <p class="hero-sub fade-up" style="animation-delay:.4s">
-        Les figures qui traversent le Void.<br>
-        Leurs histoires, leurs secrets, leur destin.
-      </p>
+      <p class="hero-sub fade-up" style="animation-delay:.4s">Les figures qui traversent le Void.<br>Leurs histoires, leurs secrets, leur destin.</p>
     </div>
 
-    <!-- TABS -->
     <div style="display:flex;justify-content:center;padding:0 2rem;">
       <div class="tabs">
         <button class="tab active" onclick="switchTab('fiches')">📜 Fiches</button>
@@ -438,368 +395,379 @@
       </div>
     </div>
 
-    <!-- CONTENT -->
     <div class="content">
 
-      <!-- ===== PANEL 1 : FICHES ===== -->
+      <!-- PANEL FICHES -->
       <div class="panel active" id="panel-fiches">
         <div class="section-head" style="margin-top:2rem;">
           <span class="section-head-title">✦ Fiches personnages</span>
           <div class="section-head-line"></div>
         </div>
-
-        <!-- Detail panel (hidden by default) -->
-        <div class="char-detail" id="charDetail"></div>
-
-        <!-- Character grid -->
         <div class="char-grid">
-
-          <div class="char-card" onclick="openChar(0)">
+          <div class="char-card" onclick="openModal(0)">
             <div class="char-portrait" style="background:linear-gradient(160deg,#1a0a0a,#2d1515);">⚔</div>
-            <div class="char-info">
-              <div class="char-name">Kael Vorn</div>
-              <div class="char-role">Porteur du Void</div>
-              <div class="char-faction faction-void">Void</div>
-            </div>
+            <div class="char-info"><div class="char-name">Kael Vorn</div><div class="char-role">Porteur du Void</div><div class="char-faction faction-void">Void</div></div>
           </div>
-
-          <div class="char-card" onclick="openChar(1)">
+          <div class="char-card" onclick="openModal(1)">
             <div class="char-portrait" style="background:linear-gradient(160deg,#0a0f1a,#152035);">🌑</div>
-            <div class="char-info">
-              <div class="char-name">Lyra Ashfen</div>
-              <div class="char-role">Archiviste de l'Ordre</div>
-              <div class="char-faction faction-order">Ordre</div>
-            </div>
+            <div class="char-info"><div class="char-name">Lyra Ashfen</div><div class="char-role">Archiviste de l'Ordre</div><div class="char-faction faction-order">Ordre</div></div>
           </div>
-
-          <div class="char-card" onclick="openChar(2)">
+          <div class="char-card" onclick="openModal(2)">
             <div class="char-portrait" style="background:linear-gradient(160deg,#0d0a1a,#1a1530);">🔮</div>
-            <div class="char-info">
-              <div class="char-name">Seris Nul</div>
-              <div class="char-role">Tisseuse d'Ombres</div>
-              <div class="char-faction faction-shadow">Ombre</div>
-            </div>
+            <div class="char-info"><div class="char-name">Seris Nul</div><div class="char-role">Tisseuse d'Ombres</div><div class="char-faction faction-shadow">Ombre</div></div>
           </div>
-
-          <div class="char-card" onclick="openChar(3)">
+          <div class="char-card" onclick="openModal(3)">
             <div class="char-portrait" style="background:linear-gradient(160deg,#100a08,#251510);">🗡</div>
-            <div class="char-info">
-              <div class="char-name">Drath Edun</div>
-              <div class="char-role">Général des Cendres</div>
-              <div class="char-faction faction-shadow">Ombre</div>
-            </div>
+            <div class="char-info"><div class="char-name">Drath Edun</div><div class="char-role">Général des Cendres</div><div class="char-faction faction-shadow">Ombre</div></div>
           </div>
-
-          <div class="char-card" onclick="openChar(4)">
+          <div class="char-card" onclick="openModal(4)">
             <div class="char-portrait" style="background:linear-gradient(160deg,#0a150a,#102010);">🌿</div>
-            <div class="char-info">
-              <div class="char-name">Eryn Solh</div>
-              <div class="char-role">Vagabonde du Rift</div>
-              <div class="char-faction faction-neutral">Neutre</div>
-            </div>
+            <div class="char-info"><div class="char-name">Eryn Solh</div><div class="char-role">Vagabonde du Rift</div><div class="char-faction faction-neutral">Neutre</div></div>
           </div>
-
-          <div class="char-card" onclick="openChar(5)">
+          <div class="char-card" onclick="openModal(5)">
             <div class="char-portrait" style="background:linear-gradient(160deg,#150f08,#2a1e0f);">⚗</div>
-            <div class="char-info">
-              <div class="char-name">Maren Cael</div>
-              <div class="char-role">Alchimiste du Vide</div>
-              <div class="char-faction faction-void">Void</div>
-            </div>
+            <div class="char-info"><div class="char-name">Maren Cael</div><div class="char-role">Alchimiste du Vide</div><div class="char-faction faction-void">Void</div></div>
           </div>
-
         </div>
       </div>
 
-      <!-- ===== PANEL 2 : REGISTRE ===== -->
+      <!-- PANEL LISTE -->
       <div class="panel" id="panel-liste">
-        <div class="section-head" style="margin-top:2rem;">
-          <span class="section-head-title">✦ Registre complet</span>
-          <div class="section-head-line"></div>
-        </div>
-
+        <div class="section-head" style="margin-top:2rem;"><span class="section-head-title">✦ Registre complet</span><div class="section-head-line"></div></div>
         <div class="char-list">
-
-          <div class="char-list-item">
-            <div class="list-avatar" style="background:linear-gradient(160deg,#1a0a0a,#2d1515);">⚔</div>
-            <div>
-              <div class="list-name">Kael Vorn</div>
-              <div class="list-role">Porteur du Void · Faction Void</div>
-            </div>
-            <div class="list-status status-alive">Vivant</div>
-          </div>
-
-          <div class="char-list-item">
-            <div class="list-avatar" style="background:linear-gradient(160deg,#0a0f1a,#152035);">🌑</div>
-            <div>
-              <div class="list-name">Lyra Ashfen</div>
-              <div class="list-role">Archiviste · Ordre</div>
-            </div>
-            <div class="list-status status-alive">Vivante</div>
-          </div>
-
-          <div class="char-list-item">
-            <div class="list-avatar" style="background:linear-gradient(160deg,#0d0a1a,#1a1530);">🔮</div>
-            <div>
-              <div class="list-name">Seris Nul</div>
-              <div class="list-role">Tisseuse d'Ombres · Ombre</div>
-            </div>
-            <div class="list-status status-unknown">Inconnue</div>
-          </div>
-
-          <div class="char-list-item">
-            <div class="list-avatar" style="background:linear-gradient(160deg,#100a08,#251510);">🗡</div>
-            <div>
-              <div class="list-name">Drath Edun</div>
-              <div class="list-role">Général · Ombre</div>
-            </div>
-            <div class="list-status status-dead">Décédé</div>
-          </div>
-
-          <div class="char-list-item">
-            <div class="list-avatar" style="background:linear-gradient(160deg,#0a150a,#102010);">🌿</div>
-            <div>
-              <div class="list-name">Eryn Solh</div>
-              <div class="list-role">Vagabonde · Neutre</div>
-            </div>
-            <div class="list-status status-alive">Vivante</div>
-          </div>
-
-          <div class="char-list-item">
-            <div class="list-avatar" style="background:linear-gradient(160deg,#150f08,#2a1e0f);">⚗</div>
-            <div>
-              <div class="list-name">Maren Cael</div>
-              <div class="list-role">Alchimiste · Void</div>
-            </div>
-            <div class="list-status status-unknown">Inconnue</div>
-          </div>
-
+          <div class="char-list-item"><div class="list-avatar" style="background:linear-gradient(160deg,#1a0a0a,#2d1515);">⚔</div><div><div class="list-name">Kael Vorn</div><div class="list-role">Porteur du Void · Faction Void</div></div><div class="list-status status-alive">Vivant</div></div>
+          <div class="char-list-item"><div class="list-avatar" style="background:linear-gradient(160deg,#0a0f1a,#152035);">🌑</div><div><div class="list-name">Lyra Ashfen</div><div class="list-role">Archiviste · Ordre</div></div><div class="list-status status-alive">Vivante</div></div>
+          <div class="char-list-item"><div class="list-avatar" style="background:linear-gradient(160deg,#0d0a1a,#1a1530);">🔮</div><div><div class="list-name">Seris Nul</div><div class="list-role">Tisseuse d'Ombres · Ombre</div></div><div class="list-status status-unknown">Inconnue</div></div>
+          <div class="char-list-item"><div class="list-avatar" style="background:linear-gradient(160deg,#100a08,#251510);">🗡</div><div><div class="list-name">Drath Edun</div><div class="list-role">Général · Ombre</div></div><div class="list-status status-dead">Décédé</div></div>
+          <div class="char-list-item"><div class="list-avatar" style="background:linear-gradient(160deg,#0a150a,#102010);">🌿</div><div><div class="list-name">Eryn Solh</div><div class="list-role">Vagabonde · Neutre</div></div><div class="list-status status-alive">Vivante</div></div>
+          <div class="char-list-item"><div class="list-avatar" style="background:linear-gradient(160deg,#150f08,#2a1e0f);">⚗</div><div><div class="list-name">Maren Cael</div><div class="list-role">Alchimiste · Void</div></div><div class="list-status status-unknown">Inconnu</div></div>
         </div>
       </div>
 
-      <!-- ===== PANEL 3 : TIMELINE ===== -->
+      <!-- PANEL TIMELINE -->
       <div class="panel" id="panel-timeline">
-        <div class="section-head" style="margin-top:2rem;">
-          <span class="section-head-title">✦ Chronologie des événements</span>
-          <div class="section-head-line"></div>
-        </div>
-
+        <div class="section-head" style="margin-top:2rem;"><span class="section-head-title">✦ Chronologie</span><div class="section-head-line"></div></div>
         <div class="timeline">
-
-          <div class="tl-entry">
-            <div class="tl-dot"></div>
-            <div class="tl-date">Année 0 — L'Éveil</div>
-            <div class="tl-title">Naissance du Void</div>
-            <div class="tl-body">La première fissure apparaît dans le ciel de Korrath. Les archives de l'Ordre enregistrent une anomalie inexplicable dans le tissu de la réalité.</div>
-            <div class="tl-chars">
-              <span class="tl-char-tag">Lyra Ashfen</span>
-            </div>
-          </div>
-
-          <div class="tl-entry">
-            <div class="tl-dot"></div>
-            <div class="tl-date">Année 3 — La Marque</div>
-            <div class="tl-title">Kael reçoit la Marque du Void</div>
-            <div class="tl-body">Lors d'une expédition dans les ruines de Vel'Khan, Kael Vorn entre en contact direct avec le Void. Sa main gauche se couvre de runes vivantes.</div>
-            <div class="tl-chars">
-              <span class="tl-char-tag">Kael Vorn</span>
-              <span class="tl-char-tag">Maren Cael</span>
-            </div>
-          </div>
-
-          <div class="tl-entry">
-            <div class="tl-dot"></div>
-            <div class="tl-date">Année 5 — La Trahison</div>
-            <div class="tl-title">Chute de l'Ordre de l'Aube</div>
-            <div class="tl-body">Drath Edun retourne ses armées contre ses anciens frères. La cité-forteresse de Mirhal tombe en une nuit. Seris Nul disparaît dans les flammes.</div>
-            <div class="tl-chars">
-              <span class="tl-char-tag">Drath Edun</span>
-              <span class="tl-char-tag">Seris Nul</span>
-              <span class="tl-char-tag">Lyra Ashfen</span>
-            </div>
-          </div>
-
-          <div class="tl-entry">
-            <div class="tl-dot"></div>
-            <div class="tl-date">Année 6 — L'Errance</div>
-            <div class="tl-title">Kael et Eryn traversent le Rift</div>
-            <div class="tl-body">À la recherche des archives perdues, Kael et Eryn franchissent le Rift pour la première fois. Ce qu'ils découvrent de l'autre côté change tout.</div>
-            <div class="tl-chars">
-              <span class="tl-char-tag">Kael Vorn</span>
-              <span class="tl-char-tag">Eryn Solh</span>
-            </div>
-          </div>
-
-          <div class="tl-entry">
-            <div class="tl-dot"></div>
-            <div class="tl-date">Année 7 — La Mort du Général</div>
-            <div class="tl-title">Fin de Drath Edun</div>
-            <div class="tl-body">Drath Edun est vaincu lors du siège de Vel'Norah. Mais sa mort ouvre quelque chose d'encore plus sombre dans les profondeurs du Void.</div>
-            <div class="tl-chars">
-              <span class="tl-char-tag">Drath Edun</span>
-              <span class="tl-char-tag">Kael Vorn</span>
-            </div>
-          </div>
-
-          <div class="tl-entry">
-            <div class="tl-dot"></div>
-            <div class="tl-date">Année 7 — L'Inconnu</div>
-            <div class="tl-title">Tome I — À suivre…</div>
-            <div class="tl-body">Les événements du Void Project Tome I s'achèvent ici. La suite des chroniques attend d'être écrite.</div>
-            <div class="tl-chars">
-              <span class="tl-char-tag">Tous</span>
-            </div>
-          </div>
-
+          <div class="tl-entry"><div class="tl-dot"></div><div class="tl-date">Année 0 — L'Éveil</div><div class="tl-title">Naissance du Void</div><div class="tl-body">La première fissure apparaît dans le ciel de Korrath. Les archives de l'Ordre enregistrent une anomalie inexplicable dans le tissu de la réalité.</div><div class="tl-chars"><span class="tl-char-tag">Lyra Ashfen</span></div></div>
+          <div class="tl-entry"><div class="tl-dot"></div><div class="tl-date">Année 3 — La Marque</div><div class="tl-title">Kael reçoit la Marque du Void</div><div class="tl-body">Lors d'une expédition dans les ruines de Vel'Khan, Kael Vorn entre en contact direct avec le Void. Sa main gauche se couvre de runes vivantes.</div><div class="tl-chars"><span class="tl-char-tag">Kael Vorn</span><span class="tl-char-tag">Maren Cael</span></div></div>
+          <div class="tl-entry"><div class="tl-dot"></div><div class="tl-date">Année 5 — La Trahison</div><div class="tl-title">Chute de l'Ordre de l'Aube</div><div class="tl-body">Drath Edun retourne ses armées contre ses anciens frères. La cité-forteresse de Mirhal tombe en une nuit. Seris Nul disparaît dans les flammes.</div><div class="tl-chars"><span class="tl-char-tag">Drath Edun</span><span class="tl-char-tag">Seris Nul</span><span class="tl-char-tag">Lyra Ashfen</span></div></div>
+          <div class="tl-entry"><div class="tl-dot"></div><div class="tl-date">Année 6 — L'Errance</div><div class="tl-title">Kael et Eryn traversent le Rift</div><div class="tl-body">À la recherche des archives perdues, Kael et Eryn franchissent le Rift pour la première fois. Ce qu'ils découvrent de l'autre côté change tout.</div><div class="tl-chars"><span class="tl-char-tag">Kael Vorn</span><span class="tl-char-tag">Eryn Solh</span></div></div>
+          <div class="tl-entry"><div class="tl-dot"></div><div class="tl-date">Année 7 — La Mort du Général</div><div class="tl-title">Fin de Drath Edun</div><div class="tl-body">Drath Edun est vaincu lors du siège de Vel'Norah. Mais sa mort ouvre quelque chose d'encore plus sombre dans les profondeurs du Void.</div><div class="tl-chars"><span class="tl-char-tag">Drath Edun</span><span class="tl-char-tag">Kael Vorn</span></div></div>
+          <div class="tl-entry"><div class="tl-dot"></div><div class="tl-date">Année 7 — L'Inconnu</div><div class="tl-title">Tome I — À suivre…</div><div class="tl-body">Les événements du Void Project Tome I s'achèvent ici. La suite des chroniques attend d'être écrite.</div><div class="tl-chars"><span class="tl-char-tag">Tous</span></div></div>
         </div>
       </div>
 
-    </div><!-- /content -->
-
+    </div>
     <footer>Scriptorium — Forged in darkness · All rights reserved</footer>
   </div>
 
   <script>
-    // --- Embers ---
-    const container = document.getElementById('embers');
+    // EMBERS
+    const ec = document.getElementById('embers');
     function spawnEmber() {
-      const el = document.createElement('div');
-      el.className = 'ember';
-      const size = Math.random() * 3.5 + 1.2;
-      const x    = Math.random() * 100;
-      const dx   = (Math.random() - .5) * 70;
-      const dur  = Math.random() * 6 + 5;
-      const del  = Math.random() * 4;
-      const gold = Math.random() > .5;
-      el.style.cssText = `
-        width:${size}px;height:${size}px;left:${x}%;bottom:-10px;--dx:${dx}px;
-        background:radial-gradient(circle,${gold?'rgba(201,168,76,0.85)':'rgba(192,57,43,0.85)'},transparent 70%);
-        animation-duration:${dur}s;animation-delay:${del}s;
-        box-shadow:0 0 ${size*2}px ${gold?'rgba(201,168,76,0.5)':'rgba(192,57,43,0.5)'};
-      `;
-      container.appendChild(el);
-      setTimeout(() => el.remove(), (dur + del) * 1000);
+      const el = document.createElement('div'); el.className = 'ember';
+      const s = Math.random()*3.5+1.2, x = Math.random()*100, dx = (Math.random()-.5)*70, dur = Math.random()*6+5, del = Math.random()*4, gold = Math.random()>.5;
+      el.style.cssText = `width:${s}px;height:${s}px;left:${x}%;bottom:-10px;--dx:${dx}px;background:radial-gradient(circle,${gold?'rgba(201,168,76,0.85)':'rgba(192,57,43,0.85)'},transparent 70%);animation-duration:${dur}s;animation-delay:${del}s;box-shadow:0 0 ${s*2}px ${gold?'rgba(201,168,76,0.5)':'rgba(192,57,43,0.5)'};`;
+      ec.appendChild(el); setTimeout(()=>el.remove(),(dur+del)*1000);
     }
-    for (let i = 0; i < 16; i++) spawnEmber();
-    setInterval(spawnEmber, 620);
+    for(let i=0;i<16;i++) spawnEmber(); setInterval(spawnEmber,620);
 
-    // --- Tabs ---
+    // TABS
     function switchTab(name) {
-      document.querySelectorAll('.tab').forEach((t, i) => {
-        t.classList.toggle('active', ['fiches','liste','timeline'][i] === name);
-      });
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      document.getElementById('panel-' + name).classList.add('active');
-      closeChar();
+      document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',['fiches','liste','timeline'][i]===name));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      document.getElementById('panel-'+name).classList.add('active');
     }
 
-    // --- Characters data ---
+    // CHARACTERS DATA
     const chars = [
       {
-        emoji: '⚔', bg: 'linear-gradient(160deg,#1a0a0a,#2d1515)',
-        name: 'Kael Vorn', role: 'Porteur du Void', faction: 'Void', factionClass: 'faction-void',
-        desc: 'Ancien soldat de l\'Ordre, Kael fut marqué par le Void lors d\'une expédition dans les ruines de Vel\'Khan. Ses runes vivantes lui confèrent des pouvoirs incontrôlables qu\'il tente de maîtriser avant qu\'ils ne le consument.',
-        stats: [
-          { label: 'Âge', value: '28 ans' },
-          { label: 'Origine', value: 'Korrath' },
-          { label: 'Statut', value: 'Vivant' },
-          { label: 'Affinité', value: 'Void' },
+        emoji:'⚔', bg:'linear-gradient(160deg,#1a0a0a,#2d1515)', glow:'rgba(139,26,26,0.35)',
+        name:'Kael Vorn', role:'Porteur du Void', faction:'Void', factionClass:'faction-void',
+        classe:'Guerrier / Maudit', race:'Humain', alignement:'Neutre Chaotique', niveau:'12',
+        quote:'"Le Void ne m\'a pas choisi. Il m\'a absorbé."',
+        desc:'Ancien soldat de l\'Ordre, Kael fut marqué par le Void lors d\'une expédition dans les ruines de Vel\'Khan. Ses runes vivantes lui confèrent des pouvoirs incontrôlables qu\'il tente de maîtriser avant qu\'ils ne le consument.',
+        hp: { current: 78, max: 104 },
+        abilities: [
+          { name:'FOR', score:18, mod:'+4' },
+          { name:'DEX', score:14, mod:'+2' },
+          { name:'CON', score:16, mod:'+3' },
+          { name:'INT', score:10, mod:'+0' },
+          { name:'SAG', score:11, mod:'+0' },
+          { name:'CHA', score:13, mod:'+1' },
+        ],
+        bars: [
+          { label:'Combat', val:88, color:'linear-gradient(to right,#7f1d1d,#ef4444)' },
+          { label:'Magie Voïdale', val:72, color:'linear-gradient(to right,#4c1d95,#a78bfa)' },
+          { label:'Endurance', val:80, color:'linear-gradient(to right,#064e3b,#34d399)' },
+          { label:'Instinct', val:60, color:'linear-gradient(to right,#78350f,#f59e0b)' },
+        ],
+        powers:[
+          { icon:'🌑', name:'Fissure du Void', desc:'Ouvre une brèche temporaire dans la réalité. Dés: 3d10 dégâts nécrotiques.' },
+          { icon:'⚔', name:'Frappe Runique', desc:'Les runes de Kael s\'enflamment au contact. +2d6 dégâts de force.' },
+          { icon:'🛡', name:'Égide du Maudit', desc:'Absorbe jusqu\'à 20 dégâts une fois par repos long.' },
+        ],
+        infos:[
+          { label:'Âge', val:'28 ans' },{ label:'Origine', val:'Korrath' },
+          { label:'Statut', val:'Vivant' },{ label:'Affinité', val:'Void' },
         ]
       },
       {
-        emoji: '🌑', bg: 'linear-gradient(160deg,#0a0f1a,#152035)',
-        name: 'Lyra Ashfen', role: 'Archiviste de l\'Ordre', faction: 'Ordre', factionClass: 'faction-order',
-        desc: 'Gardienne des archives de l\'Ordre de l\'Aube, Lyra est la seule à avoir lu les textes interdits sur le Void. Sa mémoire parfaite est à la fois son plus grand atout et son plus lourd fardeau.',
-        stats: [
-          { label: 'Âge', value: '31 ans' },
-          { label: 'Origine', value: 'Mirhal' },
-          { label: 'Statut', value: 'Vivante' },
-          { label: 'Affinité', value: 'Lumière' },
+        emoji:'🌑', bg:'linear-gradient(160deg,#0a0f1a,#152035)', glow:'rgba(59,130,246,0.25)',
+        name:'Lyra Ashfen', role:'Archiviste de l\'Ordre', faction:'Ordre', factionClass:'faction-order',
+        classe:'Clerc / Érudit', race:'Humaine', alignement:'Loyal Bon', niveau:'10',
+        quote:'"Chaque mot interdit est une arme que j\'ai choisi de porter."',
+        desc:'Gardienne des archives de l\'Ordre de l\'Aube, Lyra est la seule à avoir lu les textes interdits sur le Void. Sa mémoire parfaite est à la fois son plus grand atout et son plus lourd fardeau.',
+        hp: { current: 62, max: 72 },
+        abilities:[
+          { name:'FOR', score:8, mod:'-1' },{ name:'DEX', score:12, mod:'+1' },{ name:'CON', score:13, mod:'+1' },
+          { name:'INT', score:20, mod:'+5' },{ name:'SAG', score:18, mod:'+4' },{ name:'CHA', score:15, mod:'+2' },
+        ],
+        bars:[
+          { label:'Savoir', val:98, color:'linear-gradient(to right,#78350f,#fcd34d)' },
+          { label:'Magie Sacrée', val:85, color:'linear-gradient(to right,#1e3a5f,#60a5fa)' },
+          { label:'Diplomatie', val:75, color:'linear-gradient(to right,#064e3b,#34d399)' },
+          { label:'Combat', val:28, color:'linear-gradient(to right,#7f1d1d,#ef4444)' },
+        ],
+        powers:[
+          { icon:'📖', name:'Mémoire Absolue', desc:'Rappel parfait de tout texte lu. Avantage sur tous les jets d\'Histoire.' },
+          { icon:'✨', name:'Lumière Sacrée', desc:'Frappe radiante 2d8. Désavantage aux créatures du Void.' },
+          { icon:'🔒', name:'Sceau de l\'Ordre', desc:'Lie un secret dans un artefact. Nul ne peut le révéler sous contrainte.' },
+        ],
+        infos:[
+          { label:'Âge', val:'31 ans' },{ label:'Origine', val:'Mirhal' },
+          { label:'Statut', val:'Vivante' },{ label:'Affinité', val:'Lumière' },
         ]
       },
       {
-        emoji: '🔮', bg: 'linear-gradient(160deg,#0d0a1a,#1a1530)',
-        name: 'Seris Nul', role: 'Tisseuse d\'Ombres', faction: 'Ombre', factionClass: 'faction-shadow',
-        desc: 'Mystérieuse et insaisissable, Seris Nul tisse les fils de l\'ombre pour manipuler les perceptions. Ses véritables allégeances sont inconnues. Elle est apparue et disparue lors de la chute de Mirhal.',
-        stats: [
-          { label: 'Âge', value: 'Inconnu' },
-          { label: 'Origine', value: 'Inconnue' },
-          { label: 'Statut', value: 'Inconnue' },
-          { label: 'Affinité', value: 'Ombre' },
+        emoji:'🔮', bg:'linear-gradient(160deg,#0d0a1a,#1a1530)', glow:'rgba(167,139,250,0.2)',
+        name:'Seris Nul', role:'Tisseuse d\'Ombres', faction:'Ombre', factionClass:'faction-shadow',
+        classe:'Ensorceleur / Tisserand', race:'Inconnue', alignement:'Neutre Vrai', niveau:'??',
+        quote:'"Je ne suis ni alliée ni ennemie. Je suis l\'inévitable."',
+        desc:'Mystérieuse et insaisissable, Seris Nul tisse les fils de l\'ombre pour manipuler les perceptions. Ses véritables allégeances sont inconnues. Elle est apparue et disparue lors de la chute de Mirhal.',
+        hp: { current: 45, max: 58 },
+        abilities:[
+          { name:'FOR', score:9, mod:'-1' },{ name:'DEX', score:19, mod:'+4' },{ name:'CON', score:12, mod:'+1' },
+          { name:'INT', score:16, mod:'+3' },{ name:'SAG', score:14, mod:'+2' },{ name:'CHA', score:22, mod:'+6' },
+        ],
+        bars:[
+          { label:'Manipulation', val:95, color:'linear-gradient(to right,#4c1d95,#a78bfa)' },
+          { label:'Discrétion', val:92, color:'linear-gradient(to right,#1f2937,#6b7280)' },
+          { label:'Magie des Ombres', val:88, color:'linear-gradient(to right,#2d1b69,#8b5cf6)' },
+          { label:'Combat direct', val:40, color:'linear-gradient(to right,#7f1d1d,#ef4444)' },
+        ],
+        powers:[
+          { icon:'🌫', name:'Voile d\'Ombre', desc:'Devient invisible dans toute zone de pénombre. Dure jusqu\'à attaque.' },
+          { icon:'🔮', name:'Tisser les Esprits', desc:'Implante une fausse mémoire dans une cible. Jet SAG DD 18.' },
+          { icon:'👁', name:'Regard du Néant', desc:'La cible est effrayée pendant 1 minute. Jet SAG DD 16.' },
+        ],
+        infos:[
+          { label:'Âge', val:'Inconnue' },{ label:'Origine', val:'Inconnue' },
+          { label:'Statut', val:'Inconnue' },{ label:'Affinité', val:'Ombre' },
         ]
       },
       {
-        emoji: '🗡', bg: 'linear-gradient(160deg,#100a08,#251510)',
-        name: 'Drath Edun', role: 'Général des Cendres', faction: 'Ombre', factionClass: 'faction-shadow',
-        desc: 'Autrefois le plus grand général de l\'Ordre, Drath Edun a trahi ses frères pour servir une puissance venue du Void. Sa chute lors du siège de Vel\'Norah a laissé un vide plus dangereux encore.',
-        stats: [
-          { label: 'Âge', value: '54 ans' },
-          { label: 'Origine', value: 'Eldrath' },
-          { label: 'Statut', value: 'Décédé' },
-          { label: 'Affinité', value: 'Feu noir' },
+        emoji:'🗡', bg:'linear-gradient(160deg,#100a08,#251510)', glow:'rgba(192,57,43,0.3)',
+        name:'Drath Edun', role:'Général des Cendres', faction:'Ombre', factionClass:'faction-shadow',
+        classe:'Guerrier / Paladin Déchu', race:'Humain', alignement:'Loyal Mauvais', niveau:'15',
+        quote:'"L\'Ordre m\'a appris à mourir pour une cause. J\'ai choisi la mienne."',
+        desc:'Autrefois le plus grand général de l\'Ordre, Drath Edun a trahi ses frères pour servir une puissance venue du Void. Sa chute lors du siège de Vel\'Norah a laissé un vide plus dangereux encore.',
+        hp: { current: 0, max: 138 },
+        abilities:[
+          { name:'FOR', score:22, mod:'+6' },{ name:'DEX', score:13, mod:'+1' },{ name:'CON', score:20, mod:'+5' },
+          { name:'INT', score:14, mod:'+2' },{ name:'SAG', score:10, mod:'+0' },{ name:'CHA', score:17, mod:'+3' },
+        ],
+        bars:[
+          { label:'Force brute', val:96, color:'linear-gradient(to right,#7f1d1d,#ef4444)' },
+          { label:'Tactique', val:90, color:'linear-gradient(to right,#78350f,#f59e0b)' },
+          { label:'Résistance', val:94, color:'linear-gradient(to right,#064e3b,#34d399)' },
+          { label:'Magie noire', val:55, color:'linear-gradient(to right,#1f2937,#374151)' },
+        ],
+        powers:[
+          { icon:'🔥', name:'Serment Brisé', desc:'Cantrip : 2d8 dégâts nécrotiques. Ignore les résistances divines.' },
+          { icon:'⚔', name:'Frappe du Traître', desc:'Triple les dés de dégâts contre une cible alliée du défunt Ordre.' },
+          { icon:'💀', name:'Dernier Souffle', desc:'Déclenché à 0 PV : explosion de 30 pieds, 8d6 dégâts nécrotiques.' },
+        ],
+        infos:[
+          { label:'Âge', val:'54 ans' },{ label:'Origine', val:'Eldrath' },
+          { label:'Statut', val:'Décédé' },{ label:'Affinité', val:'Feu noir' },
         ]
       },
       {
-        emoji: '🌿', bg: 'linear-gradient(160deg,#0a150a,#102010)',
-        name: 'Eryn Solh', role: 'Vagabonde du Rift', faction: 'Neutre', factionClass: 'faction-neutral',
-        desc: 'Ni de l\'Ordre ni du Void, Eryn traverse les Rifts depuis l\'enfance. Elle connaît les routes impossibles et les passages oubliés. Son passé est un secret qu\'elle protège avec une lame acérée.',
-        stats: [
-          { label: 'Âge', value: '24 ans' },
-          { label: 'Origine', value: 'Les Rifts' },
-          { label: 'Statut', value: 'Vivante' },
-          { label: 'Affinité', value: 'Neutre' },
+        emoji:'🌿', bg:'linear-gradient(160deg,#0a150a,#102010)', glow:'rgba(52,211,153,0.15)',
+        name:'Eryn Solh', role:'Vagabonde du Rift', faction:'Neutre', factionClass:'faction-neutral',
+        classe:'Rôdeur / Explorateur', race:'Mi-elfe', alignement:'Chaotique Bon', niveau:'9',
+        quote:'"Les Rifts ne font pas peur à qui n\'a plus rien à perdre."',
+        desc:'Ni de l\'Ordre ni du Void, Eryn traverse les Rifts depuis l\'enfance. Elle connaît les routes impossibles et les passages oubliés. Son passé est un secret qu\'elle protège avec une lame acérée.',
+        hp: { current: 70, max: 82 },
+        abilities:[
+          { name:'FOR', score:13, mod:'+1' },{ name:'DEX', score:20, mod:'+5' },{ name:'CON', score:15, mod:'+2' },
+          { name:'INT', score:13, mod:'+1' },{ name:'SAG', score:16, mod:'+3' },{ name:'CHA', score:11, mod:'+0' },
+        ],
+        bars:[
+          { label:'Agilité', val:92, color:'linear-gradient(to right,#064e3b,#34d399)' },
+          { label:'Survie', val:88, color:'linear-gradient(to right,#78350f,#f59e0b)' },
+          { label:'Navigation des Rifts', val:85, color:'linear-gradient(to right,#1e3a5f,#60a5fa)' },
+          { label:'Combat à distance', val:80, color:'linear-gradient(to right,#7f1d1d,#ef4444)' },
+        ],
+        powers:[
+          { icon:'🏹', name:'Flèche du Rift', desc:'Téléporte la flèche à travers un Rift. Ignore les abris totaux.' },
+          { icon:'🌿', name:'Pas du Chasseur', desc:'Déplacement silencieux. Avantage sur Discrétion en terrain naturel.' },
+          { icon:'🗺', name:'Mémoire des Passages', desc:'Connaît instinctivement tous les Rifts dans un rayon de 10 km.' },
+        ],
+        infos:[
+          { label:'Âge', val:'24 ans' },{ label:'Origine', val:'Les Rifts' },
+          { label:'Statut', val:'Vivante' },{ label:'Affinité', val:'Neutre' },
         ]
       },
       {
-        emoji: '⚗', bg: 'linear-gradient(160deg,#150f08,#2a1e0f)',
-        name: 'Maren Cael', role: 'Alchimiste du Vide', faction: 'Void', factionClass: 'faction-void',
-        desc: 'Génie de l\'alchimie voïdale, Maren cherche à synthétiser l\'énergie du Void en substance stable. Ses expériences l\'ont partiellement transformé — ses yeux ne reflètent plus la lumière.',
-        stats: [
-          { label: 'Âge', value: '44 ans' },
-          { label: 'Origine', value: 'Vel\'Khan' },
-          { label: 'Statut', value: 'Inconnu' },
-          { label: 'Affinité', value: 'Void / Alchimie' },
+        emoji:'⚗', bg:'linear-gradient(160deg,#150f08,#2a1e0f)', glow:'rgba(201,168,76,0.2)',
+        name:'Maren Cael', role:'Alchimiste du Vide', faction:'Void', factionClass:'faction-void',
+        classe:'Magicien / Alchimiste', race:'Humain (altéré)', alignement:'Neutre Vrai', niveau:'13',
+        quote:'"Le Void n\'est pas une malédiction. C\'est une matière première."',
+        desc:'Génie de l\'alchimie voïdale, Maren cherche à synthétiser l\'énergie du Void en substance stable. Ses expériences l\'ont partiellement transformé — ses yeux ne reflètent plus la lumière.',
+        hp: { current: 55, max: 68 },
+        abilities:[
+          { name:'FOR', score:8, mod:'-1' },{ name:'DEX', score:14, mod:'+2' },{ name:'CON', score:13, mod:'+1' },
+          { name:'INT', score:22, mod:'+6' },{ name:'SAG', score:12, mod:'+1' },{ name:'CHA', score:10, mod:'+0' },
+        ],
+        bars:[
+          { label:'Intelligence', val:97, color:'linear-gradient(to right,#78350f,#fcd34d)' },
+          { label:'Alchimie Voïdale', val:93, color:'linear-gradient(to right,#4c1d95,#a78bfa)' },
+          { label:'Magie Arcanique', val:82, color:'linear-gradient(to right,#1e3a5f,#60a5fa)' },
+          { label:'Combat', val:25, color:'linear-gradient(to right,#7f1d1d,#ef4444)' },
+        ],
+        powers:[
+          { icon:'⚗', name:'Extrait du Vide', desc:'Crée une fiole qui inflige 4d10 dégâts nécrotiques ou soigne 4d8 PV.' },
+          { icon:'🔬', name:'Transmutation Voïdale', desc:'Transforme une substance en énergie pure. Effets variables.' },
+          { icon:'👁', name:'Vision du Néant', desc:'Ses yeux voient les flux du Void. Détecte magie invisible à 60 pieds.' },
+        ],
+        infos:[
+          { label:'Âge', val:'44 ans' },{ label:'Origine', val:"Vel'Khan" },
+          { label:'Statut', val:'Inconnu' },{ label:'Affinité', val:'Void / Alchimie' },
         ]
       },
     ];
 
-    let openIndex = null;
-
-    function openChar(i) {
+    function openModal(i) {
       const c = chars[i];
-      const detail = document.getElementById('charDetail');
+      const hpPct = Math.round((c.hp.current / c.hp.max) * 100);
 
-      // Toggle if same card
-      if (openIndex === i) { closeChar(); return; }
-      openIndex = i;
-
-      document.querySelectorAll('.char-card').forEach((el, idx) => {
-        el.classList.toggle('active-card', idx === i);
-      });
-
-      detail.className = 'char-detail open';
-      detail.innerHTML = `
-        <div class="detail-portrait" style="background:${c.bg};">${c.emoji}</div>
-        <div>
-          <div class="detail-name">${c.name}</div>
-          <div class="detail-role">${c.role} &nbsp;·&nbsp; <span class="char-faction ${c.factionClass}">${c.faction}</span></div>
-          <div class="detail-divider"></div>
-          <div class="detail-desc">${c.desc}</div>
-          <div class="stats-row">
-            ${c.stats.map(s => `<div class="stat-box"><div class="stat-label">${s.label}</div><div class="stat-value">${s.value}</div></div>`).join('')}
+      document.getElementById('modalContent').innerHTML = `
+        <!-- HEADER -->
+        <div class="sheet-header">
+          <div class="sheet-portrait" style="background:${c.bg};">
+            <div class="sheet-portrait-glow" style="--portrait-glow:${c.glow};"></div>
+            <span style="position:relative;z-index:1;font-size:4.5rem;">${c.emoji}</span>
           </div>
-          <button class="close-btn" onclick="closeChar()">✕ Fermer la fiche</button>
+          <div class="sheet-title-block">
+            <div class="sheet-name">${c.name}</div>
+            <div class="sheet-role">${c.role}</div>
+            <div class="sheet-identity">
+              <span class="id-badge">${c.classe}</span>
+              <span class="id-badge">${c.race}</span>
+              <span class="id-badge">${c.alignement}</span>
+              <span class="id-badge">Niv. ${c.niveau}</span>
+              <span class="char-faction ${c.factionClass}">${c.faction}</span>
+            </div>
+            <div class="sheet-quote">${c.quote}</div>
+          </div>
+        </div>
+
+        <div class="sheet-divider"></div>
+
+        <div class="sheet-body">
+
+          <!-- HP -->
+          <div class="hp-section">
+            <div class="sheet-section-label">Points de vie</div>
+            <div class="hp-label"><span>PV Actuels</span><span class="hp-value">${c.hp.current} / ${c.hp.max}</span></div>
+            <div class="hp-bar-track"><div class="hp-bar-fill" data-pct="${hpPct}" style="width:0%"></div></div>
+          </div>
+
+          <!-- ABILITY SCORES -->
+          <div>
+            <div class="sheet-section-label">Caractéristiques</div>
+            <div class="ability-grid">
+              ${c.abilities.map(a=>`
+                <div class="ability-box">
+                  <div class="ability-name">${a.name}</div>
+                  <div class="ability-score">${a.score}</div>
+                  <div class="ability-mod">${a.mod}</div>
+                </div>`).join('')}
+            </div>
+          </div>
+
+          <!-- STAT BARS -->
+          <div>
+            <div class="sheet-section-label">Compétences</div>
+            <div class="stat-bars">
+              ${c.bars.map(b=>`
+                <div class="stat-bar-row">
+                  <div class="stat-bar-label"><span>${b.label}</span><span class="stat-bar-val">${b.val}</span></div>
+                  <div class="stat-bar-track"><div class="stat-bar-fill" data-val="${b.val}" style="background:${b.color};width:0%"></div></div>
+                </div>`).join('')}
+            </div>
+          </div>
+
+          <!-- DESC -->
+          <div class="sheet-desc" style="grid-column:1/-1;">
+            <div class="sheet-section-label">Histoire</div>
+            <p>${c.desc}</p>
+          </div>
+
+          <!-- POWERS -->
+          <div>
+            <div class="sheet-section-label">Capacités spéciales</div>
+            <div class="powers-list">
+              ${c.powers.map(p=>`
+                <div class="power-item">
+                  <span class="power-icon">${p.icon}</span>
+                  <div><div class="power-name">${p.name}</div><div class="power-desc">${p.desc}</div></div>
+                </div>`).join('')}
+            </div>
+          </div>
+
+          <!-- INFO BOXES -->
+          <div>
+            <div class="sheet-section-label">Informations</div>
+            <div class="info-boxes">
+              ${c.infos.map(inf=>`
+                <div class="info-box">
+                  <div class="info-box-label">${inf.label}</div>
+                  <div class="info-box-value">${inf.val}</div>
+                </div>`).join('')}
+            </div>
+          </div>
+
         </div>
       `;
 
-      detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      const overlay = document.getElementById('modalOverlay');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+
+      // Animate bars after a short delay
+      setTimeout(() => {
+        document.querySelectorAll('.stat-bar-fill').forEach(el => {
+          el.style.width = el.dataset.val + '%';
+        });
+        document.querySelectorAll('.hp-bar-fill').forEach(el => {
+          el.style.width = el.dataset.pct + '%';
+        });
+      }, 120);
     }
 
-    function closeChar() {
-      openIndex = null;
-      document.getElementById('charDetail').className = 'char-detail';
-      document.querySelectorAll('.char-card').forEach(el => el.classList.remove('active-card'));
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+      document.body.style.overflow = '';
     }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
   </script>
 </body>
 </html>
