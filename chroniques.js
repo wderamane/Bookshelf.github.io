@@ -197,7 +197,6 @@ let curSection = 'attributes';
 // BUILD RIGHT PANEL
 // =====================
 function buildRight(c, section) {
-  const hpPct = Math.round(c.hp.current / c.hp.max * 100);
 
   const sections = {
     attributes: `
