@@ -169,7 +169,6 @@ chars.forEach((c, i) => {
       </div>
       <div class="card-body">
         <div class="card-name">${c.name}</div>
-        <div class="card-role">${c.role}</div>
         <div class="card-faction ${c.factionClass}">${c.faction}</div>
       </div>
     </div>`;
@@ -178,7 +177,7 @@ chars.forEach((c, i) => {
       <div class="list-avatar" style="background:${c.bg};">${c.emoji}</div>
       <div>
         <div class="list-name">${c.name}</div>
-        <div class="list-role">${c.role} · ${c.faction}</div>
+        <div class="list-role">${c.faction}</div>
       </div>
       <div class="list-status ${c.statusClass}">${c.status}</div>
     </div>`;
@@ -294,7 +293,6 @@ function openModal(i) {
   document.getElementById('gNavIcon').style.cssText = `background:${c.bg};`;
   document.getElementById('gNavIcon').textContent = c.emoji;
   document.getElementById('gNavName').textContent = c.name;
-  document.getElementById('gNavSub').textContent = c.role;
 
   document.getElementById('gBg').style.background = c.bg;
   document.getElementById('gGlow').style.background = c.glow;
@@ -302,7 +300,6 @@ function openModal(i) {
   document.getElementById('gArt').innerHTML = `
     <div class="g-art-emoji">${c.emoji}</div>
     <div class="g-art-name">${c.name}</div>
-    <div class="g-art-role">${c.role}</div>
     <div class="g-art-badge ${c.factionClass}">${c.faction} · ${c.element}</div>`;
 
   document.getElementById('gQuote').textContent = c.quote;
