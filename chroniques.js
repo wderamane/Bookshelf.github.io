@@ -64,20 +64,18 @@ const chars = [
     emoji:'🌑', element:'💧',
     bg:'linear-gradient(160deg,#120540 0%,#0a021e 40%,#060118 100%)',
     glow:'rgba(224,64,251,0.5)', cardGlow:'rgba(224,64,251,0.22)',
-    name:'Lyra Ashfen', role:'Archiviste de l\'Ordre', faction:'Ordre', factionClass:'faction-order',
-    classe:'Clerc / Érudit', race:'Humaine', alignement:'Loyal Bon', niveau:'10',
-    status:'Vivante', statusClass:'status-alive',
+    name:'Ji Yosen', role:'Prince (Tome 1) et Empereur (Tome 3)', faction:'Imépriale', factionClass:'faction-order',
+    classe:'Reaper', race:'Néthéral Impérial', alignement:'Loyal Bon',
+    status:'Vivant', statusClass:'status-alive',
     quote:'"Chaque mot interdit est une arme que j\'ai choisi de porter."',
-    desc:'Gardienne des archives de l\'Ordre de l\'Aube, Lyra est la seule à avoir lu les textes interdits sur le Void. Sa mémoire parfaite est à la fois son plus grand atout et son plus lourd fardeau.',
-    hp:{current:62, max:72},
-    abilities:[{n:'FOR',s:8,m:'-1'},{n:'DEX',s:12,m:'+1'},{n:'CON',s:13,m:'+1'},{n:'INT',s:20,m:'+5'},{n:'SAG',s:18,m:'+4'},{n:'CHA',s:15,m:'+2'}],
+    desc:'Empereur de Nétheria et meilleur ami de Waren, Ji Yosen est le seul empereur de Nétheria restant, ses soeurs étant l\'ainée une princesse et la benjamine une princesse également, elles ne participent qu\'aux grands conseils et aux plans de guerre. Son titre est à la fois son plus grand atout et son plus lourd fardeau.',
     bars:[{l:'Savoir',v:98,c:BAR_SOFT},{l:'Magie Sacrée',v:85,c:BAR_LILAC},{l:'Diplomatie',v:75,c:BAR_VIOLET},{l:'Combat',v:28,c:BAR_DEEP}],
     powers:[
       {i:'📖',n:'Mémoire Absolue',d:'Avantage sur tous les jets d\'Histoire.'},
       {i:'✨',n:'Lumière Sacrée',d:'2d8 dégâts radieux. Désavantage aux créatures du Void.'},
       {i:'🔒',n:'Sceau de l\'Ordre',d:'Lie un secret. Nul ne peut le révéler sous contrainte.'}
     ],
-    infos:[{l:'Âge',v:'31 ans'},{l:'Origine',v:'Mirhal'},{l:'Statut',v:'Vivante'},{l:'Affinité',v:'Lumière'}]
+    infos:[{l:'Âge',v:'29 ans'},{l:'Origine',v:'Néthéral Impérial'},{l:'Statut',v:'Vivant'},{l:'Affinité',v:'Néther'}]
   },
   {
     emoji:'🔮', element:'🌫',
@@ -168,7 +166,6 @@ chars.forEach((c, i) => {
     <div class="char-card" onclick="openModal(${i})" style="--card-glow:${c.cardGlow}">
       <div class="card-icon-wrap">
         <div class="card-icon" style="background:${c.bg};--card-glow:${c.cardGlow};">${c.emoji}</div>
-        <div class="card-element">${c.element}</div>
       </div>
       <div class="card-body">
         <div class="card-name">${c.name}</div>
@@ -207,7 +204,6 @@ function buildRight(c, section) {
           <span class="g-badge">${c.classe}</span>
           <span class="g-badge">${c.race}</span>
           <span class="g-badge">${c.alignement}</span>
-          <span class="g-badge">Niv. ${c.niveau}</span>
         </div>
         <div class="g-section-title">Points de vie</div>
         <div class="g-hp">
