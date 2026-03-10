@@ -211,7 +211,7 @@ function buildRight(c, section) {
         <div class="g-section-title">Points de vie</div>
         <div class="g-hp">
           <div class="g-hp-label"><span>PV</span><span class="g-hp-val">${c.hp.current} / ${c.hp.max}</span></div>
-          <div class="g-hp-track"><div class="g-hp-fill" data-pct="${hpPct}"></div></div>
+          <div class="g-hp-track"><div class="g-hp-fill" data-pct=""></div></div>
         </div>
         <div class="g-section-title">Caractéristiques</div>
         <div class="g-abilities">
