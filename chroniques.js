@@ -208,11 +208,6 @@ function buildRight(c, section) {
           <span class="g-badge">${c.alignement}</span>
           <span class="g-badge">Niv. ${c.niveau}</span>
         </div>
-        <div class="g-section-title">Points de vie</div>
-        <div class="g-hp">
-          <div class="g-hp-label"><span>PV</span><span class="g-hp-val"></span></div>
-          <div class="g-hp-track"><div class="g-hp-fill" data-pct=""></div></div>
-        </div>
         <div class="g-section-title">Caractéristiques</div>
         <div class="g-abilities">
           ${c.abilities.map(a => `
