@@ -86,7 +86,7 @@ const chars = [
   {
     emoji:'🌑', element:'💧',
     // imgIcon: 'https://ton-url.com/ji-icon.jpg',   ← petite icône ronde
-    // imgArt:  'https://ton-url.com/ji-art.jpg',    ← grande illustration
+    imgArt:  'img/jiyosen.png', 
     bg:'linear-gradient(160deg,#120540 0%,#0a021e 40%,#060118 100%)',
     glow:'rgba(224,64,251,0.5)', cardGlow:'rgba(224,64,251,0.22)',
     name:'Ji Yosen', role:'Archiviste de l\'Ordre', faction:'Ordre', factionClass:'faction-order',
