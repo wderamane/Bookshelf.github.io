@@ -335,7 +335,7 @@ function openModal(i) {
   if (c.imgArt) {
     document.getElementById('gArt').innerHTML = `
       <img src="${c.imgArt}" alt="${c.name}"
-        style="width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;border-radius:0;"
+        style="width:50%;height:50%;object-fit:contain;object-position:center bottom;display:block;border-radius:0;"
         onerror="this.outerHTML='<div class=\\'g-art-emoji\\'>${c.emoji}</div><div class=\\'g-art-name\\'>${c.name}</div><div class=\\'g-art-role\\'>${c.role}</div><div class=\\'g-art-badge ${c.factionClass}\\'>${c.faction} · ${c.element}</div>'">`;
   } else {
     document.getElementById('gArt').innerHTML = `
