@@ -168,7 +168,6 @@ chars.forEach((c, i) => {
     <div class="char-card" onclick="openModal(${i})" style="--card-glow:${c.cardGlow}">
       <div class="card-icon-wrap">
         <div class="card-icon" style="background:${c.bg};--card-glow:${c.cardGlow};">${c.emoji}</div>
-        <div class="card-element">${c.element}</div>
       </div>
       <div class="card-body">
         <div class="card-name">${c.name}</div>
@@ -203,10 +202,8 @@ function buildRight(c, section) {
       <div class="g-section active">
         <div class="g-section-title">Identité</div>
         <div class="g-identity">
-          <span class="g-badge">${c.classe}</span>
           <span class="g-badge">${c.race}</span>
           <span class="g-badge">${c.alignement}</span>
-          <span class="g-badge">Niv. ${c.niveau}</span>
         </div>
         <div class="g-section-title">Caractéristiques</div>
         <div class="g-abilities">
