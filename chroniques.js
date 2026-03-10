@@ -85,10 +85,10 @@ const chars = [
     // imgIcon: 'img/ji-icon.jpg',
     imgArt:  'img/jiyosen.png',
     bg:'linear-gradient(160deg,#120540 0%,#0a021e 40%,#060118 100%)',
-    glow:'rgba(224,64,251,0.5)', cardGlow:'rgba(224,64,251,0.22)',
-    name:'Ji Yosen', role:'Archiviste de l\'Ordre', faction:'Ordre', factionClass:'faction-order',
-    classe:'Clerc / Érudit', race:'Humaine', alignement:'Loyal Bon', niveau:'10',
-    status:'Vivante', statusClass:'status-alive',
+    glow:'rgba(132, 23, 151, 0.5)', cardGlow:'rgba(224,64,251,0.22)',
+    name:'Ji Yosen', role:'Prince (Tome 1) et Empereur (Tome 3)', faction:'Impériale', factionClass:'faction-order',
+    classe:'Clerc / Érudit', race:'Néthéral Impérial', alignement:'Loyal Bon', niveau:'10',
+    status:'Vivant', statusClass:'status-alive',
     quote:'"Chaque mot interdit est une arme que j\'ai choisi de porter."',
     desc:'Gardienne des archives de l\'Ordre de l\'Aube, Lyra est la seule à avoir lu les textes interdits sur le Void. Sa mémoire parfaite est à la fois son plus grand atout et son plus lourd fardeau.',
     hp:{current:62, max:72},
@@ -99,7 +99,7 @@ const chars = [
       {i:'✨',n:'Lumière Sacrée',d:'2d8 dégâts radieux. Désavantage aux créatures du Void.'},
       {i:'🔒',n:'Sceau de l\'Ordre',d:'Lie un secret. Nul ne peut le révéler sous contrainte.'}
     ],
-    infos:[{l:'Âge',v:'31 ans'},{l:'Origine',v:'Mirhal'},{l:'Statut',v:'Vivante'},{l:'Affinité',v:'Lumière'}]
+    infos:[{l:'Âge',v:'9 ans - 19 ans (Tome 1) et 29 ans (Tome 3)'},{l:'Origine',v:'Néthéria'},{l:'Statut',v:'Vivant'},{l:'Affinité',v:'Néther Obscure'}]
   },
   {
     emoji:'🔮', element:'🌫',
@@ -170,7 +170,7 @@ const chars = [
     // imgArt:  'img/maren-art.jpg',
     bg:'linear-gradient(160deg,#180540 0%,#0d0228 40%,#08011c 100%)',
     glow:'rgba(232,121,249,0.5)', cardGlow:'rgba(232,121,249,0.22)',
-    name:'Maren Cael', role:'Alchimiste du Vide', faction:'Void', factionClass:'faction-void',
+    name:'Maren Cael', role:'Alchimiste du Vide',faction:'Void', factionClass:'faction-void',
     classe:'Magicien / Alchimiste', race:'Humain (altéré)', alignement:'Neutre Vrai', niveau:'13',
     status:'Inconnu', statusClass:'status-unknown',
     quote:'"Le Void n\'est pas une malédiction. C\'est une matière première."',
