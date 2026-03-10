@@ -38,11 +38,27 @@ const BAR_DEEP    = 'linear-gradient(to right,#2e1065,#7c3aed)';
 const BAR_MAGENTA = 'linear-gradient(to right,#831843,#e040fb)';
 
 // =====================
+// HELPER : rendu avatar (image ou emoji fallback)
+// Pour ajouter une image, ajoute img:'URL' dans les données du perso.
+// =====================
+function renderAvatar(c, size) {
+  if (!c.img) return c.emoji;
+  const styles = {
+    card: 'width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block;',
+    list: 'width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block;',
+    modal:'width:130px;height:130px;border-radius:50%;object-fit:cover;border:3px solid rgba(168,85,247,0.7);box-shadow:0 0 32px rgba(168,85,247,0.5);display:block;'
+  };
+  return `<img src="${c.img}" alt="${c.name}" style="${styles[size]}"
+    onerror="this.style.display='none';this.parentElement.textContent='${c.emoji}'">`;
+}
+
+// =====================
 // CHARACTERS DATA
 // =====================
 const chars = [
   {
     emoji:'⚔', element:'🔥',
+    // img: 'https://ton-url.com/kael.jpg',
     bg:'linear-gradient(160deg,#1a0530 0%,#0e0220 40%,#08011a 100%)',
     glow:'rgba(168,85,247,0.6)', cardGlow:'rgba(168,85,247,0.3)',
     name:'Kael Vorn', role:'Porteur du Void', faction:'Void', factionClass:'faction-void',
@@ -62,6 +78,7 @@ const chars = [
   },
   {
     emoji:'🌑', element:'💧',
+    // img: 'https://ton-url.com/jiyosen.jpg',
     bg:'linear-gradient(160deg,#120540 0%,#0a021e 40%,#060118 100%)',
     glow:'rgba(224,64,251,0.5)', cardGlow:'rgba(224,64,251,0.22)',
     name:'Ji Yosen', role:'Archiviste de l\'Ordre', faction:'Ordre', factionClass:'faction-order',
@@ -81,6 +98,7 @@ const chars = [
   },
   {
     emoji:'🔮', element:'🌫',
+    // img: 'https://ton-url.com/seris.jpg',
     bg:'linear-gradient(160deg,#1a0545 0%,#0f0230 40%,#08011e 100%)',
     glow:'rgba(192,132,252,0.55)', cardGlow:'rgba(192,132,252,0.25)',
     name:'Seris Nul', role:'Tisseuse d\'Ombres', faction:'Ombre', factionClass:'faction-shadow',
@@ -100,6 +118,7 @@ const chars = [
   },
   {
     emoji:'🗡', element:'🔥',
+    // img: 'https://ton-url.com/drath.jpg',
     bg:'linear-gradient(160deg,#200550 0%,#130228 40%,#0a0118 100%)',
     glow:'rgba(124,58,237,0.65)', cardGlow:'rgba(124,58,237,0.3)',
     name:'Drath Edun', role:'Général des Cendres', faction:'Ombre', factionClass:'faction-shadow',
@@ -119,6 +138,7 @@ const chars = [
   },
   {
     emoji:'🌿', element:'🌿',
+    // img: 'https://ton-url.com/eryn.jpg',
     bg:'linear-gradient(160deg,#0e0535 0%,#080220 40%,#050115 100%)',
     glow:'rgba(216,180,254,0.4)', cardGlow:'rgba(216,180,254,0.18)',
     name:'Eryn Solh', role:'Vagabonde du Rift', faction:'Neutre', factionClass:'faction-neutral',
@@ -138,6 +158,7 @@ const chars = [
   },
   {
     emoji:'⚗', element:'⚡',
+    // img: 'https://ton-url.com/maren.jpg',
     bg:'linear-gradient(160deg,#180540 0%,#0d0228 40%,#08011c 100%)',
     glow:'rgba(232,121,249,0.5)', cardGlow:'rgba(232,121,249,0.22)',
     name:'Maren Cael', role:'Alchimiste du Vide', faction:'Void', factionClass:'faction-void',
@@ -167,7 +188,7 @@ chars.forEach((c, i) => {
   grid.innerHTML += `
     <div class="char-card" onclick="openModal(${i})" style="--card-glow:${c.cardGlow}">
       <div class="card-icon-wrap">
-        <div class="card-icon" style="background:${c.bg};--card-glow:${c.cardGlow};">${c.emoji}</div>
+        <div class="card-icon" style="background:${c.bg};--card-glow:${c.cardGlow};overflow:hidden;">${renderAvatar(c,'card')}</div>
       </div>
       <div class="card-body">
         <div class="card-name">${c.name}</div>
@@ -177,7 +198,7 @@ chars.forEach((c, i) => {
     </div>`;
   list.innerHTML += `
     <div class="char-list-item" onclick="openModal(${i})">
-      <div class="list-avatar" style="background:${c.bg};">${c.emoji}</div>
+      <div class="list-avatar" style="background:${c.bg};overflow:hidden;">${renderAvatar(c,'list')}</div>
       <div>
         <div class="list-name">${c.name}</div>
         <div class="list-role">${c.role} · ${c.faction}</div>
@@ -286,19 +307,36 @@ function openModal(i) {
 
   document.querySelectorAll('.g-nav-item').forEach((n, idx) => n.classList.toggle('active', idx === 0));
 
-  document.getElementById('gNavIcon').style.cssText = `background:${c.bg};`;
-  document.getElementById('gNavIcon').textContent = c.emoji;
+  // Nav icon : image ou emoji
+  const navIcon = document.getElementById('gNavIcon');
+  navIcon.style.cssText = `background:${c.bg};overflow:hidden;`;
+  navIcon.innerHTML = c.img
+    ? `<img src="${c.img}" alt="${c.name}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"
+        onerror="this.style.display='none';this.parentElement.textContent='${c.emoji}'">`
+    : c.emoji;
+
   document.getElementById('gNavName').textContent = c.name;
   document.getElementById('gNavSub').textContent = c.role;
 
   document.getElementById('gBg').style.background = c.bg;
   document.getElementById('gGlow').style.background = c.glow;
 
-  document.getElementById('gArt').innerHTML = `
-    <div class="g-art-emoji">${c.emoji}</div>
-    <div class="g-art-name">${c.name}</div>
-    <div class="g-art-role">${c.role}</div>
-    <div class="g-art-badge ${c.factionClass}">${c.faction} · ${c.element}</div>`;
+  // Art zone : image ou emoji
+  document.getElementById('gArt').innerHTML = c.img
+    ? `<div style="display:flex;flex-direction:column;align-items:center;gap:.8rem;">
+        <img src="${c.img}" alt="${c.name}"
+          style="width:130px;height:130px;border-radius:50%;object-fit:cover;
+                 border:3px solid rgba(168,85,247,0.7);
+                 box-shadow:0 0 32px rgba(168,85,247,0.5);"
+          onerror="this.parentElement.innerHTML='<div class=\\'g-art-emoji\\'>${c.emoji}</div><div class=\\'g-art-name\\'>${c.name}</div><div class=\\'g-art-role\\'>${c.role}</div><div class=\\'g-art-badge ${c.factionClass}\\'>${c.faction} · ${c.element}</div>'">
+        <div class="g-art-name">${c.name}</div>
+        <div class="g-art-role">${c.role}</div>
+        <div class="g-art-badge ${c.factionClass}">${c.faction} · ${c.element}</div>
+      </div>`
+    : `<div class="g-art-emoji">${c.emoji}</div>
+       <div class="g-art-name">${c.name}</div>
+       <div class="g-art-role">${c.role}</div>
+       <div class="g-art-badge ${c.factionClass}">${c.faction} · ${c.element}</div>`;
 
   document.getElementById('gQuote').textContent = c.quote;
 
