@@ -41,16 +41,13 @@ const BAR_MAGENTA = 'linear-gradient(to right,#831843,#e040fb)';
 // HELPERS AVATAR
 // imgIcon = petite icône ronde (nav gauche + carte + liste)
 // imgArt  = grande illustration centrale (modal art zone)
-// Si imgArt absent, on réutilise imgIcon. Si aucun, on affiche l'emoji.
 // =====================
 function renderAvatar(c, size) {
-  const src = size === 'modal' ? (c.imgArt || c.imgIcon) : c.imgIcon;
+  const src = c.imgIcon;
   if (!src) return c.emoji;
   const styles = {
-    card:  'width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block;',
-    list:  'width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block;',
-    nav:   'width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block;',
-    modal: 'width:130px;height:130px;border-radius:50%;object-fit:cover;border:3px solid rgba(168,85,247,0.7);box-shadow:0 0 32px rgba(168,85,247,0.5);display:block;'
+    card: 'width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block;',
+    list: 'width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block;',
   };
   return `<img src="${src}" alt="${c.name}" style="${styles[size]}"
     onerror="this.style.display='none';this.parentElement.textContent='${c.emoji}'">`;
@@ -60,12 +57,12 @@ function renderAvatar(c, size) {
 // CHARACTERS DATA
 // =====================
 // imgIcon : petite image ronde (nav, carte, liste)
-// imgArt  : grande illustration dans la modal (optionnel, sinon imgIcon est utilisé)
+// imgArt  : grande illustration pleine hauteur dans la zone centrale de la modal
 const chars = [
   {
     emoji:'⚔', element:'🔥',
-    // imgIcon: 'https://ton-url.com/kael-icon.jpg',
-    // imgArt:  'https://ton-url.com/kael-art.jpg',
+    // imgIcon: 'img/kael-icon.jpg',
+    // imgArt:  'img/kael-art.jpg',
     bg:'linear-gradient(160deg,#1a0530 0%,#0e0220 40%,#08011a 100%)',
     glow:'rgba(168,85,247,0.6)', cardGlow:'rgba(168,85,247,0.3)',
     name:'Kael Vorn', role:'Porteur du Void', faction:'Void', factionClass:'faction-void',
@@ -85,8 +82,8 @@ const chars = [
   },
   {
     emoji:'🌑', element:'💧',
-    // imgIcon: 'https://ton-url.com/ji-icon.jpg',   ← petite icône ronde
-    imgArt:  'img/jiyosen.png', 
+    // imgIcon: 'img/ji-icon.jpg',
+    imgArt:  'img/jiyosen.png',
     bg:'linear-gradient(160deg,#120540 0%,#0a021e 40%,#060118 100%)',
     glow:'rgba(224,64,251,0.5)', cardGlow:'rgba(224,64,251,0.22)',
     name:'Ji Yosen', role:'Archiviste de l\'Ordre', faction:'Ordre', factionClass:'faction-order',
@@ -106,8 +103,8 @@ const chars = [
   },
   {
     emoji:'🔮', element:'🌫',
-    // imgIcon: 'https://ton-url.com/seris-icon.jpg',
-    // imgArt:  'https://ton-url.com/seris-art.jpg',
+    // imgIcon: 'img/seris-icon.jpg',
+    // imgArt:  'img/seris-art.jpg',
     bg:'linear-gradient(160deg,#1a0545 0%,#0f0230 40%,#08011e 100%)',
     glow:'rgba(192,132,252,0.55)', cardGlow:'rgba(192,132,252,0.25)',
     name:'Seris Nul', role:'Tisseuse d\'Ombres', faction:'Ombre', factionClass:'faction-shadow',
@@ -127,8 +124,8 @@ const chars = [
   },
   {
     emoji:'🗡', element:'🔥',
-    // imgIcon: 'https://ton-url.com/drath-icon.jpg',
-    // imgArt:  'https://ton-url.com/drath-art.jpg',
+    // imgIcon: 'img/drath-icon.jpg',
+    // imgArt:  'img/drath-art.jpg',
     bg:'linear-gradient(160deg,#200550 0%,#130228 40%,#0a0118 100%)',
     glow:'rgba(124,58,237,0.65)', cardGlow:'rgba(124,58,237,0.3)',
     name:'Drath Edun', role:'Général des Cendres', faction:'Ombre', factionClass:'faction-shadow',
@@ -148,8 +145,8 @@ const chars = [
   },
   {
     emoji:'🌿', element:'🌿',
-    // imgIcon: 'https://ton-url.com/eryn-icon.jpg',
-    // imgArt:  'https://ton-url.com/eryn-art.jpg',
+    // imgIcon: 'img/eryn-icon.jpg',
+    // imgArt:  'img/eryn-art.jpg',
     bg:'linear-gradient(160deg,#0e0535 0%,#080220 40%,#050115 100%)',
     glow:'rgba(216,180,254,0.4)', cardGlow:'rgba(216,180,254,0.18)',
     name:'Eryn Solh', role:'Vagabonde du Rift', faction:'Neutre', factionClass:'faction-neutral',
@@ -169,8 +166,8 @@ const chars = [
   },
   {
     emoji:'⚗', element:'⚡',
-    // imgIcon: 'https://ton-url.com/maren-icon.jpg',
-    // imgArt:  'https://ton-url.com/maren-art.jpg',
+    // imgIcon: 'img/maren-icon.jpg',
+    // imgArt:  'img/maren-art.jpg',
     bg:'linear-gradient(160deg,#180540 0%,#0d0228 40%,#08011c 100%)',
     glow:'rgba(232,121,249,0.5)', cardGlow:'rgba(232,121,249,0.22)',
     name:'Maren Cael', role:'Alchimiste du Vide', faction:'Void', factionClass:'faction-void',
@@ -319,7 +316,7 @@ function openModal(i) {
 
   document.querySelectorAll('.g-nav-item').forEach((n, idx) => n.classList.toggle('active', idx === 0));
 
-  // Nav icon : utilise imgIcon (petite image ronde)
+  // Nav icon (haut gauche) : utilise imgIcon, sinon emoji
   const navIcon = document.getElementById('gNavIcon');
   navIcon.style.cssText = `background:${c.bg};overflow:hidden;`;
   navIcon.innerHTML = c.imgIcon
@@ -333,23 +330,20 @@ function openModal(i) {
   document.getElementById('gBg').style.background = c.bg;
   document.getElementById('gGlow').style.background = c.glow;
 
-  // Art zone : utilise imgArt (grande illustration), sinon imgIcon, sinon emoji
-  const artSrc = c.imgArt || c.imgIcon;
-  document.getElementById('gArt').innerHTML = artSrc
-    ? `<div style="display:flex;flex-direction:column;align-items:center;gap:.8rem;">
-        <img src="${artSrc}" alt="${c.name}"
-          style="width:130px;height:130px;border-radius:50%;object-fit:cover;
-                 border:3px solid rgba(168,85,247,0.7);
-                 box-shadow:0 0 32px rgba(168,85,247,0.5);"
-          onerror="this.parentElement.innerHTML='<div class=\\'g-art-emoji\\'>${c.emoji}</div><div class=\\'g-art-name\\'>${c.name}</div><div class=\\'g-art-role\\'>${c.role}</div><div class=\\'g-art-badge ${c.factionClass}\\'>${c.faction} · ${c.element}</div>'">
-        <div class="g-art-name">${c.name}</div>
-        <div class="g-art-role">${c.role}</div>
-        <div class="g-art-badge ${c.factionClass}">${c.faction} · ${c.element}</div>
-      </div>`
-    : `<div class="g-art-emoji">${c.emoji}</div>
-       <div class="g-art-name">${c.name}</div>
-       <div class="g-art-role">${c.role}</div>
-       <div class="g-art-badge ${c.factionClass}">${c.faction} · ${c.element}</div>`;
+  // Zone centrale : si imgArt → grande image pleine hauteur, sans texte
+  // Sinon → affichage classique emoji + nom + rôle + badge
+  if (c.imgArt) {
+    document.getElementById('gArt').innerHTML = `
+      <img src="${c.imgArt}" alt="${c.name}"
+        style="width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;border-radius:0;"
+        onerror="this.outerHTML='<div class=\\'g-art-emoji\\'>${c.emoji}</div><div class=\\'g-art-name\\'>${c.name}</div><div class=\\'g-art-role\\'>${c.role}</div><div class=\\'g-art-badge ${c.factionClass}\\'>${c.faction} · ${c.element}</div>'">`;
+  } else {
+    document.getElementById('gArt').innerHTML = `
+      <div class="g-art-emoji">${c.emoji}</div>
+      <div class="g-art-name">${c.name}</div>
+      <div class="g-art-role">${c.role}</div>
+      <div class="g-art-badge ${c.factionClass}">${c.faction} · ${c.element}</div>`;
+  }
 
   document.getElementById('gQuote').textContent = c.quote;
 
