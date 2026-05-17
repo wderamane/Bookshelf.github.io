@@ -28,19 +28,7 @@ function switchTab(name) {
 }
 
 // =====================
-// STAT BAR COLOR PALETTE
-// =====================
-const BAR_VIOLET  = 'linear-gradient(to right,#4c1d95,#a855f7)';
-const BAR_PINK    = 'linear-gradient(to right,#6b21a8,#e040fb)';
-const BAR_LILAC   = 'linear-gradient(to right,#5b21b6,#c084fc)';
-const BAR_SOFT    = 'linear-gradient(to right,#7c3aed,#d8b4fe)';
-const BAR_DEEP    = 'linear-gradient(to right,#2e1065,#7c3aed)';
-const BAR_MAGENTA = 'linear-gradient(to right,#831843,#e040fb)';
-
-// =====================
 // HELPERS AVATAR
-// imgIcon = petite icône ronde (nav gauche + carte + liste)
-// imgArt  = grande illustration centrale (modal art zone)
 // =====================
 function renderAvatar(c, size) {
   const src = c.imgIcon;
@@ -56,9 +44,6 @@ function renderAvatar(c, size) {
 // =====================
 // CHARACTERS DATA
 // =====================
-// imgIcon : petite image ronde (nav, carte, liste)
-// imgArt  : grande illustration pleine hauteur dans la zone centrale de la modal
-
 const chars = [
   {
     emoji:'🔥', element:'🔥',
@@ -68,7 +53,7 @@ const chars = [
     classe:'Divinité Élémentaire', race:'Entité Divine', alignement:'Chaotique Neutre', niveau:'∞',
     status:'Disparue', statusClass:'status-unknown',
     quote:'"Les flammes détruisent, mais elles forgent aussi les empires."',
-    desc:'Hinoka est la Déesse du Feu et des passions ardentes. Créatrice des terres volcaniques du sud, elle insuffla aux peuples la force, l’ambition et la guerre.',
+    desc:"Hinoka est la Déesse du Feu et des passions ardentes. Créatrice des terres volcaniques du sud, elle insuffla aux peuples la force, l'ambition et la guerre.",
     infos:[
       {l:'Origine',v:'Premier Feu'},
       {l:'Affinité',v:'Flamme Primordiale'},
@@ -84,7 +69,7 @@ const chars = [
     name:'Mireon', role:'Dieu des Océans', faction:'Divinité Primordiale', factionClass:'faction-void',
     classe:'Divinité Élémentaire', race:'Entité Divine', alignement:'Neutre', niveau:'∞',
     status:'Disparu', statusClass:'status-unknown',
-    quote:'"Toute chose retourne à l’océan."',
+    quote:'"Toute chose retourne à l\u2019océan."',
     desc:'Mireon façonna les mers et les rivières de Shūrenga. Il est considéré comme le gardien des profondeurs et du savoir oublié.',
     infos:[
       {l:'Origine',v:'Océan Primordial'},
@@ -102,7 +87,7 @@ const chars = [
     classe:'Divinité Élémentaire', race:'Entité Divine', alignement:'Loyal Neutre', niveau:'∞',
     status:'Disparu', statusClass:'status-unknown',
     quote:'"Les montagnes survivent à tous les royaumes."',
-    desc:'Tianzu érigea les montagnes, les forêts anciennes et les plaines infinies. Il représente la stabilité, la mémoire et l’équilibre.',
+    desc:"Tianzu érigea les montagnes, les forêts anciennes et les plaines infinies. Il représente la stabilité, la mémoire et l'équilibre.",
     infos:[
       {l:'Origine',v:'Pierre Originelle'},
       {l:'Affinité',v:'Terre Divine'},
@@ -132,11 +117,11 @@ const chars = [
     emoji:'🌑', element:'🖤',
     bg:'linear-gradient(160deg,#050505 0%,#110016 50%,#020202 100%)',
     glow:'rgba(180,0,255,0.55)', cardGlow:'rgba(180,0,255,0.25)',
-    name:'Noctyra', role:'Déesse de l’Ombre', faction:'Divinité Primordiale', factionClass:'faction-shadow',
+    name:'Noctyra', role:"Déesse de l'Ombre", faction:'Divinité Primordiale', factionClass:'faction-shadow',
     classe:'Divinité Élémentaire', race:'Entité Divine', alignement:'Neutre Absolu', niveau:'∞',
     status:'Disparue', statusClass:'status-unknown',
-    quote:'"L’ombre n’est pas le mal. Elle est la vérité cachée."',
-    desc:'Noctyra est la plus mystérieuse des divinités. Déesse de l’ombre, des secrets et du Void, elle désirait offrir davantage de pouvoir aux mortels.',
+    quote:'"L\u2019ombre n\u2019est pas le mal. Elle est la vérité cachée."',
+    desc:"Noctyra est la plus mystérieuse des divinités. Déesse de l'ombre, des secrets et du Void, elle désirait offrir davantage de pouvoir aux mortels.",
     infos:[
       {l:'Origine',v:'Néant Originel'},
       {l:'Affinité',v:'Ombre Primordiale'},
@@ -145,10 +130,6 @@ const chars = [
     ]
   }
 ];
-
-
-
-
 
 // =====================
 // BUILD GRID & LIST
@@ -183,90 +164,33 @@ chars.forEach((c, i) => {
 // MODAL STATE
 // =====================
 let curChar = null;
-let curSection = 'attributes';
 
 // =====================
-// BUILD RIGHT PANEL
+// BUILD RIGHT PANEL — Profil uniquement
 // =====================
-function buildRight(c, section) {
-
-  const sections = {
-    attributes: `
-      <div class="g-section active">
-        <div class="g-section-title">Identité</div>
-        <div class="g-identity">
-          <span class="g-badge">${c.race}</span>
-          <span class="g-badge">${c.alignement}</span>
-        </div>
-        <div class="g-section-title">Caractéristiques</div>
-        <div class="g-abilities">
-          ${c.abilities.map(a => `
-            <div class="g-ability">
-              <div class="g-ability-name">${a.n}</div>
-              <div class="g-ability-score">${a.s}</div>
-              <div class="g-ability-mod">${a.m}</div>
-            </div>`).join('')}
-        </div>
-      </div>`,
-
-    combat: `
-      <div class="g-section active">
-        <div class="g-section-title">Compétences</div>
-        <div class="g-stat-bars">
-          ${c.bars.map(b => `
-            <div>
-              <div class="g-bar-label"><span>${b.l}</span><span class="g-bar-val">${b.v}</span></div>
-              <div class="g-bar-track"><div class="g-bar-fill" data-val="${b.v}" style="background:${b.c}"></div></div>
-            </div>`).join('')}
-        </div>
-      </div>`,
-
-    powers: `
-      <div class="g-section active">
-        <div class="g-section-title">Capacités spéciales</div>
-        <div class="g-powers">
-          ${c.powers.map(p => `
-            <div class="g-power">
-              <span class="g-power-icon">${p.i}</span>
-              <div>
-                <div class="g-power-name">${p.n}</div>
-                <div class="g-power-desc">${p.d}</div>
-              </div>
-            </div>`).join('')}
-        </div>
-      </div>`,
-
-    profile: `
-      <div class="g-section active">
-        <div class="g-section-title">Histoire</div>
-        <p class="g-desc">${c.desc}</p>
-        <div class="g-section-title" style="margin-top:1.2rem;">Informations</div>
-        <div class="g-infos">
-          ${c.infos.map(inf => `
-            <div class="g-info">
-              <div class="g-info-label">${inf.l}</div>
-              <div class="g-info-val">${inf.v}</div>
-            </div>`).join('')}
-        </div>
-      </div>`
-  };
-
-  document.getElementById('gRight').innerHTML = sections[section] || sections['attributes'];
-
-  setTimeout(() => {
-    document.querySelectorAll('.g-bar-fill').forEach(el => { el.style.width = el.dataset.val + '%'; });
-    document.querySelectorAll('.g-hp-fill').forEach(el => { el.style.width = el.dataset.pct + '%'; });
-  }, 80);
+function buildRight(c) {
+  document.getElementById('gRight').innerHTML = `
+    <div class="g-section active">
+      <div class="g-section-title">Histoire</div>
+      <p class="g-desc">${c.desc}</p>
+      <div class="g-section-title" style="margin-top:1.2rem;">Informations</div>
+      <div class="g-infos">
+        ${c.infos.map(inf => `
+          <div class="g-info">
+            <div class="g-info-label">${inf.l}</div>
+            <div class="g-info-val">${inf.v}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
 }
 
 // =====================
-// SWITCH NAV SECTION
+// SWITCH NAV SECTION (gardé pour compatibilité, ne fait que rafraîchir)
 // =====================
 function switchSection(el, section) {
-  curSection = section;
   document.querySelectorAll('.g-nav-item').forEach(n => n.classList.remove('active'));
   el.classList.add('active');
-  if (curChar !== null) buildRight(chars[curChar], section);
+  if (curChar !== null) buildRight(chars[curChar]);
 }
 
 // =====================
@@ -274,12 +198,11 @@ function switchSection(el, section) {
 // =====================
 function openModal(i) {
   curChar = i;
-  curSection = 'attributes';
   const c = chars[i];
 
-  document.querySelectorAll('.g-nav-item').forEach((n, idx) => n.classList.toggle('active', idx === 0));
+  document.querySelectorAll('.g-nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelector('.g-nav-item').classList.add('active');
 
-  // Nav icon (haut gauche) : utilise imgIcon, sinon emoji
   const navIcon = document.getElementById('gNavIcon');
   navIcon.style.cssText = `background:${c.bg};overflow:hidden;`;
   navIcon.innerHTML = c.imgIcon
@@ -293,8 +216,6 @@ function openModal(i) {
   document.getElementById('gBg').style.background = c.bg;
   document.getElementById('gGlow').style.background = c.glow;
 
-  // Zone centrale : si imgArt → grande image pleine hauteur, sans texte
-  // Sinon → affichage classique emoji + nom + rôle + badge
   if (c.imgArt) {
     document.getElementById('gArt').innerHTML = `
       <img src="${c.imgArt}" alt="${c.name}"
@@ -310,7 +231,7 @@ function openModal(i) {
 
   document.getElementById('gQuote').textContent = c.quote;
 
-  buildRight(c, 'attributes');
+  buildRight(c);
 
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
