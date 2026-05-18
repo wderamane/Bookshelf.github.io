@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scriptorium — Carte de Shūrenga</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --void:   #7c3aed;
+      --mauve:  #a855f7;
+      --lilac:  #c084fc;
+      --pink:   #e040fb;
+      --soft:   #d8b4fe;
+      --smoke:  #08060e;
+      --ash:    #0d0a1a;
+      --text:   #f0e6ff;
+      --muted:  #8b6aaf;
+      --border: rgba(168,85,247,0.18);
+
+      /* clan colors */
+      --air-col:   #c8e6f5;
+      --ombre-col: #9b59b6;
+      --terre-col: #c8a96a;
+      --eau-col:   #4a8fa8;
+      --feu-col:   #e05c2a;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow-x: hidden; }
+    body { font-family: 'EB Garamond', Georgia, serif; background: var(--smoke); color: var(--text); }
+
+    .bg {
+      position: fixed; inset: 0; z-index: -2;
+      background:
+        radial-gradient(ellipse 80% 55% at 50% 105%, rgba(124,58,237,0.45) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 35% at 20% 10%, rgba(224,64,251,0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 35% at 80% 10%, rgba(168,85,247,0.07) 0%, transparent 55%),
+        linear-gradient(180deg, #06040c 0%, #08060e 40%, #0e0a1a 100%);
+    }
+    .rune-grid {
+      position: fixed; inset: 0; z-index: -1; opacity: .12;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(168,85,247,0.1) 80px),
+        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(168,85,247,0.1) 80px);
+    }
+    .vignette {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.82) 100%);
+    }
+    .embers { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+    .ember { position: absolute; border-radius: 50%; animation: rise linear infinite; opacity: 0; }
+    @keyframes rise {
+      0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+      8%   { opacity: 1; }
+      85%  { opacity: .4; }
+      100% { transform: translateY(-110vh) translateX(var(--dx)) scale(0); opacity: 0; }
+    }
+
+    .corner { position: fixed; width: 55px; height: 55px; pointer-events: none; z-index: 3; opacity: .28; }
+    .corner svg { width: 100%; height: 100%; }
+    .corner.tl { top: 14px; left: 14px; }
+    .corner.tr { top: 14px; right: 14px; transform: scaleX(-1); }
+    .corner.bl { bottom: 14px; left: 14px; transform: scaleY(-1); }
+    .corner.br { bottom: 14px; right: 14px; transform: scale(-1); }
+
+    .page { position: relative; z-index: 2; min-height: 100vh; display: flex; flex-direction: column; }
+
+    header { display: flex; justify-content: space-between; align-items: center; padding: 1.6rem 2.5rem; border-bottom: 1px solid var(--border); }
+    .logo { font-family: 'Cinzel Decorative', serif; font-size: .88rem; letter-spacing: .12em; color: var(--lilac); text-shadow: 0 0 22px rgba(224,64,251,0.5); }
+    nav { display: flex; gap: 2rem; }
+    nav a { font-family: 'Cinzel', serif; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+    nav a:hover, nav a.active { color: var(--soft); }
+
+    /* ─── HERO TITLE ─── */
+    .map-hero { text-align: center; padding: 2.4rem 1rem 1.8rem; }
+    .rune-bar { display: flex; align-items: center; gap: 1rem; justify-content: center; margin-bottom: 1rem; }
+    .rune-line { height: 1px; width: 80px; background: linear-gradient(to right, transparent, var(--lilac)); }
+    .rune-line.r { background: linear-gradient(to left, transparent, var(--lilac)); }
+    .rune-glyph { font-family: 'Cinzel Decorative', serif; font-size: .7rem; color: var(--lilac); letter-spacing: .2em; text-shadow: 0 0 14px rgba(224,64,251,0.4); }
+    .map-hero h1 { font-family: 'Cinzel Decorative', serif; font-size: clamp(1.6rem, 4vw, 3rem); color: var(--text); text-shadow: 0 0 40px rgba(168,85,247,0.6); margin-bottom: .5rem; }
+    .map-hero p { font-size: .95rem; color: var(--muted); font-style: italic; }
+
+    /* ─── LAYOUT ─── */
+    .map-layout { display: flex; gap: 0; flex: 1; min-height: 0; padding: 0 2rem 2rem; align-items: flex-start; }
+
+    /* ─── MAP CONTAINER ─── */
+    .map-wrap {
+      flex: 1; position: relative; border: 1px solid var(--border);
+      border-radius: 4px; overflow: hidden; cursor: crosshair;
+      box-shadow: 0 0 60px rgba(124,58,237,0.2), inset 0 0 40px rgba(0,0,0,0.5);
+    }
+    .map-wrap img { display: block; width: 100%; height: auto; user-select: none; pointer-events: none; }
+
+    /* ─── SVG OVERLAY ─── */
+    .map-svg {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    }
+
+    /* Clan zones */
+    .clan-zone {
+      cursor: pointer;
+      transition: all .3s ease;
+    }
+    .clan-zone polygon, .clan-zone ellipse, .clan-zone path {
+      fill: transparent;
+      stroke: transparent;
+      stroke-width: 1.5;
+      transition: fill .3s, stroke .3s, filter .3s;
+    }
+    .clan-zone:hover polygon,
+    .clan-zone:hover ellipse,
+    .clan-zone:hover path,
+    .clan-zone.active polygon,
+    .clan-zone.active ellipse,
+    .clan-zone.active path {
+      stroke-width: 2;
+    }
+
+    /* Air */
+    .clan-zone.air:hover polygon, .clan-zone.air.active polygon { fill: rgba(200,230,245,0.15); stroke: var(--air-col); filter: drop-shadow(0 0 8px rgba(200,230,245,0.5)); }
+    /* Ombre */
+    .clan-zone.ombre:hover polygon, .clan-zone.ombre.active polygon { fill: rgba(155,89,182,0.18); stroke: var(--ombre-col); filter: drop-shadow(0 0 8px rgba(155,89,182,0.5)); }
+    /* Terre */
+    .clan-zone.terre:hover polygon, .clan-zone.terre.active polygon { fill: rgba(200,169,106,0.18); stroke: var(--terre-col); filter: drop-shadow(0 0 8px rgba(200,169,106,0.5)); }
+    /* Eau */
+    .clan-zone.eau:hover polygon, .clan-zone.eau.active polygon { fill: rgba(74,143,168,0.18); stroke: var(--eau-col); filter: drop-shadow(0 0 8px rgba(74,143,168,0.5)); }
+    /* Feu */
+    .clan-zone.feu:hover polygon, .clan-zone.feu.active polygon { fill: rgba(224,92,42,0.18); stroke: var(--feu-col); filter: drop-shadow(0 0 8px rgba(224,92,42,0.5)); }
+
+    /* Pulse beacon dots */
+    .beacon { cursor: pointer; }
+    .beacon circle.pulse {
+      animation: pulse-ring 2s ease-out infinite;
+      transform-origin: center;
+    }
+    @keyframes pulse-ring {
+      0%   { r: 6; opacity: .7; }
+      100% { r: 16; opacity: 0; }
+    }
+
+    /* ─── SIDE PANEL ─── */
+    .side-panel {
+      width: 300px; min-width: 260px; margin-left: 1.5rem;
+      border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+      background: rgba(8,6,14,0.85); backdrop-filter: blur(12px);
+      display: flex; flex-direction: column;
+      box-shadow: 0 0 40px rgba(0,0,0,0.6);
+      position: sticky; top: 1rem;
+    }
+    .panel-header {
+      padding: 1rem 1.2rem; border-bottom: 1px solid var(--border);
+      font-family: 'Cinzel', serif; font-size: .68rem; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--muted);
+      display: flex; align-items: center; gap: .6rem;
+    }
+    .panel-header::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--lilac); box-shadow: 0 0 8px var(--lilac); flex-shrink: 0; }
+
+    .panel-default { padding: 2rem 1.4rem; text-align: center; }
+    .panel-default .idle-icon { font-size: 2.2rem; margin-bottom: .8rem; opacity: .4; }
+    .panel-default p { font-size: .88rem; color: var(--muted); font-style: italic; line-height: 1.7; }
+
+    .clan-info { display: none; padding: 0; flex-direction: column; }
+    .clan-info.visible { display: flex; }
+
+    .clan-banner {
+      height: 80px; display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem; position: relative; overflow: hidden;
+    }
+    .clan-banner::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(8,6,14,0.9));
+    }
+
+    .clan-body { padding: 1rem 1.4rem 1.4rem; flex: 1; }
+    .clan-title { font-family: 'Cinzel Decorative', serif; font-size: 1.1rem; margin-bottom: .2rem; }
+    .clan-subtitle { font-family: 'Cinzel', serif; font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-bottom: 1rem; }
+
+    .clan-divider { height: 1px; background: var(--border); margin: .9rem 0; }
+
+    .clan-stat { display: flex; justify-content: space-between; align-items: center; margin-bottom: .6rem; }
+    .clan-stat .label { font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .clan-stat .value { font-size: .9rem; }
+
+    .clan-lore { font-size: .88rem; line-height: 1.75; color: rgba(240,230,255,0.75); font-style: italic; margin-top: .5rem; }
+
+    .clan-tag {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .25rem .7rem; border-radius: 2px; font-family: 'Cinzel', serif;
+      font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; margin-top: 1rem;
+      border: 1px solid currentColor; opacity: .75;
+    }
+
+    /* ─── LEGEND ─── */
+    .legend {
+      display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+      padding: 1rem 2rem; border-top: 1px solid var(--border);
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: .5rem;
+      font-family: 'Cinzel', serif; font-size: .62rem; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--muted); cursor: pointer;
+      transition: color .2s;
+    }
+    .legend-item:hover { color: var(--soft); }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    footer { text-align: center; padding: 1.2rem; font-family: 'Cinzel', serif; font-size: .6rem; letter-spacing: .14em; color: rgba(139,106,175,0.25); border-top: 1px solid rgba(168,85,247,0.07); position: relative; z-index: 2; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .map-hero, .map-layout, .legend { animation: fadeUp .8s both; }
+    .map-layout { animation-delay: .3s; }
+    .legend { animation-delay: .5s; }
+
+    @media (max-width: 900px) {
+      .map-layout { flex-direction: column; padding: 0 1rem 1.5rem; }
+      .side-panel { width: 100%; min-width: unset; margin-left: 0; margin-top: 1rem; position: static; }
+    }
+    @media (max-width: 600px) { header { padding: 1rem 1.2rem; } nav { gap: 1rem; } }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="rune-grid"></div>
+  <div class="vignette"></div>
+  <div class="embers" id="embers"></div>
+
+  <div class="corner tl"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#a855f7" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#e040fb" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#e040fb" opacity=".8"/></svg></div>
+  <div class="corner tr"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#a855f7" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#e040fb" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#e040fb" opacity=".8"/></svg></div>
+  <div class="corner bl"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#a855f7" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#e040fb" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#e040fb" opacity=".8"/></svg></div>
+  <div class="corner br"><svg viewBox="0 0 60 60" fill="none"><path d="M2 58 L2 2 L58 2" stroke="#a855f7" stroke-width="1.5"/><path d="M2 30 L12 20 M2 14 L14 2" stroke="#e040fb" stroke-width="1" opacity=".5"/><circle cx="2" cy="2" r="3" fill="#e040fb" opacity=".8"/></svg></div>
+
+  <div class="page">
+    <header>
+      <div class="logo">⚔ Scriptorium</div>
+      <nav>
+        <a href="index.html">Accueil</a>
+        <a href="bibliotheque.html">Archives</a>
+        <a href="chroniques.html">Chroniques</a>
+        <a href="carte.html" class="active">Carte</a>
+      </nav>
+    </header>
+
+    <div class="map-hero">
+      <div class="rune-bar">
+        <div class="rune-line"></div>
+        <span class="rune-glyph">✦ Cartographie ✦</span>
+        <div class="rune-line r"></div>
+      </div>
+      <h1>Shūrenga</h1>
+      <p>Survolez les territoires pour révéler leurs secrets — cliquez pour en apprendre davantage.</p>
+    </div>
+
+    <div class="map-layout">
+      <!-- MAP -->
+      <div class="map-wrap" id="mapWrap">
+        <img src="img/Shurenga.png" alt="Carte de Shūrenga" id="mapImg" />
+
+        <svg class="map-svg" id="mapSvg" viewBox="0 0 1270 953" preserveAspectRatio="xMidYMid meet">
+
+          <!-- ── CLAN DE L'AIR — TENGRIYA (haut centre, territoire blanc/nuageux) ── -->
+          <g class="clan-zone air" data-clan="air" tabindex="0" role="button" aria-label="Clan de l'Air — Tengriya">
+            <polygon points="280,20 640,20 760,60 730,230 620,270 500,270 350,230 270,140"/>
+          </g>
+
+          <!-- ── CLAN DE L'OMBRE — MORYAKSHA (gauche, territoire sombre) ── -->
+          <g class="clan-zone ombre" data-clan="ombre" tabindex="0" role="button" aria-label="Clan de l'Ombre — Moryaksha">
+            <polygon points="10,150 200,130 280,200 290,420 240,580 200,730 80,780 10,700"/>
+          </g>
+
+          <!-- ── CLAN DE LA TERRE — LÓNGSHUǏ (centre, territoire beige/sable) ── -->
+          <g class="clan-zone terre" data-clan="terre" tabindex="0" role="button" aria-label="Clan de la Terre — Lóngshuǐ">
+            <polygon points="350,230 620,270 730,300 760,420 700,600 580,680 420,680 300,580 270,420 300,300"/>
+          </g>
+
+          <!-- ── CLAN DE L'EAU — JINSEONG (droite, territoire bleu foncé) ── -->
+          <g class="clan-zone eau" data-clan="eau" tabindex="0" role="button" aria-label="Clan de l'Eau — Jinseong">
+            <polygon points="760,150 1000,140 1100,220 1130,420 1050,580 900,620 760,540 730,380 760,280"/>
+          </g>
+
+          <!-- ── CLAN DU FEU — AKARYŪ (sud, territoire marron foncé) ── -->
+          <g class="clan-zone feu" data-clan="feu" tabindex="0" role="button" aria-label="Clan du Feu — Akaryū">
+            <polygon points="350,680 650,660 760,680 840,780 820,920 620,940 400,920 300,820"/>
+          </g>
+
+          <!-- ── BEACONS (marqueurs lumineux sur chaque clan) ── -->
+          <!-- Air -->
+          <g class="beacon" data-clan="air">
+            <circle cx="490" cy="160" r="6" fill="#c8e6f5" opacity=".9"/>
+            <circle class="pulse" cx="490" cy="160" r="6" fill="none" stroke="#c8e6f5" stroke-width="1.5" style="animation-delay:0s"/>
+          </g>
+          <!-- Ombre -->
+          <g class="beacon" data-clan="ombre">
+            <circle cx="145" cy="430" r="6" fill="#9b59b6" opacity=".9"/>
+            <circle class="pulse" cx="145" cy="430" r="6" fill="none" stroke="#9b59b6" stroke-width="1.5" style="animation-delay:.4s"/>
+          </g>
+          <!-- Terre -->
+          <g class="beacon" data-clan="terre">
+            <circle cx="510" cy="450" r="6" fill="#c8a96a" opacity=".9"/>
+            <circle class="pulse" cx="510" cy="450" r="6" fill="none" stroke="#c8a96a" stroke-width="1.5" style="animation-delay:.8s"/>
+          </g>
+          <!-- Eau -->
+          <g class="beacon" data-clan="eau">
+            <circle cx="930" cy="390" r="6" fill="#4a8fa8" opacity=".9"/>
+            <circle class="pulse" cx="930" cy="390" r="6" fill="none" stroke="#4a8fa8" stroke-width="1.5" style="animation-delay:1.2s"/>
+          </g>
+          <!-- Feu -->
+          <g class="beacon" data-clan="feu">
+            <circle cx="575" cy="800" r="6" fill="#e05c2a" opacity=".9"/>
+            <circle class="pulse" cx="575" cy="800" r="6" fill="none" stroke="#e05c2a" stroke-width="1.5" style="animation-delay:1.6s"/>
+          </g>
+        </svg>
+      </div>
+
+      <!-- SIDE PANEL -->
+      <div class="side-panel">
+        <div class="panel-header">Informations sur le territoire</div>
+
+        <!-- Default state -->
+        <div class="panel-default" id="panelDefault">
+          <div class="idle-icon">🗺️</div>
+          <p>Survolez un territoire sur la carte pour révéler les secrets de ses habitants.</p>
+        </div>
+
+        <!-- Clan info blocks (hidden by default) -->
+        <div class="clan-info" id="info-air">
+          <div class="clan-banner" style="background: linear-gradient(135deg, #1a2f3f 0%, #2a4a5e 50%, #3a6a8a 100%);">
+            <span style="position:relative;z-index:1;">💨</span>
+          </div>
+          <div class="clan-body">
+            <div class="clan-title" style="color: var(--air-col);">Clan de l'Air</div>
+            <div class="clan-subtitle">Tengriya · Les Cieux Éternels</div>
+            <div class="clan-divider"></div>
+            <div class="clan-stat"><span class="label">Territoire</span><span class="value">Archipel des Nuages</span></div>
+            <div class="clan-stat"><span class="label">Élément</span><span class="value">☁️ Air & Vent</span></div>
+            <div class="clan-stat"><span class="label">Statut</span><span class="value" style="color:#a8d8ea;">Neutre</span></div>
+            <div class="clan-divider"></div>
+            <p class="clan-lore">Perchés au-dessus du monde sur leurs îles flottantes, les Tengriya observent les conflits des clans terrestres sans jamais s'y mêler. Leurs chamans lisent les vents et prédisent l'avenir dans les formations de nuages.</p>
+            <span class="clan-tag" style="color: var(--air-col);">✦ Observateurs du Ciel</span>
+          </div>
+        </div>
+
+        <div class="clan-info" id="info-ombre">
+          <div class="clan-banner" style="background: linear-gradient(135deg, #1a0d2e 0%, #2d1055 50%, #3d1a70 100%);">
+            <span style="position:relative;z-index:1;">🌑</span>
+          </div>
+          <div class="clan-body">
+            <div class="clan-title" style="color: var(--ombre-col);">Clan de l'Ombre</div>
+            <div class="clan-subtitle">Moryaksha · Les Voiles Nocturnes</div>
+            <div class="clan-divider"></div>
+            <div class="clan-stat"><span class="label">Territoire</span><span class="value">Terres de Cendre</span></div>
+            <div class="clan-stat"><span class="label">Élément</span><span class="value">🌑 Ombre & Illusion</span></div>
+            <div class="clan-stat"><span class="label">Statut</span><span class="value" style="color:#d4a8ea;">Méfiant</span></div>
+            <div class="clan-divider"></div>
+            <p class="clan-lore">Dans les terres où la lumière ne pénètre jamais, les Moryaksha ont appris à voir sans yeux et à agir sans être vus. Leurs espions infiltrent chaque clan, leurs secrets s'achètent au prix du silence.</p>
+            <span class="clan-tag" style="color: var(--ombre-col);">✦ Maîtres de l'Illusion</span>
+          </div>
+        </div>
+
+        <div class="clan-info" id="info-terre">
+          <div class="clan-banner" style="background: linear-gradient(135deg, #2a1f0a 0%, #4a3518 50%, #6a4e25 100%);">
+            <span style="position:relative;z-index:1;">⛰️</span>
+          </div>
+          <div class="clan-body">
+            <div class="clan-title" style="color: var(--terre-col);">Clan de la Terre</div>
+            <div class="clan-subtitle">Lóngshuǐ · Le Cœur du Monde</div>
+            <div class="clan-divider"></div>
+            <div class="clan-stat"><span class="label">Territoire</span><span class="value">Plaines Dorées</span></div>
+            <div class="clan-stat"><span class="label">Élément</span><span class="value">🌍 Terre & Pierre</span></div>
+            <div class="clan-stat"><span class="label">Statut</span><span class="value" style="color:#e8c97a;">Dominant</span></div>
+            <div class="clan-divider"></div>
+            <p class="clan-lore">Au centre de Shūrenga, les Lóngshuǐ règnent depuis des millénaires. Leurs forteresses de roc noir défient le temps, leurs guerriers portent l'armure des anciens dragons de pierre. La terre leur appartient — pour combien de temps encore ?</p>
+            <span class="clan-tag" style="color: var(--terre-col);">✦ Gardiens du Centre</span>
+          </div>
+        </div>
+
+        <div class="clan-info" id="info-eau">
+          <div class="clan-banner" style="background: linear-gradient(135deg, #041a2e 0%, #083050 50%, #0a4068 100%);">
+            <span style="position:relative;z-index:1;">🌊</span>
+          </div>
+          <div class="clan-body">
+            <div class="clan-title" style="color: var(--eau-col);">Clan de l'Eau</div>
+            <div class="clan-subtitle">Jinseong · Les Profondeurs Vivantes</div>
+            <div class="clan-divider"></div>
+            <div class="clan-stat"><span class="label">Territoire</span><span class="value">Mer Intérieure</span></div>
+            <div class="clan-stat"><span class="label">Élément</span><span class="value">🌊 Eau & Marée</span></div>
+            <div class="clan-stat"><span class="label">Statut</span><span class="value" style="color:#7ec8e3;">Expansionniste</span></div>
+            <div class="clan-divider"></div>
+            <p class="clan-lore">Là où la mer intérieure s'étend à l'est, les Jinseong ont bâti leur empire sur l'eau. Leurs flottes de guerre sillonnent des canaux impossibles, et leurs guérisseurs maîtrisent l'art du courant vital qui traverse tout être vivant.</p>
+            <span class="clan-tag" style="color: var(--eau-col);">✦ Seigneurs des Flots</span>
+          </div>
+        </div>
+
+        <div class="clan-info" id="info-feu">
+          <div class="clan-banner" style="background: linear-gradient(135deg, #2a0a00 0%, #5a1800 50%, #8a2800 100%);">
+            <span style="position:relative;z-index:1;">🔥</span>
+          </div>
+          <div class="clan-body">
+            <div class="clan-title" style="color: var(--feu-col);">Clan du Feu</div>
+            <div class="clan-subtitle">Akaryū · Les Forges Éternelles</div>
+            <div class="clan-divider"></div>
+            <div class="clan-stat"><span class="label">Territoire</span><span class="value">Plaines de Cendre</span></div>
+            <div class="clan-stat"><span class="label">Élément</span><span class="value">🔥 Feu & Forge</span></div>
+            <div class="clan-stat"><span class="label">Statut</span><span class="value" style="color:#f4a261;">En guerre</span></div>
+            <div class="clan-divider"></div>
+            <p class="clan-lore">Nés dans les cendres d'un ancien volcan, les Akaryū ont transformé la destruction en art. Leurs forgeurs créent des armes qui ne rouillent jamais, leurs guerriers-flammes brûlent jusqu'au souvenir de leurs ennemis.</p>
+            <span class="clan-tag" style="color: var(--feu-col);">✦ Forgeurs de Destins</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEGEND -->
+    <div class="legend">
+      <div class="legend-item" data-clan="air"><span class="legend-dot" style="background:var(--air-col);box-shadow:0 0 6px var(--air-col)"></span>Tengriya · Air</div>
+      <div class="legend-item" data-clan="ombre"><span class="legend-dot" style="background:var(--ombre-col);box-shadow:0 0 6px var(--ombre-col)"></span>Moryaksha · Ombre</div>
+      <div class="legend-item" data-clan="terre"><span class="legend-dot" style="background:var(--terre-col);box-shadow:0 0 6px var(--terre-col)"></span>Lóngshuǐ · Terre</div>
+      <div class="legend-item" data-clan="eau"><span class="legend-dot" style="background:var(--eau-col);box-shadow:0 0 6px var(--eau-col)"></span>Jinseong · Eau</div>
+      <div class="legend-item" data-clan="feu"><span class="legend-dot" style="background:var(--feu-col);box-shadow:0 0 6px var(--feu-col)"></span>Akaryū · Feu</div>
+    </div>
+
+    <footer>Scriptorium — Forged in darkness · All rights reserved</footer>
+  </div>
+
+  <script>
+    // ── Ember particles ──
+    const container = document.getElementById('embers');
+    function spawnEmber() {
+      const el = document.createElement('div'); el.className = 'ember';
+      const size=Math.random()*4+1.5, x=Math.random()*100, dx=(Math.random()-.5)*80, dur=Math.random()*6+5, delay=Math.random()*4, pink=Math.random()>.5;
+      el.style.cssText=`width:${size}px;height:${size}px;left:${x}%;bottom:-10px;--dx:${dx}px;background:radial-gradient(circle,${pink?'rgba(224,64,251,0.9)':'rgba(168,85,247,0.9)'},transparent 70%);animation-duration:${dur}s;animation-delay:${delay}s;box-shadow:0 0 ${size*2}px ${pink?'rgba(224,64,251,0.6)':'rgba(168,85,247,0.6)'};`;
+      container.appendChild(el); setTimeout(()=>el.remove(),(dur+delay)*1000);
+    }
+    for(let i=0;i<20;i++) spawnEmber(); setInterval(spawnEmber,550);
+
+    // ── Map interactivity ──
+    let activeClan = null;
+
+    function showClan(clan) {
+      // Hide default
+      document.getElementById('panelDefault').style.display = 'none';
+
+      // Hide all clan info
+      document.querySelectorAll('.clan-info').forEach(el => el.classList.remove('visible'));
+
+      // Remove active zone
+      document.querySelectorAll('.clan-zone').forEach(el => el.classList.remove('active'));
+
+      if (clan && clan !== activeClan) {
+        activeClan = clan;
+        const info = document.getElementById('info-' + clan);
+        if (info) info.classList.add('visible');
+        document.querySelectorAll('.clan-zone[data-clan="' + clan + '"]').forEach(el => el.classList.add('active'));
+      } else {
+        activeClan = null;
+        document.getElementById('panelDefault').style.display = '';
+      }
+    }
+
+    // Zone clicks
+    document.querySelectorAll('.clan-zone, .beacon').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showClan(el.dataset.clan);
+      });
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') showClan(el.dataset.clan);
+      });
+    });
+
+    // Legend clicks
+    document.querySelectorAll('.legend-item[data-clan]').forEach(el => {
+      el.addEventListener('click', () => showClan(el.dataset.clan));
+    });
+
+    // Click outside to deselect
+    document.getElementById('mapWrap').addEventListener('click', () => showClan(null));
+  </script>
+</body>
+</html>
